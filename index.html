@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <link rel="icon" href="./favicon.ico">
     
-    <!-- ==================== MERGED SUPABASE CONFIG (from all files) ==================== -->
+    <!-- ==================== MERGED SUPABASE CONFIG ==================== -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         const SUPABASE_URL = 'https://gycsmfsltrmurlskzppx.supabase.co';
@@ -19,16 +19,14 @@
     <meta property="og:description" content="Complete academic management, attendance, fees, grading, and enrollment.">
     <meta property="og:image" content="https://picsum.photos/id/20/1200/630.jpg">
     
-    <!-- External Dependencies (single inclusion) -->
+    <!-- External Dependencies -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <!-- ==================== MERGED STYLES ==================== -->
     <style>
-        /* Base & common */
         * { font-family: 'Inter', system-ui, sans-serif; }
         @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap');
-        * { font-family: 'Inter', sans-serif; }
         
         .hero-pattern { background: linear-gradient(135deg, #0a2e2c 0%, #0f3b38 100%); }
         .sidebar { background: #0f2e2c; transition: transform 0.2s ease, width 0.2s; z-index: 45; }
@@ -72,6 +70,8 @@
         .status-reviewed { background: #dbeafe; color: #1e40af; }
         .status-accepted { background: #d1fae5; color: #065f46; }
         .status-rejected { background: #fee2e2; color: #991b1b; }
+        .appraise-btn { background: #f59e0b; padding: 2px 10px; border-radius: 20px; font-size: 0.7rem; cursor: pointer; border: none; color: white; }
+        .appraise-btn:hover { background: #d97706; }
         
         @media (max-width: 768px) {
             .sidebar { position: fixed; left: -280px; top: 0; bottom: 0; width: 280px; transition: left 0.25s ease; box-shadow: 2px 0 12px rgba(0,0,0,0.2); z-index: 60; }
@@ -99,7 +99,6 @@
                 <div class="flex flex-col lg:flex-row justify-between items-start gap-10">
                     <div class="max-w-2xl">
                         <div class="flex items-center gap-4 mb-4">
-                            <!-- Logo renamed to logo.jpg -->
                             <img src="logo.jpg" alt="Academy Logo" class="logo-img" onerror="this.onerror=null; this.src='https://placehold.co/400x200?text=Logo';">
                             <div><h1 class="text-3xl md:text-4xl font-bold">Al‑Istiqaamah <span class="text-amber-300">Flying Wings Academy</span></h1></div>
                         </div>
@@ -156,7 +155,8 @@
     </div>
 
     <!-- ==================== MODALS ==================== -->
-    <div id="loginScreen" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70"><div class="bg-white rounded-2xl p-8 w-96 relative"><h2 class="text-2xl font-bold mb-4">Staff/Admin Login</h2><form id="authForm"><input type="email" id="authEmail" placeholder="Email" class="w-full border p-2 rounded mb-3"><input type="password" id="authPassword" placeholder="Password" class="w-full border p-2 rounded mb-4"><button type="submit" class="w-full bg-amber-600 text-white py-2 rounded-lg">Login</button><button type="button" onclick="window.resetPasswordAction()" class="text-xs text-amber-600 mt-2 block text-right">Forgot Password?</button></form><button id="closeLoginBtn" class="absolute top-3 right-4 text-2xl">&times;</button></div></div>
+    <!-- Login modal now uses Username instead of Email -->
+    <div id="loginScreen" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70"><div class="bg-white rounded-2xl p-8 w-96 relative"><h2 class="text-2xl font-bold mb-4">Staff/Admin Login</h2><form id="authForm"><input type="text" id="authUsername" placeholder="Username" class="w-full border p-2 rounded mb-3"><input type="password" id="authPassword" placeholder="Password" class="w-full border p-2 rounded mb-4"><button type="submit" class="w-full bg-amber-600 text-white py-2 rounded-lg">Login</button><button type="button" onclick="window.resetPasswordAction()" class="text-xs text-amber-600 mt-2 block text-right">Forgot Password?</button></form><button id="closeLoginBtn" class="absolute top-3 right-4 text-2xl">&times;</button></div></div>
     <div id="parentLoginModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70"><div class="bg-white rounded-2xl p-8 w-96 relative"><h2 class="text-2xl font-bold mb-4">Parent Login</h2><form id="parentAuthForm"><input type="text" id="parentRegNo" placeholder="Student Registration Number" class="w-full border p-2 rounded mb-3"><input type="password" id="parentPassword" value="al123" class="w-full border p-2 rounded mb-4"><button type="submit" class="w-full bg-emerald-600 text-white py-2 rounded-lg">Access Dashboard</button></form><button id="closeParentLoginBtn" class="absolute top-3 right-4 text-2xl">&times;</button></div></div>
     <div id="adminSignupModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70"><div class="bg-white rounded-2xl p-8 w-96 relative"><h2 class="text-2xl font-bold mb-4">Admin Signup</h2><form id="adminSignupForm"><input type="text" id="adminFullName" placeholder="Full Name" class="w-full border p-2 rounded mb-2"><input type="email" id="adminEmail" placeholder="Email" class="w-full border p-2 rounded mb-2"><input type="password" id="adminPassword" placeholder="Password" class="w-full border p-2 rounded mb-2"><select id="adminRole"><option value="dg_ceo">DG/CEO</option><option value="umc">UMC</option></select><input type="text" id="adminRegCode" placeholder="Registration Code (ALIFLY2026)" class="w-full border p-2 rounded mt-2"><button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-lg mt-3">Create Account</button></form><button id="closeAdminSignupBtn" class="absolute top-3 right-4 text-2xl">&times;</button></div></div>
 
@@ -181,16 +181,19 @@
         let currentUser = null;
         let slidesData = [], currentSlideIndex = 0, slideInterval;
         
-        // ---------- SESSION TIMEOUT (50 seconds inactivity) ----------
+        // Domain for converting username to email
+        const USERNAME_DOMAIN = '@alistiqaamah.edu.ng';
+        
+        // ---------- SESSION TIMEOUT (30 seconds inactivity) ----------
         let inactivityTimer = null;
-        const SESSION_TIMEOUT_MS = 50000; // 50 seconds
+        const SESSION_TIMEOUT_MS = 30000;
 
         function resetInactivityTimer() {
-            if (!currentUser) return; // only when logged in
+            if (!currentUser) return;
             if (inactivityTimer) clearTimeout(inactivityTimer);
             inactivityTimer = setTimeout(() => {
                 if (currentUser) {
-                    showToast("Session expired due to 50 seconds of inactivity. Please log in again.", false);
+                    showToast("Session expired due to 30 seconds of inactivity. Please log in again.", false);
                     logoutUser();
                 }
             }, SESSION_TIMEOUT_MS);
@@ -210,11 +213,6 @@
             });
             if (inactivityTimer) clearTimeout(inactivityTimer);
         }
-
-        // Override logoutUser to also clear timer and detach listeners
-        const originalLogoutUser = null; // placeholder, we'll redefine logoutUser after functions
-        // We'll redefine logoutUser later to include cleanup, but we need to preserve the original functionality.
-        // Instead, we'll wrap the logout logic inside the main logoutUser function.
 
         // ========== ANNOUNCEMENT ==========
         async function fetchAndDisplayAnnouncement() {
@@ -264,19 +262,19 @@
             let html = `<div class="bg-white p-6 rounded-xl"><h2>🖼️ Manage Slideshow</h2><input type="file" id="slideFile" accept="image/*"><input id="slideCap" placeholder="Caption" class="border p-2 w-full mt-2"><button id="uploadSlideBtn" class="bg-emerald-600 text-white p-2 rounded mt-2">Upload</button><div class="grid grid-cols-2 gap-2 mt-6">${slidesData.map(s=>`<div class="border p-2"><img src="${s.url}" class="h-28 object-cover w-full"><p>${s.caption}</p><button onclick="window.deleteSlideFromSupabase('${s.id}','${s.url}')" class="bg-red-500 text-white text-xs p-1 w-full">Delete</button></div>`).join('')}</div></div>`;
             document.getElementById("mainContent").innerHTML = html; document.getElementById("uploadSlideBtn")?.addEventListener("click", async()=>{ let file = document.getElementById("slideFile").files[0]; if(!file) return; await uploadSlideToSupabase(file, document.getElementById("slideCap").value); renderSlideManager(); }); window.deleteSlideFromSupabase = deleteSlideFromSupabase; }
 
-        // ========== STUDENT & STAFF CORE ==========
+        // ========== STUDENT CORE ==========
         async function refreshSchoolData() { const { data: students } = await supabaseClient.from('students').select('*'); if (students) schoolData.students = students.map(s => ({ ...s, fee_status: s.fee_status || 'Pending', status: s.status || 'active' })); const { data: teachers } = await supabaseClient.from('teachers').select('*'); if (teachers) schoolData.teachers = teachers; }
         async function addStudentLogic(reg_number, name, parent_name, level, section, fee_status) { if(!currentUser || !['dg_ceo','umc','headteacher'].includes(currentUser.role)) { showToast("Not authorized", true); return false; } if(currentUser.role === 'headteacher' && currentUser.assignedSection !== section) { showToast(`Headteachers can only enroll in ${currentUser.assignedSection}`, true); return false; } if (!name?.trim() || name.length<3) { showToast("Name too short", true); return false; } if (schoolData.students.find(s=>s.reg_number===reg_number)) { showToast("Reg number exists", true); return false; } const { error } = await supabaseClient.from('students').insert([{ reg_number, name, parent_name, level: parseInt(level), section, fee_status, status: 'active' }]); if(error) { showToast(error.message, true); return false; } await refreshSchoolData(); showToast("Student enrolled"); return true; }
         async function toggleSuspendStudent(id, cur){ const newStatus = cur==='active'?'suspended':'active'; await supabaseClient.from('students').update({status:newStatus}).eq('id',id); await refreshSchoolData(); renderContentView("students"); }
         async function deleteStudent(id){ if(confirm("Delete permanently?")){ await supabaseClient.from('students').delete().eq('id',id); await refreshSchoolData(); renderContentView("students"); } }
         function renderStudentsList() { let sections = ['All Sections', ...SECTIONS]; let html = `<div class="bg-white p-5 rounded-xl"><h2>📋 Students</h2><div class="filter-bar flex gap-4"><select id="sectionFilterSelect">${sections.map(s=>`<option>${s}</option>`).join('')}</select><input id="studentSearchInput" placeholder="Search..."></div><table class="w-full border"><thead><tr><th>Reg No</th><th>Name</th><th>Parent</th><th>Section</th><th>Level</th><th>Fees</th><th>Status</th><th>Actions</th></tr></thead><tbody id="studentsTableBody"></tbody></table></div>`;
-            document.getElementById("mainContent").innerHTML = html; const update = () => { let filtered = schoolData.students.filter(s => document.getElementById("sectionFilterSelect").value === 'All Sections' || s.section === document.getElementById("sectionFilterSelect").value); const term = document.getElementById("studentSearchInput").value.toLowerCase(); if(term) filtered = filtered.filter(s=>s.name.toLowerCase().includes(term)||s.reg_number.toLowerCase().includes(term)); document.getElementById("studentsTableBody").innerHTML = filtered.map(s=>`<tr><td>${s.reg_number}</td><td>${s.name}</td><td>${s.parent_name||'-'}</td><td>${s.section}</td><td>${s.level}</td><td class="${s.fee_status==='Paid'?'text-green-600':'text-red-500'}">${s.fee_status}</td><td><span class="${s.status==='active'?'active-badge':'suspended-badge'}">${s.status}</span></td><td><button onclick="window.toggleSuspendStudent('${s.id}','${s.status}')" class="suspend-btn">Toggle</button> <button onclick="window.deleteStudent('${s.id}')" class="delete-btn">Del</button></td></tr>`).join(''); };
+            document.getElementById("mainContent").innerHTML = html; const update = () => { let filtered = schoolData.students.filter(s => document.getElementById("sectionFilterSelect").value === 'All Sections' || s.section === document.getElementById("sectionFilterSelect").value); const term = document.getElementById("studentSearchInput").value.toLowerCase(); if(term) filtered = filtered.filter(s=>s.name.toLowerCase().includes(term)||s.reg_number.toLowerCase().includes(term)); document.getElementById("studentsTableBody").innerHTML = filtered.map(s=>`<tr><td class="p-2">${s.reg_number}</td><td class="p-2">${s.name}</td><td class="p-2">${s.parent_name||'-'}</td><td class="p-2">${s.section}</td><td class="p-2">${s.level}</td><td class="${s.fee_status==='Paid'?'text-green-600':'text-red-500'}">${s.fee_status}</td><td class="p-2"><span class="${s.status==='active'?'active-badge':'suspended-badge'}">${s.status}</span></td><td class="p-2"><button onclick="window.toggleSuspendStudent('${s.id}','${s.status}')" class="suspend-btn">Toggle</button> <button onclick="window.deleteStudent('${s.id}')" class="delete-btn">Del</button></td></tr>`).join(''); };
             document.getElementById("sectionFilterSelect").addEventListener("change", update); document.getElementById("studentSearchInput").addEventListener("input", update); update(); window.toggleSuspendStudent = toggleSuspendStudent; window.deleteStudent = deleteStudent; }
         function renderEnrollStudent() { if(!['dg_ceo','umc','headteacher'].includes(currentUser?.role)) { showToast("Access denied", true); return; } let secOps = SECTIONS.map(s=>`<option value="${s}">${s}</option>`).join(''); let sectionField = `<select id="section" class="border p-2 w-full rounded">${secOps}</select>`; if(currentUser.role === 'headteacher') sectionField = `<input type="text" id="section" value="${currentUser.assignedSection || SECTIONS[0]}" readonly class="border p-2 w-full bg-gray-100">`;
             let html = `<div class="bg-white p-6 rounded-xl"><h2>🎓 Enroll Student</h2><form id="enrollStudentForm"><input id="regNumber" placeholder="Reg Number" required><input id="studentName" placeholder="Student Name" required><input id="parentName" placeholder="Parent Name" required><input id="level" type="number" placeholder="Level 1-12" required>${sectionField}<select id="feeStatus"><option>Pending</option><option>Paid</option></select><button type="submit" class="bg-emerald-600 text-white p-2 rounded w-full">Register</button></form></div>`;
             document.getElementById("mainContent").innerHTML = html; document.getElementById("enrollStudentForm").addEventListener("submit", async(e)=>{ e.preventDefault(); await addStudentLogic(regNumber.value, studentName.value, parentName.value, level.value, document.getElementById("section").value, feeStatus.value); renderStudentsList(); }); }
 
-        // ========== RESULT & OTHER MODULES ==========
+        // ========== RESULT MODULES ==========
         async function saveStudentResult(studentId, term, year, subject, ca1, ca2, exam) { const total = ca1+ca2+exam; let grade = total>=80?'A':total>=70?'B':total>=60?'C':total>=50?'D':'E'; await supabaseClient.from('student_results').upsert({ student_id:studentId, term, year, subject, ca1, ca2, exam, total, grade }, { onConflict: 'student_id,term,year,subject' }); showToast("Saved"); }
         async function renderRecordResults() { if(!['teacher','headteacher','dg_ceo'].includes(currentUser.role)) return; let section = currentUser.assignedSection || SECTIONS[0]; let students = schoolData.students.filter(s=>s.section===section); let html = `<div class="bg-white p-6"><h2>Record Results</h2><select id="resultTerm"><option>1</option><option>2</option><option>3</option></select><input id="resultYear" value="2026"><input id="resultSubject" placeholder="Subject"><button id="loadTable" class="bg-emerald-600 text-white p-1 rounded">Load</button><div id="resultTableContainer"></div></div>`;
             document.getElementById("mainContent").innerHTML = html; document.getElementById("loadTable").addEventListener("click", async()=>{ let term = document.getElementById("resultTerm").value, year = document.getElementById("resultYear").value, subject = document.getElementById("resultSubject").value; let table = `<table class="result-table"><tr><th>Student</th><th>CA1</th><th>CA2</th><th>Exam</th><th>Save</th></tr>`; for(let s of students){ table += `<tr><td>${s.name}</td><td><input class="ca1-${s.id}" type="number" min="0" max="20"></td><td><input class="ca2-${s.id}" type="number" min="0" max="20"></td><td><input class="exam-${s.id}" type="number" min="0" max="60"></td><td><button onclick="window.saveRow(${s.id}, '${term}', ${year}, '${subject}')" class="bg-amber-500 p-1 rounded">Save</button></td></tr>`; } table += `</table>`; document.getElementById("resultTableContainer").innerHTML = table; window.saveRow = async (sid, t, y, sub) => { let ca1 = parseFloat(document.querySelector(`.ca1-${sid}`).value)||0, ca2 = parseFloat(document.querySelector(`.ca2-${sid}`).value)||0, exam = parseFloat(document.querySelector(`.exam-${sid}`).value)||0; await saveStudentResult(sid, t, y, sub, ca1, ca2, exam); }; }); }
@@ -284,26 +282,136 @@
             document.getElementById("mainContent").innerHTML = html; document.getElementById("viewAll").addEventListener("click", async()=>{ let section = document.getElementById("adminSection").value; let students = section==='All Sections'? schoolData.students : schoolData.students.filter(s=>s.section===section); let out = ''; for(let s of students){ let { data: res } = await supabaseClient.from('student_results').select('*').eq('student_id', s.id); out += `<div><b>${s.name}</b> ${res.map(r=>`${r.subject}: ${r.total}(${r.grade})`).join(', ')}</div>`; } document.getElementById("adminResultDisplay").innerHTML = out; }); }
         async function renderParentResults() { let child = schoolData.students.find(s=>s.id === currentUser.studentId); if(!child) return; let html = `<div class="bg-white p-6"><h2>Results for ${child.name}</h2><select id="parentTerm"><option>1</option><option>2</option><option>3</option></select><input id="parentYear" value="2026"><button id="viewParentResults" class="bg-amber-600 p-2 rounded">View</button><div id="parentResultDiv"></div></div>`;
             document.getElementById("mainContent").innerHTML = html; document.getElementById("viewParentResults").addEventListener("click", async()=>{ let term = document.getElementById("parentTerm").value, year = document.getElementById("parentYear").value; let { data } = await supabaseClient.from('student_results').select('*').eq('student_id', child.id).eq('term', term).eq('year', year); let table = `<table class="result-table"><tr><th>Subject</th><th>Total</th><th>Grade</th></tr>${data.map(r=>`<tr><td>${r.subject}</td><td>${r.total}</td><td>${r.grade}</td></tr>`).join('')}</table>`; document.getElementById("parentResultDiv").innerHTML = table; }); }
-        function renderStaffManagement() { if(!['dg_ceo','umc'].includes(currentUser.role)) return; let html = `<div class="bg-white p-6"><h2>Enroll Staff</h2><form id="staffForm"><input id="staffName" placeholder="Full Name"><input id="staffEmail" placeholder="Email"><select id="staffRole">${ROLES.map(r=>`<option value="${r.value}">${r.label}</option>`)}</select><select id="staffSection">${STAFF_SECTIONS.map(s=>`<option>${s}</option>`)}</select><input id="staffPassword" value="pass123"><button type="submit" class="bg-emerald-600 p-2 rounded">Register</button></form><hr><h3>Existing Staff</h3><div>${schoolData.teachers.map(t=>`<div>${t.name} (${t.email}) - ${t.role}</div>`).join('')}</div></div>`;
-            document.getElementById("mainContent").innerHTML = html; document.getElementById("staffForm").addEventListener("submit", async(e)=>{ e.preventDefault(); let role = document.getElementById("staffRole").value; await supabaseClient.auth.signUp({ email: staffEmail.value, password: staffPassword.value }); const { data: { user } } = await supabaseClient.auth.getUser(); await supabaseClient.from('profiles').insert([{ id: user.id, full_name: staffName.value, email: staffEmail.value, role, section: staffSection.value }]); await supabaseClient.from('teachers').insert([{ name: staffName.value, email: staffEmail.value, role, assigned_section: staffSection.value }]); showToast("Staff enrolled"); renderStaffManagement(); }); }
-        async function renderStaffAppraisal() { if(currentUser.role !== 'dg_ceo') return; let staffList = schoolData.teachers; let html = `<div class="bg-white p-6"><h2>Staff Appraisal</h2><div id="staffCards"></div></div>`; document.getElementById("mainContent").innerHTML = html; let cards = ''; for(let s of staffList){ cards += `<div class="border p-2 my-2"><b>${s.name}</b> (${s.role})<button onclick="window.appraiseStaff(${s.id}, '${s.name}')" class="bg-amber-500 p-1 rounded">Appraise</button></div>`; } document.getElementById("staffCards").innerHTML = cards; window.appraiseStaff = async (id, name) => { let rating = prompt("Rating 1-5"); let comments = prompt("Comments"); if(rating) await supabaseClient.from('staff_appraisals').insert({ staff_id: id, rating: parseInt(rating), comments, appraised_by: currentUser.full_name, appraised_at: new Date() }); showToast("Appraisal saved"); }; }
-        function renderAttendance() { document.getElementById("mainContent").innerHTML = `<div class="bg-white p-6">✅ Attendance module: use 'record-results' and teacher dashboard.</div>`; }
-        function renderContentView(view) { const fns = { dashboard:()=>document.getElementById("mainContent").innerHTML=`<div class="bg-white p-6"><h2>Welcome ${currentUser.full_name}</h2><div class="grid grid-cols-2 gap-4"><div>Students: ${schoolData.students.length}</div><div>Staff: ${schoolData.teachers.length}</div></div></div>`, students:renderStudentsList, "enroll-student":renderEnrollStudent, "record-results":renderRecordResults, "all-results-admin":renderAllResultsAdmin, "staff-appraisal":renderStaffAppraisal, applications:renderApplicationsList, "manage-announcement":()=>{ let html = `<div class="bg-white p-6"><textarea id="announceText" rows="3" class="w-full border"></textarea><button id="saveAnnounce" class="bg-amber-600 p-2 rounded">Update</button></div>`; document.getElementById("mainContent").innerHTML = html; supabaseClient.from('site_announcement').select('content').eq('id',1).single().then(d=>{ if(d.data) document.getElementById("announceText").value = d.data.content; }); document.getElementById("saveAnnounce").addEventListener("click", async()=>{ await updateAnnouncement(document.getElementById("announceText").value); }); }, "manage-slides":renderSlideManager, attendance:renderAttendance, "my-children-results":renderParentResults, "staff-management":renderStaffManagement }; if(fns[view]) fns[view](); else document.getElementById("mainContent").innerHTML = "<div class='bg-white p-6'>Module loading...</div>"; }
         
-        // ========== AUTH & LOGOUT (with timeout cleanup) ==========
-        async function loginUser(email, password) { 
+        // ========== MERGED STAFF MANAGEMENT + APPRAISAL (with Username) ==========
+        async function saveStaffAppraisal(staffId, rating, comments) {
+            if (!currentUser || currentUser.role !== 'dg_ceo') { showToast("Only DG/CEO can appraise", true); return false; }
+            const { error } = await supabaseClient.from('staff_appraisals').insert({ staff_id: staffId, rating, comments, appraised_by: currentUser.full_name, appraised_at: new Date() });
+            if (error) { showToast(error.message, true); return false; }
+            showToast("Appraisal saved"); return true;
+        }
+        async function fetchAppraisalsForStaff(staffId) {
+            const { data } = await supabaseClient.from('staff_appraisals').select('*').eq('staff_id', staffId).order('appraised_at', { ascending: false });
+            return data || [];
+        }
+        // Helper: check if username is unique (no existing profile with that username)
+        async function isUsernameUnique(username) {
+            const email = username + USERNAME_DOMAIN;
+            const { data } = await supabaseClient.from('profiles').select('id').eq('email', email);
+            return !data || data.length === 0;
+        }
+        async function renderStaffManagement() {
+            if (!['dg_ceo','umc'].includes(currentUser.role)) { showToast("Access denied", true); renderContentView("dashboard"); return; }
+            const { data: teachersList } = await supabaseClient.from('teachers').select('*');
+            const allStaff = teachersList || [];
+            const roleOps = ROLES.map(r=>`<option value="${r.value}">${r.label}</option>`).join('');
+            const secOps = STAFF_SECTIONS.map(s=>`<option value="${s}">${s}</option>`).join('');
+            let html = `<div class="bg-white p-6 rounded-xl shadow">
+                <h2 class="text-2xl font-bold mb-4">👥 Staff Management & Appraisal</h2>
+                <div class="border-b pb-4 mb-4"><h3 class="text-xl font-semibold">➕ Enroll New Staff</h3>
+                <form id="staffEnrollForm" class="space-y-4 mt-2">
+                    <input type="text" id="staffName" placeholder="Full Name" required class="border p-2 w-full rounded">
+                    <input type="text" id="staffUsername" placeholder="Username (unique, used for login)" required class="border p-2 w-full rounded">
+                    <select id="staffRole" class="border p-2 w-full rounded">${roleOps}</select>
+                    <div id="teacherLevelContainer" style="display:none;">
+                        <input type="number" id="teacherLevel" placeholder="Assigned Class Level (1-12)" min="1" max="12" class="border p-2 w-full rounded">
+                    </div>
+                    <select id="staffSection" class="border p-2 w-full rounded">${secOps}</select>
+                    <input type="text" id="staffPassword" value="password123" class="border p-2 w-full rounded">
+                    <button type="submit" class="bg-emerald-600 text-white px-4 py-2 rounded-lg">Register Staff</button>
+                </form></div>
+                <h3 class="text-xl font-semibold mt-6">📋 Existing Staff & Appraisals</h3>
+                <div class="overflow-x-auto"><table class="w-full border mt-2"><thead><tr class="bg-gray-100"><th>Name</th><th>Username</th><th>Role</th><th>Section</th><th>Level</th><th>Latest Appraisal</th><th>Actions</th></tr></thead><tbody id="staffTableBody"></tbody></table></div>
+            </div>`;
+            document.getElementById("mainContent").innerHTML = html;
+            
+            const roleSelect = document.getElementById("staffRole");
+            const levelDiv = document.getElementById("teacherLevelContainer");
+            const toggleLevel = () => { levelDiv.style.display = roleSelect.value === 'teacher' ? 'block' : 'none'; };
+            roleSelect.addEventListener("change", toggleLevel);
+            toggleLevel();
+            
+            const staffTableBody = document.getElementById("staffTableBody");
+            const renderStaffTable = async () => {
+                staffTableBody.innerHTML = '';
+                for (let staff of allStaff) {
+                    const appraisals = await fetchAppraisalsForStaff(staff.id);
+                    const latest = appraisals[0];
+                    const latestText = latest ? `⭐ ${latest.rating}/5 (${new Date(latest.appraised_at).toLocaleDateString()})` : 'Not appraised';
+                    // Extract username from email (strip domain)
+                    let username = staff.email ? staff.email.replace(USERNAME_DOMAIN, '') : staff.username || '-';
+                    const row = `<tr class="border-b"><td class="p-2">${escapeHtml(staff.name)}</td><td class="p-2">${escapeHtml(username)}</td><td class="p-2">${staff.role || '-'}</td><td class="p-2">${staff.assigned_section || '-'}</td><td class="p-2">${staff.level ? staff.level : (staff.role === 'teacher' ? 'Not set' : '-')}</td><td class="p-2">${latestText}</td><td class="p-2"><button class="appraise-staff-btn bg-amber-500 text-white px-3 py-1 rounded text-sm" data-id="${staff.id}" data-name="${escapeHtml(staff.name)}">Appraise</button></td></tr>`;
+                    staffTableBody.insertAdjacentHTML('beforeend', row);
+                }
+                document.querySelectorAll('.appraise-staff-btn').forEach(btn => btn.addEventListener('click', () => openAppraisalModal(btn.dataset.id, btn.dataset.name)));
+            };
+            await renderStaffTable();
+            
+            document.getElementById("staffEnrollForm").addEventListener("submit", async(e) => {
+                e.preventDefault();
+                const role = document.getElementById("staffRole").value;
+                const level = (role === 'teacher') ? document.getElementById("teacherLevel").value : null;
+                if (role === 'teacher' && (!level || level < 1 || level > 12)) { showToast("Valid class level (1-12) required for teacher", true); return; }
+                const fullName = document.getElementById("staffName").value;
+                const username = document.getElementById("staffUsername").value.trim();
+                if (!username) { showToast("Username required", true); return; }
+                // Check uniqueness
+                if (!(await isUsernameUnique(username))) { showToast("Username already taken. Choose another.", true); return; }
+                const password = document.getElementById("staffPassword").value;
+                const section = document.getElementById("staffSection").value;
+                const email = username + USERNAME_DOMAIN;
+                // Sign up auth user with email (generated)
+                const { data: authUser, error: signUpError } = await supabaseClient.auth.signUp({ email, password });
+                if (signUpError) { showToast("Signup error: "+signUpError.message, true); return; }
+                const roleLabel = ROLES.find(r=>r.value===role)?.label || role;
+                const { error: profileError } = await supabaseClient.from('profiles').insert([{ id: authUser.user.id, full_name: fullName, email, role, section, created_at: new Date() }]);
+                if (profileError) { showToast("Profile error: "+profileError.message, true); return; }
+                const teacherPayload = { name: fullName, email, role: roleLabel, assigned_section: section, username: username };
+                if (role === 'teacher') teacherPayload.level = parseInt(level);
+                await supabaseClient.from('teachers').insert([teacherPayload]);
+                await refreshSchoolData();
+                showToast(`Staff ${fullName} enrolled. Username: ${username}, Password: ${password}`);
+                renderStaffManagement(); // refresh
+            });
+            
+            window.openAppraisalModal = openAppraisalModal;
+            function openAppraisalModal(staffId, staffName) {
+                const modalDiv = document.createElement('div');
+                modalDiv.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black/50';
+                modalDiv.innerHTML = `<div class="bg-white rounded-2xl p-6 w-96 relative"><button class="close-modal absolute top-2 right-3 text-2xl">&times;</button><h3 class="text-xl font-bold mb-3">Appraise ${staffName}</h3><div><label>Rating (1-5)</label><div id="starRating" class="flex gap-1 text-2xl text-amber-400 my-2"></div><input type="hidden" id="ratingValue" value="3"></div><textarea id="appraisalComments" rows="3" class="w-full border rounded-lg p-2 mt-2" placeholder="Performance comments..."></textarea><button id="submitAppraisal" class="w-full bg-emerald-600 text-white py-2 rounded-full mt-4">Submit</button></div>`;
+                document.body.appendChild(modalDiv);
+                let currentRating = 3;
+                const starContainer = modalDiv.querySelector('#starRating');
+                const updateStars = () => { starContainer.innerHTML = ''; for (let i=1; i<=5; i++) { const star = document.createElement('i'); star.className = i <= currentRating ? 'fas fa-star cursor-pointer' : 'far fa-star cursor-pointer'; star.addEventListener('click', () => { currentRating = i; document.getElementById('ratingValue').value = i; updateStars(); }); starContainer.appendChild(star); } };
+                updateStars();
+                modalDiv.querySelector('#submitAppraisal').addEventListener('click', async () => {
+                    const rating = parseInt(document.getElementById('ratingValue').value);
+                    const comments = modalDiv.querySelector('#appraisalComments').value;
+                    await saveStaffAppraisal(parseInt(staffId), rating, comments);
+                    modalDiv.remove();
+                    renderStaffManagement();
+                });
+                modalDiv.querySelector('.close-modal').addEventListener('click', () => modalDiv.remove());
+            }
+        }
+        
+        function renderAttendance() { document.getElementById("mainContent").innerHTML = `<div class="bg-white p-6">✅ Attendance module: use 'record-results' and teacher dashboard.</div>`; }
+        function renderContentView(view) { const fns = { dashboard:()=>document.getElementById("mainContent").innerHTML=`<div class="bg-white p-6"><h2>Welcome ${currentUser.full_name}</h2><div class="grid grid-cols-2 gap-4"><div>Students: ${schoolData.students.length}</div><div>Staff: ${schoolData.teachers.length}</div></div></div>`, students:renderStudentsList, "enroll-student":renderEnrollStudent, "record-results":renderRecordResults, "all-results-admin":renderAllResultsAdmin, "staff-management":renderStaffManagement, applications:renderApplicationsList, "manage-announcement":()=>{ let html = `<div class="bg-white p-6"><textarea id="announceText" rows="3" class="w-full border"></textarea><button id="saveAnnounce" class="bg-amber-600 p-2 rounded">Update</button></div>`; document.getElementById("mainContent").innerHTML = html; supabaseClient.from('site_announcement').select('content').eq('id',1).single().then(d=>{ if(d.data) document.getElementById("announceText").value = d.data.content; }); document.getElementById("saveAnnounce").addEventListener("click", async()=>{ await updateAnnouncement(document.getElementById("announceText").value); }); }, "manage-slides":renderSlideManager, attendance:renderAttendance, "my-children-results":renderParentResults }; if(fns[view]) fns[view](); else document.getElementById("mainContent").innerHTML = "<div class='bg-white p-6'>Module loading...</div>"; }
+        
+        // ========== AUTH & LOGOUT (Username-based) ==========
+        async function loginUser(username, password) { 
             try { 
+                const email = username + USERNAME_DOMAIN;
                 const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password }); 
                 if(error) throw error; 
                 const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', data.user.id).single(); 
-                if (!profile?.role) throw new Error("No role"); 
+                if (!profile?.role) throw new Error("No role assigned"); 
                 currentUser = { ...profile, full_name: profile.full_name, role: profile.role, assignedSection: profile.section && !profile.section.includes('Oversight') ? profile.section : SECTIONS[0] }; 
                 await refreshSchoolData(); 
                 showDashboard(); 
-                // Attach activity listeners and start timeout
                 attachActivityListeners();
                 resetInactivityTimer();
-            } catch(e) { showToast(e.message, true); } 
+            } catch(e) { showToast("Login failed: "+e.message, true); } 
         }
         async function parentLogin(regNo, pwd) { if(pwd !== "al123") return showToast("Invalid password", true); const student = schoolData.students.find(s=>s.reg_number === regNo); if(!student) return showToast("Not found", true); currentUser = { role:"parent", full_name:`Parent of ${student.name}`, studentId:student.id }; showDashboard(); attachActivityListeners(); resetInactivityTimer(); }
         async function adminSignup(fullName, email, password, role, code) { if(code !== "ALIFLY2026") return showToast("Invalid code", true); const { error } = await supabaseClient.auth.signUp({ email, password }); if(error) return showToast(error.message, true); const { data: { user } } = await supabaseClient.auth.getUser(); await supabaseClient.from('profiles').insert([{ id: user.id, full_name: fullName, email, role, section: "Oversight" }]); showToast("Admin created, please login"); document.getElementById('adminSignupModal').style.display = 'none'; }
@@ -314,18 +422,17 @@
             document.getElementById('landingPage').style.display = 'block'; 
             fetchAndDisplayAnnouncement(); 
             closeMobileSidebar();
-            // Cleanup inactivity timer and listeners
             detachActivityListeners();
         }
         function showDashboard() { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('parentLoginModal').style.display = 'none'; document.getElementById('landingPage').style.display = 'none'; document.getElementById('appContainer').classList.remove('hidden'); document.getElementById('topUserName').innerText = currentUser.full_name; document.getElementById('topUserRole').innerText = currentUser.role.toUpperCase(); renderNav(); }
         function renderNav() { let items = []; const role = currentUser.role;
-            if(role === 'dg_ceo') items = ["dashboard","students","enroll-student","record-results","all-results-admin","staff-appraisal","applications","manage-announcement","manage-slides","staff-management"];
-            else if(role === 'umc') items = ["dashboard","students","enroll-student","record-results","all-results-admin","manage-slides","staff-management"];
+            if(role === 'dg_ceo') items = ["dashboard","students","enroll-student","record-results","all-results-admin","staff-management","applications","manage-announcement","manage-slides"];
+            else if(role === 'umc') items = ["dashboard","students","enroll-student","record-results","all-results-admin","staff-management","manage-slides"];
             else if(role === 'headteacher') items = ["dashboard","students","enroll-student","record-results","attendance"];
             else if(role === 'teacher') items = ["dashboard","record-results","attendance"];
             else if(role === 'parent') items = ["my-children-results"];
             else items = ["dashboard"];
-            const labels = { dashboard:"🏠 Dashboard", students:"📚 Students", "enroll-student":"🎓 Enroll Student", "record-results":"📝 Term Results", "all-results-admin":"📊 All Results", "staff-appraisal":"⭐ Staff Appraisal", applications:"📋 Applications", "manage-announcement":"📢 Announcement", "manage-slides":"🖼️ Slides", attendance:"✅ Attendance", "my-children-results":"📘 My Child's Results", "staff-management":"👥 Staff Management" };
+            const labels = { dashboard:"🏠 Dashboard", students:"📚 Students", "enroll-student":"🎓 Enroll Student", "record-results":"📝 Term Results", "all-results-admin":"📊 All Results", "staff-management":"👥 Staff Management", applications:"📋 Applications", "manage-announcement":"📢 Announcement", "manage-slides":"🖼️ Slides", attendance:"✅ Attendance", "my-children-results":"📘 My Child's Results" };
             const html = items.map(v=>`<a href="#" data-view="${v}" class="nav-link flex items-center space-x-3 px-4 py-2.5 rounded-lg text-slate-200 hover:bg-white/10"><i class="fas fa-folder w-5"></i><span>${labels[v]||v}</span></a>`).join('');
             document.getElementById("dynamicNav").innerHTML = html; document.querySelectorAll('.nav-link').forEach(link => link.addEventListener('click', (e)=>{ e.preventDefault(); renderContentView(link.dataset.view); closeMobileSidebar(); resetInactivityTimer(); })); renderContentView(items[0]); }
         
@@ -333,7 +440,8 @@
         function closeMobileSidebar() { document.getElementById('dynamicSidebar')?.classList.remove('open'); document.getElementById('sidebarOverlay')?.classList.remove('active'); }
         document.getElementById('mobileMenuToggle')?.addEventListener('click', () => { document.getElementById('dynamicSidebar').classList.toggle('open'); resetInactivityTimer(); });
         document.getElementById('topLogoutBtn')?.addEventListener('click', logoutUser);
-        document.getElementById('authForm')?.addEventListener('submit', async(e)=>{ e.preventDefault(); await loginUser(authEmail.value, authPassword.value); });
+        // Updated auth form with username
+        document.getElementById('authForm')?.addEventListener('submit', async(e)=>{ e.preventDefault(); await loginUser(authUsername.value, authPassword.value); });
         document.getElementById('parentAuthForm')?.addEventListener('submit', async(e)=>{ e.preventDefault(); await parentLogin(parentRegNo.value, parentPassword.value); });
         document.getElementById('adminSignupForm')?.addEventListener('submit', async(e)=>{ e.preventDefault(); await adminSignup(adminFullName.value, adminEmail.value, adminPassword.value, adminRole.value, adminRegCode.value); });
         document.getElementById('loginBtnHero')?.addEventListener('click',()=>{ document.getElementById('landingPage').style.display='none'; document.getElementById('loginScreen').style.display='flex'; resetInactivityTimer(); });
@@ -346,7 +454,7 @@
         document.getElementById('prevSlide')?.addEventListener('click',()=>goToSlide(currentSlideIndex-1));
         document.getElementById('nextSlide')?.addEventListener('click',()=>goToSlide(currentSlideIndex+1));
         document.getElementById('applyNowBtn')?.addEventListener('click', (e) => { e.preventDefault(); showApplicationFormModal(); resetInactivityTimer(); });
-        window.resetPasswordAction = async function() { const email = document.getElementById('authEmail').value; if(!email) return showToast("Enter email", true); const { error } = await supabaseClient.auth.resetPasswordForEmail(email); showToast(error ? error.message : "Reset link sent!"); };
+        window.resetPasswordAction = async function() { const username = document.getElementById('authUsername').value; if(!username) return showToast("Enter username", true); const email = username + USERNAME_DOMAIN; const { error } = await supabaseClient.auth.resetPasswordForEmail(email); showToast(error ? error.message : "Reset link sent to your email!"); };
         async function checkSession() { const { data: { session } } = await supabaseClient.auth.getSession(); if (session) { const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', session.user.id).single(); if (profile?.role) { currentUser = { ...profile, full_name: profile.full_name, role: profile.role, assignedSection: profile.section && !profile.section.includes('Oversight') ? profile.section : SECTIONS[0] }; await refreshSchoolData(); showDashboard(); attachActivityListeners(); resetInactivityTimer(); return; } } document.getElementById('landingPage').style.display = 'block'; document.getElementById('appContainer').classList.add('hidden'); fetchAndDisplayAnnouncement(); }
         function initCookieConsent() { const banner = document.getElementById('cookieBanner'); const acceptBtn = document.getElementById('acceptCookiesBtn'); if (!localStorage.getItem('cookies_accepted')) banner.style.display = 'flex'; acceptBtn.addEventListener('click', () => { localStorage.setItem('cookies_accepted', 'true'); banner.style.display = 'none'; showToast("Cookies accepted ✅"); }); }
         function updateDateTime() { let now=new Date(); if(document.getElementById('liveTime')) document.getElementById('liveTime').innerText=now.toLocaleTimeString('en-NG'); if(document.getElementById('liveDate')) document.getElementById('liveDate').innerText=now.toLocaleDateString('en-NG',{weekday:'long',year:'numeric',month:'long',day:'numeric'}); if(document.getElementById('weatherTemp')) document.getElementById('weatherTemp').innerText = "28"; document.getElementById('weatherDesc').innerText = "Sunny"; }
@@ -354,4 +462,4 @@
         ensureAnnouncementRowExists().then(()=>{ loadSlidesFromSupabase(); checkSession(); initCookieConsent(); fetchAndDisplayAnnouncement(); });
     </script>
 </body>
-    </html>
+</html>
