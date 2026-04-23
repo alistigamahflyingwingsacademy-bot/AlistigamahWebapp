@@ -8,8 +8,8 @@
     <!-- Supabase JS Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        const SUPABASE_URL = 'https://enpqmkdsbomufdowlwdw.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_YUsAMF5L77zOBM1cSfBvGg_wJys3ifW';
+        const SUPABASE_URL = 'https://gycsmfsltrmurlskzppx.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_joQFBZAlelJvqrMl8gSENg_PtQAJlak';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     </script>
     
@@ -19,7 +19,6 @@
     <meta property="og:description" content="Complete academic management, attendance, fees, grading, and enrollment.">
     <meta property="og:image" content="https://picsum.photos/id/20/1200/630.jpg">
     
-    <!-- External Dependencies -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
@@ -35,7 +34,6 @@
         .dot { transition: all 0.2s; cursor: pointer; }
         .toast-notify { position: fixed; bottom: 20px; right: 20px; background: #323232; color: white; padding: 12px 20px; border-radius: 8px; z-index: 1000; display: none; }
         .filter-bar { background: #f8fafc; border-radius: 1rem; padding: 1rem; margin-bottom: 1.5rem; border: 1px solid #e2e8f0; }
-        .score-input { width: 70px; padding: 4px; border-radius: 6px; border: 1px solid #cbd5e1; text-align: center; }
         .result-table { border-collapse: collapse; width: 100%; }
         .result-table th, .result-table td { border: 1px solid #e2e8f0; padding: 8px; text-align: center; }
         .announcement-bar { background: linear-gradient(95deg, #fef3c7 0%, #fffbeb 100%); border-left: 6px solid #f59e0b; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
@@ -51,7 +49,6 @@
         .powered-by { margin-top: 1rem; text-align: center; font-size: 0.8rem; background: linear-gradient(135deg, #0f172a, #1e293b); padding: 8px; border-radius: 40px; display: inline-block; width: auto; margin-left: auto; margin-right: auto; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
         .card-hover { transition: all 0.3s ease; }
         .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -12px rgba(0,0,0,0.15); }
-        .att-check { width: 20px; height: 20px; accent-color: #10b981; }
         .apply-btn { background: linear-gradient(135deg, #f59e0b, #d97706); transition: all 0.3s ease; }
         .apply-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -5px rgba(245, 158, 11, 0.4); }
         .suspend-btn, .delete-btn { padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; border: none; margin-right: 4px; }
@@ -71,14 +68,11 @@
             .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 55; display: none; }
             .sidebar-overlay.active { display: block; }
         }
-        .modal-scroll { max-height: 85vh; overflow-y: auto; }
-        .file-list { font-size: 0.75rem; color: #2c3e50; margin-top: 4px; }
         @media (max-width: 640px) {
             .form-card .grid { grid-template-columns: 1fr; }
             .cookie-consent { flex-direction: column; text-align: center; }
         }
         .subject-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
-        .remove-subject { background: #ef4444; color: white; border-radius: 999px; padding: 2px 8px; font-size: 0.7rem; cursor: pointer; }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -89,7 +83,7 @@
         <button id="acceptCookiesBtn">Accept All Cookies</button>
     </div>
 
-    <!-- LANDING PAGE (unchanged) -->
+    <!-- LANDING PAGE -->
     <div id="landingPage" class="min-h-screen relative">
         <div class="hero-pattern text-white relative overflow-hidden">
             <div class="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.2"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
@@ -125,10 +119,8 @@
             </div>
         </div>
 
-        <!-- ANNOUNCEMENT BAR -->
         <div class="container mx-auto px-6 pt-6"><div id="announcementBarWrapper" class="mb-5"></div></div>
 
-        <!-- Slideshow container -->
         <div class="container mx-auto px-6 pb-6">
             <div class="text-center mb-6"><h2 class="text-3xl font-bold text-gray-800">📸 Our Campus <span class="text-amber-600">in Focus</span></h2></div>
             <div class="relative rounded-2xl overflow-hidden shadow-2xl bg-gray-900">
@@ -152,7 +144,7 @@
         </footer>
     </div>
 
-    <!-- LOGIN MODALS (unchanged) -->
+    <!-- LOGIN MODALS -->
     <div id="loginScreen" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70">
         <div class="bg-white rounded-2xl p-8 w-96 relative">
             <h2 class="text-2xl font-bold mb-4">Login</h2>
@@ -223,7 +215,7 @@
         async function ensureAnnouncementRowExists() { const { data } = await supabaseClient.from('site_announcement').select('id').eq('id',1).single();
             if(!data) await supabaseClient.from('site_announcement').insert({ id:1, content: "📢 Welcome to Al‑Istiqaamah Flying Wings Academy. Admissions open for 2026!" }); }
 
-        // ========== ADMISSION APPLICATION helpers (with duplicate prevention & file validation) ==========
+        // ========== ADMISSION APPLICATION helpers (duplicate prevention + file validation) ==========
         async function ensureStorageBucket() { const { data: buckets } = await supabaseClient.storage.listBuckets(); if (!buckets.find(b => b.name === 'application_attachments')) await supabaseClient.storage.createBucket('application_attachments', { public: true }); }
         function validateFile(file) {
             const maxSize = 5 * 1024 * 1024;
@@ -253,11 +245,130 @@
             return false;
         }
         
-        // Full application form modal (identical to previous enhanced version, omitted for brevity but included in final code)
-        // [The complete showApplicationFormModal function is included in the final HTML – same as earlier with duplicate and file checks]
-        // For space, I'll include a placeholder comment, but actual code will be present.
-        
-        // ========== RESULT MANAGEMENT UNIFIED FOR DG/CEO ==========
+        // Full application form modal (with all fields, duplicate check, file validation)
+        function showApplicationFormModal() {
+            const modalDiv = document.createElement('div');
+            modalDiv.className = 'fixed inset-0 z-[100] flex items-center justify-center bg-black/80 overflow-y-auto p-4';
+            modalDiv.style.backdropFilter = 'blur(4px)';
+            modalDiv.innerHTML = `
+            <div class="bg-white rounded-2xl w-full max-w-6xl max-h-[90vh] overflow-y-auto relative shadow-2xl">
+                <div class="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center z-10">
+                    <h2 class="text-2xl font-bold text-emerald-800"><i class="fas fa-file-alt mr-2"></i> Admission Application Form</h2>
+                    <button id="closeAppModalNew" class="text-gray-500 text-3xl hover:text-gray-700">&times;</button>
+                </div>
+                <div class="p-6">
+                    <form id="admissionFormNew" class="space-y-8">
+                        <!-- SECTION A: APPLICANT INFORMATION -->
+                        <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+                            <div class="text-white px-6 py-3" style="background: linear-gradient(120deg, #0f2e2c 0%, #1b4d48 100%);"><h2 class="text-xl font-bold"><i class="fas fa-user-graduate mr-2"></i> A. APPLICANT INFORMATION</h2></div>
+                            <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                                <div><label class="block text-sm font-semibold">Surname <span class="text-red-500">*</span></label><input type="text" name="surname" required class="w-full border rounded-xl p-2.5"></div>
+                                <div><label class="block text-sm font-semibold">First Name <span class="text-red-500">*</span></label><input type="text" name="firstname" required class="w-full border rounded-xl p-2.5"></div>
+                                <div><label class="block text-sm font-semibold">Other Names</label><input type="text" name="othernames" class="w-full border rounded-xl p-2.5"></div>
+                                <div><label class="block text-sm font-semibold">Gender</label><select name="gender" class="w-full border rounded-xl p-2.5"><option>Male</option><option>Female</option></select></div>
+                                <div><label class="block text-sm font-semibold">Date of Birth</label><input type="date" name="dob" id="dobNew" class="w-full border rounded-xl p-2.5"></div>
+                                <div><label class="block text-sm font-semibold">Age</label><input type="number" name="age" id="ageNew" readonly class="w-full bg-gray-100 border rounded-xl p-2.5"></div>
+                                <div><label class="block text-sm font-semibold">Place of Birth</label><input type="text" name="placeOfBirth" class="w-full border rounded-xl p-2.5"></div>
+                                <div><label class="block text-sm font-semibold">Nationality</label><input type="text" name="nationality" value="Nigerian" class="w-full border rounded-xl p-2.5"></div>
+                                <div><label class="block text-sm font-semibold">State of Origin</label><input type="text" name="stateOfOrigin" class="w-full border rounded-xl p-2.5"></div>
+                                <div><label class="block text-sm font-semibold">Local Government Area</label><input type="text" name="lga" class="w-full border rounded-xl p-2.5"></div>
+                                <div><label class="block text-sm font-semibold">Religion</label><select name="religion" class="w-full border rounded-xl p-2.5"><option>Islam</option><option>Christianity</option><option>Other</option></select></div>
+                                <div class="md:col-span-2"><label class="block text-sm font-semibold">Home Address</label><input type="text" name="homeAddress" class="w-full border rounded-xl p-2.5"></div>
+                                <div><label class="block text-sm font-semibold">Child ID Number (NIN)</label><input type="text" name="childIdNumber" class="w-full border rounded-xl p-2.5"></div>
+                            </div>
+                        </div>
+
+                        <!-- SECTION B: ACADEMIC INFORMATION -->
+                        <div class="bg-white rounded-2xl border">
+                            <div class="text-white px-6 py-3" style="background: linear-gradient(120deg, #0f2e2c 0%, #1b4d48 100%);"><h2 class="text-xl font-bold"><i class="fas fa-book-open mr-2"></i> B. ACADEMIC INFORMATION</h2></div>
+                            <div class="p-6 grid md:grid-cols-2 gap-5">
+                                <div><label>Class/Level Seeking</label><select name="classLevel" class="w-full border rounded-xl p-2.5"><option>Regular Islamiyyah (RI)</option><option>Regular Memorization (RM)</option><option>Intensive Memorization (IM)</option><option>Integrated Islamic Basic Section</option><option>Advance Section</option><option>Woman Section</option></select></div>
+                                <div><label>Term & Academic Session</label><input type="text" name="termSession" placeholder="e.g., First Term 2025/2026" class="w-full border rounded-xl p-2.5"></div>
+                                <div><label>Previous School</label><input type="text" name="prevSchool" class="w-full border rounded-xl p-2.5"></div>
+                                <div><label>Last Class Completed</label><input type="text" name="lastClass" class="w-full border rounded-xl p-2.5"></div>
+                                <div><label>Reason for Leaving</label><textarea name="reasonLeaving" rows="2" class="w-full border rounded-xl p-2.5"></textarea></div>
+                                <div><label>Languages Spoken</label><input type="text" name="languages" class="w-full border rounded-xl p-2.5"></div>
+                                <div><label>Special Needs</label><input type="text" name="specialNeeds" class="w-full border rounded-xl p-2.5"></div>
+                            </div>
+                        </div>
+
+                        <!-- C: HEALTH, D: PARENT -->
+                        <div class="grid lg:grid-cols-2 gap-6">
+                            <div class="bg-white rounded-2xl border p-5"><h3 class="font-bold text-lg"><i class="fas fa-heartbeat text-red-500"></i> C. HEALTH</h3><div class="space-y-3 mt-2"><input type="text" name="bloodGroup" placeholder="Blood Group/Genotype" class="w-full border rounded-lg p-2"><input type="text" name="allergies" placeholder="Allergies" class="w-full border rounded-lg p-2"><input type="text" name="physicalChallenge" placeholder="Physical Challenge" class="w-full border rounded-lg p-2"><input type="text" name="chronic" placeholder="Chronic Illness" class="w-full border rounded-lg p-2"><input type="text" name="emergencyHealth" placeholder="Emergency Health" class="w-full border rounded-lg p-2"><select name="immunization" class="w-full border rounded-lg p-2"><option>Up to date</option><option>Partial</option><option>Not available</option></select></div></div>
+                            <div class="bg-white rounded-2xl border p-5"><h3 class="font-bold text-lg"><i class="fas fa-users"></i> D. PARENT/GUARDIAN</h3><div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2"><input type="text" name="fatherName" placeholder="Father's Name"><input type="text" name="motherName" placeholder="Mother's Name"><input type="text" name="guardianName" placeholder="Guardian Name"><input type="text" name="relationship" placeholder="Relationship"><input type="text" name="parentOccupation" placeholder="Occupation"><input type="text" name="parentResAddress" placeholder="Res. Address" class="col-span-2"><input type="text" name="parentOfficeAddress" placeholder="Office Address" class="col-span-2"><input type="tel" name="parentPhone" placeholder="Phone"><input type="email" name="parentEmail" placeholder="Email"></div></div>
+                        </div>
+
+                        <!-- E: SPONSOR, F: RELIGIOUS -->
+                        <div class="bg-white rounded-2xl border p-6"><h3 class="font-bold text-lg"><i class="fas fa-hand-holding-usd"></i> E. SPONSOR</h3><div class="grid md:grid-cols-2 gap-4 mt-2"><input type="text" name="sponsorName" placeholder="Sponsor Name"><input type="text" name="sponsorRelationship" placeholder="Relationship"><input type="text" name="sponsorContact" placeholder="Contact Address"><input type="tel" name="sponsorPhone" placeholder="Phone"><input type="text" name="feeResponsible" placeholder="Fee Responsible"></div></div>
+                        <div class="bg-white rounded-2xl border p-6"><h3 class="font-bold text-lg"><i class="fas fa-mosque text-emerald-700"></i> F. RELIGIOUS INFO</h3><div class="grid md:grid-cols-2 gap-4 mt-2"><input type="text" name="muslimName" placeholder="Muslim Name"><select name="quranReading"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select><input type="text" name="quranMemorization" placeholder="Memorization level"><input type="text" name="prevMadrasah" placeholder="Previous Madrasah"><textarea name="religiousNeeds" placeholder="Religious Needs" rows="2" class="col-span-2"></textarea></div></div>
+
+                        <!-- G: TRANSPORT -->
+                        <div class="bg-white rounded-2xl border p-6"><h3 class="font-bold text-lg"><i class="fas fa-bus"></i> G. TRANSPORT & HOSTEL</h3><div class="grid md:grid-cols-3 gap-4 mt-2"><select name="transportMode"><option>School Bus</option><option>Private Vehicle</option><option>Public Transport</option></select><select name="boardingStatus"><option>Day Student</option><option>Boarding</option></select><input type="text" name="busPoint" placeholder="Bus Pick-up Point"></div></div>
+
+                        <!-- H: DECLARATION -->
+                        <div class="bg-white rounded-2xl border p-6"><h3 class="font-bold text-lg"><i class="fas fa-file-signature"></i> H. DECLARATION</h3><div class="grid md:grid-cols-3 gap-4 mt-2"><input type="text" name="declarantName" placeholder="Parent/Guardian Name *" required><input type="text" name="signature" placeholder="Signature (full name)"><input type="date" name="declarationDate"></div></div>
+
+                        <!-- J: ATTACHMENTS -->
+                        <div class="bg-white rounded-2xl border p-6"><h3 class="font-bold text-lg"><i class="fas fa-paperclip"></i> J. ATTACHMENTS (Max 5MB, JPG/PNG/PDF)</h3><div class="grid md:grid-cols-3 gap-4 mt-2"><input type="file" name="birthCert" accept="image/jpeg,image/png,image/jpg,application/pdf"><input type="file" name="prevReport" accept="image/jpeg,image/png,image/jpg,application/pdf"><input type="file" name="transferCert" accept="image/jpeg,image/png,image/jpg,application/pdf"><input type="file" name="medicalReport" accept="image/jpeg,image/png,image/jpg,application/pdf"><input type="file" name="immunizationCard" accept="image/jpeg,image/png,image/jpg,application/pdf"><input type="file" name="passportPhotos" multiple accept="image/jpeg,image/png,image/jpg"></div><p class="text-xs text-gray-500 mt-2"><i class="fas fa-info-circle"></i> Allowed: JPEG, PNG, PDF up to 5MB per file.</p></div>
+
+                        <div class="flex justify-end gap-3 sticky bottom-4 bg-white/80 p-4 rounded-2xl shadow"><button type="reset" class="bg-gray-200 px-6 py-2 rounded-xl">Reset</button><button type="submit" class="bg-emerald-700 text-white px-8 py-2 rounded-xl font-bold">Submit Application</button></div>
+                    </form>
+                </div>
+            </div>`;
+            document.body.appendChild(modalDiv);
+
+            const successModal = document.createElement('div'); successModal.id = 'submissionModalNew'; successModal.className = 'fixed inset-0 bg-black/60 flex items-center justify-center z-[110] hidden'; successModal.innerHTML = `<div class="bg-white rounded-2xl max-w-lg p-6"><h3 class="text-2xl font-bold text-emerald-800"><i class="fas fa-check-circle text-green-500"></i> Application Received</h3><p class="mt-2">Thank you. Admission office will contact you.</p><button id="confirmSuccessBtn" class="mt-4 w-full bg-amber-600 text-white py-2 rounded-xl">Close</button></div>`;
+            document.body.appendChild(successModal);
+            const closeSuccess = () => successModal.classList.add('hidden');
+            document.getElementById('confirmSuccessBtn')?.addEventListener('click', closeSuccess);
+            const closeModal = () => { modalDiv.remove(); successModal.remove(); };
+            modalDiv.querySelector('#closeAppModalNew').addEventListener('click', closeModal);
+            modalDiv.addEventListener('click', (e) => { if (e.target === modalDiv) closeModal(); });
+            
+            const dobInput = modalDiv.querySelector('#dobNew');
+            const ageField = modalDiv.querySelector('#ageNew');
+            if (dobInput && ageField) dobInput.addEventListener('change', function() { if(this.value){ let age = new Date().getFullYear() - new Date(this.value).getFullYear(); ageField.value = age; } });
+            
+            modalDiv.querySelector('#admissionFormNew').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const form = e.target;
+                const surname = form.surname.value.trim(), firstname = form.firstname.value.trim(), declarant = form.declarantName.value.trim();
+                const parentEmail = form.parentEmail?.value.trim(), parentPhone = form.parentPhone?.value.trim();
+                if (!surname || !firstname || !declarant) { alert("Please fill required fields"); return; }
+                const isDuplicate = await checkDuplicateApplication(parentEmail, parentPhone, `${firstname} ${surname}`);
+                if (isDuplicate) { alert("Duplicate application: same parent email/phone already under review."); return; }
+                const applicantName = `${firstname} ${surname}`;
+                const fileFields = ['birthCert','prevReport','transferCert','medicalReport','immunizationCard','passportPhotos'];
+                const textData = {};
+                for (let [k,v] of new FormData(form).entries()) if (!fileFields.includes(k)) textData[k] = v;
+                const uploadedUrls = {};
+                try {
+                    await ensureStorageBucket();
+                    for (let field of fileFields) {
+                        if (field === 'passportPhotos') {
+                            const files = form.querySelector(`[name="${field}"]`).files;
+                            for (let f of files) if (f.size) validateFile(f);
+                            const urls = [];
+                            for (let f of files) if (f.size) urls.push(await uploadFile(f, applicantName));
+                            if (urls.length) uploadedUrls[field] = urls;
+                        } else {
+                            const file = form.querySelector(`[name="${field}"]`).files[0];
+                            if (file && file.size) { validateFile(file); uploadedUrls[field] = await uploadFile(file, applicantName); }
+                        }
+                    }
+                    const { error } = await supabaseClient.from('admission_applications').insert([{
+                        form_data: { ...textData, attachments: uploadedUrls }, full_name: applicantName,
+                        parent_email: parentEmail || null, phone: parentPhone || null, submitted_at: new Date(), status: 'pending'
+                    }]);
+                    if (error) throw error;
+                    successModal.classList.remove('hidden');
+                    form.reset(); if(ageField) ageField.value = '';
+                    setTimeout(() => closeModal(), 3000);
+                } catch (err) { showToast("Submission error: " + err.message, true); }
+            });
+        }
+
+        // ========== UNIFIED RESULTS MANAGEMENT FOR DG/CEO ==========
         async function saveStudentResult(studentId, term, year, subject, ca1, ca2, exam) {
             const total = ca1 + ca2 + exam;
             let grade = total >= 80 ? 'A' : total >= 70 ? 'B' : total >= 60 ? 'C' : total >= 50 ? 'D' : 'E';
@@ -265,66 +376,24 @@
                 student_id: studentId, term, year, subject, ca1, ca2, exam, total, grade
             }, { onConflict: 'student_id,term,year,subject' });
             if (error) throw error;
-            return true;
         }
         
-        async function deleteStudentResult(studentId, term, year, subject) {
-            const { error } = await supabaseClient.from('student_results').delete()
-                .eq('student_id', studentId).eq('term', term).eq('year', year).eq('subject', subject);
-            if (error) throw error;
-        }
-        
-        // Unified Results Management for DG/CEO
         async function renderUnifiedResults() {
-            if (currentUser.role !== 'dg_ceo') {
-                showToast("Access denied: Only DG/CEO can use this feature", true);
-                renderContentView("dashboard");
-                return;
-            }
-            
-            // Build filter UI
+            if (currentUser.role !== 'dg_ceo') { showToast("Access denied", true); renderContentView("dashboard"); return; }
             let html = `
                 <div class="bg-white rounded-xl shadow p-6">
                     <h2 class="text-2xl font-bold mb-4">📊 Comprehensive Results Management</h2>
                     <div class="grid md:grid-cols-4 gap-4 mb-6">
-                        <div>
-                            <label class="block text-sm font-medium">Section</label>
-                            <select id="resultsSection" class="w-full border rounded-lg p-2">
-                                <option value="">All Sections</option>
-                                ${SECTIONS.map(s => `<option value="${s}">${s}</option>`).join('')}
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium">Student</label>
-                            <select id="resultsStudent" class="w-full border rounded-lg p-2">
-                                <option value="">-- Select Student --</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium">Term</label>
-                            <select id="resultsTerm" class="w-full border rounded-lg p-2">
-                                <option value="1">First Term</option>
-                                <option value="2">Second Term</option>
-                                <option value="3">Third Term</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium">Academic Year</label>
-                            <input type="text" id="resultsYear" class="w-full border rounded-lg p-2" value="2026">
-                        </div>
+                        <div><label class="block text-sm font-medium">Section</label><select id="resultsSection" class="w-full border rounded-lg p-2"><option value="">All Sections</option>${SECTIONS.map(s => `<option value="${s}">${s}</option>`).join('')}</select></div>
+                        <div><label class="block text-sm font-medium">Student</label><select id="resultsStudent" class="w-full border rounded-lg p-2"><option value="">-- Select Student --</option></select></div>
+                        <div><label class="block text-sm font-medium">Term</label><select id="resultsTerm" class="w-full border rounded-lg p-2"><option value="1">First Term</option><option value="2">Second Term</option><option value="3">Third Term</option></select></div>
+                        <div><label class="block text-sm font-medium">Academic Year</label><input type="text" id="resultsYear" class="w-full border rounded-lg p-2" value="2026"></div>
                     </div>
-                    <div class="flex justify-end gap-2 mb-4">
-                        <button id="loadResultsBtn" class="bg-emerald-600 text-white px-4 py-2 rounded-lg"><i class="fas fa-search"></i> Load Results</button>
-                        <button id="addSubjectBtn" class="bg-amber-500 text-white px-4 py-2 rounded-lg"><i class="fas fa-plus"></i> Add Subject</button>
-                    </div>
-                    <div id="resultsEditorContainer" class="overflow-x-auto">
-                        <p class="text-gray-500 italic">Select a student, term, year and click "Load Results".</p>
-                    </div>
+                    <div class="flex justify-end gap-2 mb-4"><button id="loadResultsBtn" class="bg-emerald-600 text-white px-4 py-2 rounded-lg"><i class="fas fa-search"></i> Load Results</button><button id="addSubjectBtn" class="bg-amber-500 text-white px-4 py-2 rounded-lg"><i class="fas fa-plus"></i> Add Subject</button></div>
+                    <div id="resultsEditorContainer" class="overflow-x-auto"><p class="text-gray-500 italic">Select a student, term, year and click "Load Results".</p></div>
                 </div>
             `;
             document.getElementById("mainContent").innerHTML = html;
-            
-            // Populate student dropdown based on section
             const sectionSelect = document.getElementById("resultsSection");
             const studentSelect = document.getElementById("resultsStudent");
             const loadBtn = document.getElementById("loadResultsBtn");
@@ -334,183 +403,65 @@
                 const selectedSection = sectionSelect.value;
                 let filtered = schoolData.students;
                 if (selectedSection) filtered = filtered.filter(s => s.section === selectedSection);
-                studentSelect.innerHTML = '<option value="">-- Select Student --</option>' + 
-                    filtered.map(s => `<option value="${s.id}">${s.reg_number} - ${s.name}</option>`).join('');
+                studentSelect.innerHTML = '<option value="">-- Select Student --</option>' + filtered.map(s => `<option value="${s.id}">${s.reg_number} - ${s.name}</option>`).join('');
             }
             sectionSelect.addEventListener("change", updateStudentList);
             updateStudentList();
             
-            // Load results
             loadBtn.addEventListener("click", async () => {
                 const studentId = studentSelect.value;
                 const term = document.getElementById("resultsTerm").value;
                 const year = document.getElementById("resultsYear").value;
                 if (!studentId) { showToast("Please select a student", true); return; }
-                const student = schoolData.students.find(s => s.id == studentId);
-                if (!student) return;
-                
-                const { data: results } = await supabaseClient.from('student_results')
-                    .select('*')
-                    .eq('student_id', studentId)
-                    .eq('term', term)
-                    .eq('year', year);
-                
+                const { data: results } = await supabaseClient.from('student_results').select('*').eq('student_id', studentId).eq('term', term).eq('year', year);
                 const container = document.getElementById("resultsEditorContainer");
-                container.innerHTML = `
-                    <table class="w-full border-collapse border">
-                        <thead class="bg-gray-100">
-                            <tr><th class="border p-2">Subject</th><th class="border p-2">CA1 (20)</th><th class="border p-2">CA2 (20)</th><th class="border p-2">Exam (60)</th><th class="border p-2">Total</th><th class="border p-2">Grade</th><th class="border p-2">Actions</th></tr>
-                        </thead>
-                        <tbody id="resultsTbody"></tbody>
-                    </table>
-                    <div class="mt-4 flex justify-end"><button id="saveAllResultsBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg"><i class="fas fa-save"></i> Save All Changes</button></div>
-                `;
+                container.innerHTML = `<table class="w-full border-collapse border"><thead class="bg-gray-100"><tr><th class="border p-2">Subject</th><th class="border p-2">CA1 (20)</th><th class="border p-2">CA2 (20)</th><th class="border p-2">Exam (60)</th><th class="border p-2">Total</th><th class="border p-2">Grade</th><th class="border p-2">Actions</th></tr></thead><tbody id="resultsTbody"></tbody></table><div class="mt-4 flex justify-end"><button id="saveAllResultsBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg"><i class="fas fa-save"></i> Save All Changes</button></div>`;
                 const tbody = document.getElementById("resultsTbody");
-                const rowMap = new Map();
-                
-                if (!results || results.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="7" class="text-center p-4">No results found. Add a subject to start.</td></tr>';
-                } else {
-                    for (const r of results) {
-                        addResultRow(r);
-                    }
-                }
-                
                 function addResultRow(resultData = null) {
                     const rowId = 'row_' + Date.now() + '_' + Math.random();
                     const subject = resultData ? resultData.subject : '';
                     const ca1 = resultData ? resultData.ca1 : 0;
                     const ca2 = resultData ? resultData.ca2 : 0;
                     const exam = resultData ? resultData.exam : 0;
-                    const total = (ca1 + ca2 + exam);
+                    const total = ca1 + ca2 + exam;
                     const grade = resultData ? resultData.grade : (total>=80?'A':total>=70?'B':total>=60?'C':total>=50?'D':'E');
-                    
                     const tr = document.createElement('tr');
-                    tr.id = rowId;
-                    tr.innerHTML = `
-                        <td class="border p-2"><input type="text" class="subject-name w-32 border rounded p-1" value="${escapeHtml(subject)}" placeholder="Subject"></td>
-                        <td class="border p-2"><input type="number" class="ca1-input w-20 border rounded p-1" value="${ca1}" min="0" max="20"></td>
-                        <td class="border p-2"><input type="number" class="ca2-input w-20 border rounded p-1" value="${ca2}" min="0" max="20"></td>
-                        <td class="border p-2"><input type="number" class="exam-input w-20 border rounded p-1" value="${exam}" min="0" max="60"></td>
-                        <td class="total-cell border p-2 font-semibold">${total}</td>
-                        <td class="grade-cell border p-2">${grade}</td>
-                        <td class="border p-2"><button class="delete-row bg-red-500 text-white px-2 py-1 rounded text-sm">Delete</button></td>
-                    `;
-                    const ca1Inp = tr.querySelector('.ca1-input');
-                    const ca2Inp = tr.querySelector('.ca2-input');
-                    const examInp = tr.querySelector('.exam-input');
-                    const totalCell = tr.querySelector('.total-cell');
-                    const gradeCell = tr.querySelector('.grade-cell');
-                    const updateCalc = () => {
-                        let c1 = parseFloat(ca1Inp.value) || 0;
-                        let c2 = parseFloat(ca2Inp.value) || 0;
-                        let ex = parseFloat(examInp.value) || 0;
-                        let tot = c1 + c2 + ex;
-                        let grd = tot>=80?'A':tot>=70?'B':tot>=60?'C':tot>=50?'D':'E';
-                        totalCell.innerText = tot;
-                        gradeCell.innerText = grd;
-                    };
-                    ca1Inp.addEventListener('input', updateCalc);
-                    ca2Inp.addEventListener('input', updateCalc);
-                    examInp.addEventListener('input', updateCalc);
+                    tr.innerHTML = `<td class="border p-2"><input type="text" class="subject-name w-32 border rounded p-1" value="${escapeHtml(subject)}" placeholder="Subject"></td><td class="border p-2"><input type="number" class="ca1-input w-20 border rounded p-1" value="${ca1}" min="0" max="20"></td><td class="border p-2"><input type="number" class="ca2-input w-20 border rounded p-1" value="${ca2}" min="0" max="20"></td><td class="border p-2"><input type="number" class="exam-input w-20 border rounded p-1" value="${exam}" min="0" max="60"></td><td class="total-cell border p-2 font-semibold">${total}</td><td class="grade-cell border p-2">${grade}</td><td class="border p-2"><button class="delete-row bg-red-500 text-white px-2 py-1 rounded text-sm">Delete</button></td>`;
+                    const ca1Inp = tr.querySelector('.ca1-input'), ca2Inp = tr.querySelector('.ca2-input'), examInp = tr.querySelector('.exam-input'), totalCell = tr.querySelector('.total-cell'), gradeCell = tr.querySelector('.grade-cell');
+                    const updateCalc = () => { let c1=+ca1Inp.value||0, c2=+ca2Inp.value||0, ex=+examInp.value||0, tot=c1+c2+ex, grd=tot>=80?'A':tot>=70?'B':tot>=60?'C':tot>=50?'D':'E'; totalCell.innerText = tot; gradeCell.innerText = grd; };
+                    ca1Inp.addEventListener('input', updateCalc); ca2Inp.addEventListener('input', updateCalc); examInp.addEventListener('input', updateCalc);
                     tr.querySelector('.delete-row').addEventListener('click', () => tr.remove());
                     tbody.appendChild(tr);
-                    rowMap.set(rowId, tr);
                     updateCalc();
                 }
-                
-                // Add subject button dynamic
-                const addSubjectLocal = () => addResultRow(null);
-                const existingAddBtn = document.getElementById("addSubjectBtnInline");
-                if (!existingAddBtn) {
-                    const btnContainer = document.createElement('div');
-                    btnContainer.className = 'mt-2';
-                    btnContainer.innerHTML = '<button id="addSubjectBtnInline" class="bg-amber-500 text-white px-3 py-1 rounded text-sm"><i class="fas fa-plus"></i> Add another subject</button>';
-                    container.appendChild(btnContainer);
-                    document.getElementById("addSubjectBtnInline").addEventListener("click", addSubjectLocal);
-                } else {
-                    document.getElementById("addSubjectBtnInline").addEventListener("click", addSubjectLocal);
-                }
-                
-                // Save all changes
-                const saveBtn = document.getElementById("saveAllResultsBtn");
-                saveBtn.addEventListener("click", async () => {
+                if (!results || results.length === 0) tbody.innerHTML = '<tr><td colspan="7" class="text-center p-4">No results found. Add a subject.</td></tr>';
+                else for (let r of results) addResultRow(r);
+                const addLocal = () => addResultRow(null);
+                if (!document.getElementById("addSubjectBtnInline")) {
+                    const btnDiv = document.createElement('div'); btnDiv.className = 'mt-2'; btnDiv.innerHTML = '<button id="addSubjectBtnInline" class="bg-amber-500 text-white px-3 py-1 rounded text-sm"><i class="fas fa-plus"></i> Add another subject</button>';
+                    container.appendChild(btnDiv);
+                    document.getElementById("addSubjectBtnInline").addEventListener("click", addLocal);
+                } else document.getElementById("addSubjectBtnInline").addEventListener("click", addLocal);
+                document.getElementById("saveAllResultsBtn").addEventListener("click", async () => {
                     const rows = tbody.querySelectorAll('tr');
                     const updates = [];
                     for (let row of rows) {
-                        const subjectInput = row.querySelector('.subject-name');
-                        if (!subjectInput) continue;
-                        const subject = subjectInput.value.trim();
+                        const subject = row.querySelector('.subject-name')?.value.trim();
                         if (!subject) continue;
-                        const ca1 = parseFloat(row.querySelector('.ca1-input').value) || 0;
-                        const ca2 = parseFloat(row.querySelector('.ca2-input').value) || 0;
-                        const exam = parseFloat(row.querySelector('.exam-input').value) || 0;
+                        const ca1 = +row.querySelector('.ca1-input').value || 0;
+                        const ca2 = +row.querySelector('.ca2-input').value || 0;
+                        const exam = +row.querySelector('.exam-input').value || 0;
                         updates.push({ subject, ca1, ca2, exam });
                     }
-                    // First delete all existing results for this student/term/year to avoid conflicts
-                    await supabaseClient.from('student_results')
-                        .delete()
-                        .eq('student_id', studentId)
-                        .eq('term', term)
-                        .eq('year', year);
-                    // Then insert updated ones
-                    for (let u of updates) {
-                        await saveStudentResult(studentId, term, year, u.subject, u.ca1, u.ca2, u.exam);
-                    }
+                    await supabaseClient.from('student_results').delete().eq('student_id', studentId).eq('term', term).eq('year', year);
+                    for (let u of updates) await saveStudentResult(studentId, term, year, u.subject, u.ca1, u.ca2, u.exam);
                     showToast("Results saved successfully!");
                 });
             });
-            
-            addSubjectBtn.addEventListener("click", () => {
-                const container = document.getElementById("resultsEditorContainer");
-                if (container.querySelector('table')) {
-                    const addInline = document.getElementById("addSubjectBtnInline");
-                    if (addInline) addInline.click();
-                    else showToast("Please load a student first", true);
-                } else {
-                    showToast("Please load a student first", true);
-                }
-            });
+            addSubjectBtn.addEventListener("click", () => { const inline = document.getElementById("addSubjectBtnInline"); if (inline) inline.click(); else showToast("Please load a student first", true); });
         }
-        
-        // ========== LEGACY RESULT FUNCTIONS FOR TEACHERS/PARENTS (simplified) ==========
-        async function renderRecordResults() {
-            if (!['teacher','headteacher'].includes(currentUser.role)) { showToast("Not authorized", true); return; }
-            let section = currentUser.assignedSection || SECTIONS[0];
-            let students = schoolData.students.filter(s => s.section === section);
-            let html = `<div class="bg-white p-6"><h2>Record Results (Teacher)</h2><select id="resultTerm"><option>1</option><option>2</option><option>3</option></select><input id="resultYear" value="2026"><input id="resultSubject" placeholder="Subject"><button id="loadTable" class="bg-emerald-600 text-white p-1 rounded">Load</button><div id="resultTableContainer"></div></div>`;
-            document.getElementById("mainContent").innerHTML = html;
-            document.getElementById("loadTable").addEventListener("click", async () => {
-                let term = document.getElementById("resultTerm").value, year = document.getElementById("resultYear").value, subject = document.getElementById("resultSubject").value;
-                let table = `<table class="result-table"><thead><tr><th>Student</th><th>CA1</th><th>CA2</th><th>Exam</th><th>Save</th></tr></thead><tbody>`;
-                for (let s of students) {
-                    table += `<tr><td>${s.name}</td><td><input class="ca1-${s.id}" type="number" min="0" max="20"></td><td><input class="ca2-${s.id}" type="number" min="0" max="20"></td><td><input class="exam-${s.id}" type="number" min="0" max="60"></td><td><button onclick="window.saveTeacherRow(${s.id}, '${term}', ${year}, '${subject}')" class="bg-amber-500 p-1 rounded">Save</button></td></tr>`;
-                }
-                table += `</tbody></table>`;
-                document.getElementById("resultTableContainer").innerHTML = table;
-                window.saveTeacherRow = async (sid, t, y, sub) => {
-                    let ca1 = parseFloat(document.querySelector(`.ca1-${sid}`).value) || 0;
-                    let ca2 = parseFloat(document.querySelector(`.ca2-${sid}`).value) || 0;
-                    let exam = parseFloat(document.querySelector(`.exam-${sid}`).value) || 0;
-                    await saveStudentResult(sid, t, y, sub, ca1, ca2, exam);
-                };
-            });
-        }
-        
-        async function renderParentResults() {
-            let child = schoolData.students.find(s => s.id === currentUser.studentId);
-            if (!child) return;
-            let html = `<div class="bg-white p-6"><h2>Results for ${child.name}</h2><select id="parentTerm"><option>1</option><option>2</option><option>3</option></select><input id="parentYear" value="2026"><button id="viewParentResults" class="bg-amber-600 p-2 rounded">View</button><div id="parentResultDiv"></div></div>`;
-            document.getElementById("mainContent").innerHTML = html;
-            document.getElementById("viewParentResults").addEventListener("click", async () => {
-                let term = document.getElementById("parentTerm").value, year = document.getElementById("parentYear").value;
-                let { data } = await supabaseClient.from('student_results').select('*').eq('student_id', child.id).eq('term', term).eq('year', year);
-                let table = `<table class="result-table"><thead><tr><th>Subject</th><th>Total</th><th>Grade</th></tr></thead><tbody>${data.map(r => `<tr><td>${r.subject}</td><td>${r.total}</td><td>${r.grade}</td></tr>`).join('')}</tbody></table>`;
-                document.getElementById("parentResultDiv").innerHTML = table;
-            });
-        }
-        
-        // ========== OTHER FUNCTIONS (Students, Staff, Slides, etc.) ==========
+
+        // ========== OTHER CORE FUNCTIONS (Students, Staff, etc.) ==========
         async function refreshSchoolData() { const { data: students } = await supabaseClient.from('students').select('*'); if (students) schoolData.students = students.map(s => ({ ...s, fee_status: s.fee_status || 'Pending', status: s.status || 'active' })); const { data: teachers } = await supabaseClient.from('teachers').select('*'); if (teachers) schoolData.teachers = teachers; }
         async function addStudentLogic(reg_number, name, parent_name, level, section, fee_status) { if(!currentUser || !['dg_ceo','umc','headteacher'].includes(currentUser.role)) { showToast("Not authorized", true); return false; } if(currentUser.role === 'headteacher' && currentUser.assignedSection !== section) { showToast(`Headteachers can only enroll in ${currentUser.assignedSection}`, true); return false; } if (!name?.trim() || name.length<3) { showToast("Name too short", true); return false; } if (schoolData.students.find(s=>s.reg_number===reg_number)) { showToast("Reg number exists", true); return false; } const { error } = await supabaseClient.from('students').insert([{ reg_number, name, parent_name, level: parseInt(level), section, fee_status, status: 'active' }]); if(error) { showToast(error.message, true); return false; } await refreshSchoolData(); showToast("Student enrolled"); return true; }
         async function toggleSuspendStudent(id, cur){ const newStatus = cur==='active'?'suspended':'active'; await supabaseClient.from('students').update({status:newStatus}).eq('id',id); await refreshSchoolData(); renderContentView("students"); }
@@ -522,35 +473,20 @@
             let html = `<div class="bg-white p-6 rounded-xl"><h2>🎓 Enroll Student</h2><form id="enrollStudentForm"><input id="regNumber" placeholder="Reg Number" required><input id="studentName" placeholder="Student Name" required><input id="parentName" placeholder="Parent Name" required><input id="level" type="number" placeholder="Level 1-12" required>${sectionField}<select id="feeStatus"><option>Pending</option><option>Paid</option></select><button type="submit" class="bg-emerald-600 text-white p-2 rounded w-full">Register</button></form></div>`;
             document.getElementById("mainContent").innerHTML = html; document.getElementById("enrollStudentForm").addEventListener("submit", async(e)=>{ e.preventDefault(); await addStudentLogic(regNumber.value, studentName.value, parentName.value, level.value, document.getElementById("section").value, feeStatus.value); renderStudentsList(); }); }
         
-        // STAFF MANAGEMENT (unchanged)
-        async function saveStaffAppraisal(staffId, rating, comments) {
-            if (!currentUser || currentUser.role !== 'dg_ceo') { showToast("Only DG/CEO can appraise", true); return false; }
-            const { error } = await supabaseClient.from('staff_appraisals').insert({ staff_id: staffId, rating, comments, appraised_by: currentUser.full_name, appraised_at: new Date() });
-            if (error) { showToast(error.message, true); return false; }
-            showToast("Appraisal saved"); return true;
-        }
-        async function fetchAppraisalsForStaff(staffId) {
-            const { data } = await supabaseClient.from('staff_appraisals').select('*').eq('staff_id', staffId).order('appraised_at', { ascending: false });
-            return data || [];
-        }
-        async function isUsernameUnique(username) {
-            const { data } = await supabaseClient.from('staff_credentials').select('id').eq('username', username);
-            return !data || data.length === 0;
-        }
-        async function renderStaffManagement() { /* same as before, omitted for brevity but present in final */ }
+        // Simplified teacher results
+        async function renderRecordResults() { if (!['teacher','headteacher'].includes(currentUser.role)) { showToast("Not authorized", true); return; } let section = currentUser.assignedSection || SECTIONS[0]; let students = schoolData.students.filter(s => s.section === section); let html = `<div class="bg-white p-6"><h2>Record Results (Teacher)</h2><select id="resultTerm"><option>1</option><option>2</option><option>3</option></select><input id="resultYear" value="2026"><input id="resultSubject" placeholder="Subject"><button id="loadTable" class="bg-emerald-600 text-white p-1 rounded">Load</button><div id="resultTableContainer"></div></div>`; document.getElementById("mainContent").innerHTML = html; document.getElementById("loadTable").addEventListener("click", async () => { let term = document.getElementById("resultTerm").value, year = document.getElementById("resultYear").value, subject = document.getElementById("resultSubject").value; let table = `<table class="result-table"><thead><tr><th>Student</th><th>CA1</th><th>CA2</th><th>Exam</th><th>Save</th></tr></thead><tbody>`; for (let s of students) table += `<tr><td>${s.name}</td><td><input class="ca1-${s.id}" type="number" min="0" max="20"></td><td><input class="ca2-${s.id}" type="number" min="0" max="20"></td><td><input class="exam-${s.id}" type="number" min="0" max="60"></td><td><button onclick="window.saveTeacherRow(${s.id}, '${term}', ${year}, '${subject}')" class="bg-amber-500 p-1 rounded">Save</button></td></tr>`; table += `</tbody></table>`; document.getElementById("resultTableContainer").innerHTML = table; window.saveTeacherRow = async (sid, t, y, sub) => { let ca1 = parseFloat(document.querySelector(`.ca1-${sid}`).value)||0, ca2 = parseFloat(document.querySelector(`.ca2-${sid}`).value)||0, exam = parseFloat(document.querySelector(`.exam-${sid}`).value)||0; await saveStudentResult(sid, t, y, sub, ca1, ca2, exam); }; }); }
+        async function renderParentResults() { let child = schoolData.students.find(s => s.id === currentUser.studentId); if (!child) return; let html = `<div class="bg-white p-6"><h2>Results for ${child.name}</h2><select id="parentTerm"><option>1</option><option>2</option><option>3</option></select><input id="parentYear" value="2026"><button id="viewParentResults" class="bg-amber-600 p-2 rounded">View</button><div id="parentResultDiv"></div></div>`; document.getElementById("mainContent").innerHTML = html; document.getElementById("viewParentResults").addEventListener("click", async () => { let term = document.getElementById("parentTerm").value, year = document.getElementById("parentYear").value; let { data } = await supabaseClient.from('student_results').select('*').eq('student_id', child.id).eq('term', term).eq('year', year); let table = `<table class="result-table"><thead><tr><th>Subject</th><th>Total</th><th>Grade</th></tr></thead><tbody>${data.map(r => `<tr><td>${r.subject}</td><td>${r.total}</td><td>${r.grade}</td></tr>`).join('')}</tbody></table>`; document.getElementById("parentResultDiv").innerHTML = table; }); }
+        
+        // Staff Management (simplified for space)
+        async function saveStaffAppraisal(staffId, rating, comments) { if (!currentUser || currentUser.role !== 'dg_ceo') { showToast("Only DG/CEO can appraise", true); return false; } const { error } = await supabaseClient.from('staff_appraisals').insert({ staff_id: staffId, rating, comments, appraised_by: currentUser.full_name, appraised_at: new Date() }); if (error) { showToast(error.message, true); return false; } showToast("Appraisal saved"); return true; }
+        async function fetchAppraisalsForStaff(staffId) { const { data } = await supabaseClient.from('staff_appraisals').select('*').eq('staff_id', staffId).order('appraised_at', { ascending: false }); return data || []; }
+        async function isUsernameUnique(username) { const { data } = await supabaseClient.from('staff_credentials').select('id').eq('username', username); return !data || data.length === 0; }
+        async function renderStaffManagement() { if (!['dg_ceo','umc'].includes(currentUser.role)) { showToast("Access denied", true); renderContentView("dashboard"); return; } const { data: teachersList } = await supabaseClient.from('teachers').select('*'); const allStaff = teachersList || []; const roleOps = ROLES.filter(r => r.value === 'teacher' || r.value === 'headteacher').map(r=>`<option value="${r.value}">${r.label}</option>`).join(''); const secOps = STAFF_SECTIONS.map(s=>`<option value="${s}">${s}</option>`).join(''); let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">👥 Staff Management & Appraisal</h2><div class="border-b pb-4 mb-4"><h3 class="text-xl font-semibold">➕ Enroll New Staff</h3><form id="staffEnrollForm" class="space-y-4 mt-2"><input type="text" id="staffName" placeholder="Full Name" required class="border p-2 w-full rounded"><input type="text" id="staffUsername" placeholder="Username" required class="border p-2 w-full rounded"><select id="staffRole" class="border p-2 w-full rounded">${roleOps}</select><div id="teacherLevelContainer" style="display:none;"><input type="number" id="teacherLevel" placeholder="Level (1-12)" min="1" max="12" class="border p-2 w-full rounded"></div><select id="staffSection" class="border p-2 w-full rounded">${secOps}</select><input type="text" id="staffPassword" value="password123" class="border p-2 w-full rounded"><button type="submit" class="bg-emerald-600 text-white px-4 py-2 rounded-lg">Register</button></form></div><h3 class="text-xl font-semibold mt-6">📋 Existing Staff</h3><div class="overflow-x-auto"><table class="w-full border mt-2"><thead><tr><th>Name</th><th>Username</th><th>Role</th><th>Section</th><th>Level</th><th>Appraisal</th><th>Action</th></tr></thead><tbody id="staffTableBody"></tbody></table></div></div>`;
+            document.getElementById("mainContent").innerHTML = html; const roleSelect = document.getElementById("staffRole"); const levelDiv = document.getElementById("teacherLevelContainer"); const toggleLevel = () => levelDiv.style.display = roleSelect.value === 'teacher' ? 'block' : 'none'; roleSelect.addEventListener("change", toggleLevel); toggleLevel(); const staffTableBody = document.getElementById("staffTableBody"); const renderStaffTable = async () => { staffTableBody.innerHTML = ''; for (let staff of allStaff) { const appraisals = await fetchAppraisalsForStaff(staff.id); const latest = appraisals[0]; const latestText = latest ? `⭐ ${latest.rating}/5 (${new Date(latest.appraised_at).toLocaleDateString()})` : 'Not appraised'; let username = '-'; const { data: cred } = await supabaseClient.from('staff_credentials').select('username').eq('staff_id', staff.id).single(); if (cred) username = cred.username; const row = `<tr><td class="p-2">${escapeHtml(staff.name)}</td><td class="p-2">${escapeHtml(username)}</td><td class="p-2">${staff.role || '-'}</td><td class="p-2">${staff.assigned_section || '-'}</td><td class="p-2">${staff.level || '-'}</td><td class="p-2">${latestText}</td><td class="p-2"><button class="appraise-staff-btn bg-amber-500 text-white px-3 py-1 rounded text-sm" data-id="${staff.id}" data-name="${escapeHtml(staff.name)}">Appraise</button></td></tr>`; staffTableBody.insertAdjacentHTML('beforeend', row); } document.querySelectorAll('.appraise-staff-btn').forEach(btn => btn.addEventListener('click', () => openAppraisalModal(btn.dataset.id, btn.dataset.name))); }; await renderStaffTable(); document.getElementById("staffEnrollForm").addEventListener("submit", async(e) => { e.preventDefault(); const role = document.getElementById("staffRole").value; const level = (role === 'teacher') ? document.getElementById("teacherLevel").value : null; if (role === 'teacher' && (!level || level < 1 || level > 12)) { showToast("Valid level (1-12) required", true); return; } const fullName = document.getElementById("staffName").value; const username = document.getElementById("staffUsername").value.trim(); if (!username) { showToast("Username required", true); return; } if (!(await isUsernameUnique(username))) { showToast("Username taken", true); return; } const password = document.getElementById("staffPassword").value; const section = document.getElementById("staffSection").value; const { data: newTeacher, error: teacherError } = await supabaseClient.from('teachers').insert({ name: fullName, role, assigned_section: section, level: level ? parseInt(level) : null }).select().single(); if (teacherError) { showToast("Error: "+teacherError.message, true); return; } const { error: credError } = await supabaseClient.from('staff_credentials').insert({ staff_id: newTeacher.id, username, password_hash: password, role }); if (credError) { showToast("Credential error: "+credError.message, true); return; } await refreshSchoolData(); showToast(`Staff ${fullName} enrolled. Username: ${username}, Password: ${password}`); renderStaffManagement(); }); window.openAppraisalModal = openAppraisalModal; function openAppraisalModal(staffId, staffName) { const modalDiv = document.createElement('div'); modalDiv.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black/50'; modalDiv.innerHTML = `<div class="bg-white rounded-2xl p-6 w-96 relative"><button class="close-modal absolute top-2 right-3 text-2xl">&times;</button><h3 class="text-xl font-bold mb-3">Appraise ${staffName}</h3><div><label>Rating (1-5)</label><div id="starRating" class="flex gap-1 text-2xl text-amber-400 my-2"></div><input type="hidden" id="ratingValue" value="3"></div><textarea id="appraisalComments" rows="3" class="w-full border rounded-lg p-2 mt-2" placeholder="Performance comments..."></textarea><button id="submitAppraisal" class="w-full bg-emerald-600 text-white py-2 rounded-full mt-4">Submit</button></div>`; document.body.appendChild(modalDiv); let currentRating = 3; const starContainer = modalDiv.querySelector('#starRating'); const updateStars = () => { starContainer.innerHTML = ''; for (let i=1; i<=5; i++) { const star = document.createElement('i'); star.className = i <= currentRating ? 'fas fa-star cursor-pointer' : 'far fa-star cursor-pointer'; star.addEventListener('click', () => { currentRating = i; document.getElementById('ratingValue').value = i; updateStars(); }); starContainer.appendChild(star); } }; updateStars(); modalDiv.querySelector('#submitAppraisal').addEventListener('click', async () => { const rating = parseInt(document.getElementById('ratingValue').value); const comments = modalDiv.querySelector('#appraisalComments').value; await saveStaffAppraisal(parseInt(staffId), rating, comments); modalDiv.remove(); renderStaffManagement(); }); modalDiv.querySelector('.close-modal').addEventListener('click', () => modalDiv.remove()); } }
         
         function renderAttendance() { document.getElementById("mainContent").innerHTML = `<div class="bg-white p-6">✅ Attendance module: use 'record-results' and teacher dashboard.</div>`; }
-        async function renderApplicationsList() { if (currentUser?.role !== 'dg_ceo') { showToast("Access denied", true); renderContentView("dashboard"); return; }
-            const { data: applications } = await supabaseClient.from('admission_applications').select('*').order('submitted_at', { ascending: false });
-            let html = `<div class="bg-white p-6 rounded-xl"><h2 class="text-2xl font-bold">📋 Admission Applications</h2><div class="overflow-x-auto"><table class="w-full border"><thead><tr><th>Date</th><th>Full Name</th><th>Parent Email</th><th>Status</th><th>Action</th></tr></thead><tbody>`;
-            applications?.forEach(app => { html += `<tr><td>${new Date(app.submitted_at).toLocaleDateString()}</td><td>${escapeHtml(app.full_name)}</td><td>${escapeHtml(app.parent_email || '-')}</td><td><span class="status-badge status-${app.status}">${app.status}</span></td><td><select class="status-update border rounded p-1" data-id="${app.id}"><option ${app.status==='pending'?'selected':''}>pending</option><option ${app.status==='reviewed'?'selected':''}>reviewed</option><option ${app.status==='accepted'?'selected':''}>accepted</option><option ${app.status==='rejected'?'selected':''}>rejected</option></select></td></tr>`; });
-            html += `</tbody></table></div></div>`; document.getElementById("mainContent").innerHTML = html;
-            document.querySelectorAll('.status-update').forEach(sel => sel.addEventListener('change', async (e) => { await supabaseClient.from('admission_applications').update({ status: e.target.value }).eq('id', e.target.dataset.id); renderApplicationsList(); })); }
-        
-        function renderSlideManager() { if(!currentUser || !['dg_ceo','umc','daf','dprpa','der','do'].includes(currentUser.role)) { showToast("Admin only", true); renderContentView("dashboard"); return; }
-            let html = `<div class="bg-white p-6 rounded-xl"><h2>🖼️ Manage Slideshow</h2><input type="file" id="slideFile" accept="image/*"><input id="slideCap" placeholder="Caption" class="border p-2 w-full mt-2"><button id="uploadSlideBtn" class="bg-emerald-600 text-white p-2 rounded mt-2">Upload</button><div class="grid grid-cols-2 gap-2 mt-6">${slidesData.map(s=>`<div class="border p-2"><img src="${s.url}" class="h-28 object-cover w-full"><p>${s.caption}</p><button onclick="window.deleteSlideFromSupabase('${s.id}','${s.url}')" class="bg-red-500 text-white text-xs p-1 w-full">Delete</button></div>`).join('')}</div></div>`;
-            document.getElementById("mainContent").innerHTML = html; document.getElementById("uploadSlideBtn")?.addEventListener("click", async()=>{ let file = document.getElementById("slideFile").files[0]; if(!file) return; await uploadSlideToSupabase(file, document.getElementById("slideCap").value); renderSlideManager(); }); window.deleteSlideFromSupabase = deleteSlideFromSupabase; }
-        
+        async function renderApplicationsList() { if (currentUser?.role !== 'dg_ceo') { showToast("Access denied", true); renderContentView("dashboard"); return; } const { data: applications } = await supabaseClient.from('admission_applications').select('*').order('submitted_at', { ascending: false }); let html = `<div class="bg-white p-6 rounded-xl"><h2 class="text-2xl font-bold">📋 Admission Applications</h2><div class="overflow-x-auto"><table class="w-full border"><thead><tr><th>Date</th><th>Full Name</th><th>Parent Email</th><th>Status</th><th>Action</th></tr></thead><tbody>`; applications?.forEach(app => { html += `<tr><td>${new Date(app.submitted_at).toLocaleDateString()}</td><td>${escapeHtml(app.full_name)}</td><td>${escapeHtml(app.parent_email || '-')}</td><td><span class="status-badge status-${app.status}">${app.status}</span></td><td><select class="status-update border rounded p-1" data-id="${app.id}"><option ${app.status==='pending'?'selected':''}>pending</option><option ${app.status==='reviewed'?'selected':''}>reviewed</option><option ${app.status==='accepted'?'selected':''}>accepted</option><option ${app.status==='rejected'?'selected':''}>rejected</option></select></td></tr>`; }); html += `</tbody></table></div></div>`; document.getElementById("mainContent").innerHTML = html; document.querySelectorAll('.status-update').forEach(sel => sel.addEventListener('change', async (e) => { await supabaseClient.from('admission_applications').update({ status: e.target.value }).eq('id', e.target.dataset.id); renderApplicationsList(); })); }
+        function renderSlideManager() { if(!currentUser || !['dg_ceo','umc','daf','dprpa','der','do'].includes(currentUser.role)) { showToast("Admin only", true); renderContentView("dashboard"); return; } let html = `<div class="bg-white p-6 rounded-xl"><h2>🖼️ Manage Slideshow</h2><input type="file" id="slideFile" accept="image/*"><input id="slideCap" placeholder="Caption" class="border p-2 w-full mt-2"><button id="uploadSlideBtn" class="bg-emerald-600 text-white p-2 rounded mt-2">Upload</button><div class="grid grid-cols-2 gap-2 mt-6">${slidesData.map(s=>`<div class="border p-2"><img src="${s.url}" class="h-28 object-cover w-full"><p>${s.caption}</p><button onclick="window.deleteSlideFromSupabase('${s.id}','${s.url}')" class="bg-red-500 text-white text-xs p-1 w-full">Delete</button></div>`).join('')}</div></div>`; document.getElementById("mainContent").innerHTML = html; document.getElementById("uploadSlideBtn")?.addEventListener("click", async()=>{ let file = document.getElementById("slideFile").files[0]; if(!file) return; await uploadSlideToSupabase(file, document.getElementById("slideCap").value); renderSlideManager(); }); window.deleteSlideFromSupabase = deleteSlideFromSupabase; }
         async function loadSlidesFromSupabase() { const { data } = await supabaseClient.from('slides').select('*').order('created_at'); slidesData = data?.map(s=>({url:s.image_url, caption:s.caption, id:s.id})) || [{ url: "https://picsum.photos/id/20/1200/600", caption: "Modern Classrooms" }]; rebuildSlideshow(); }
         async function uploadSlideToSupabase(file, caption) { if (!currentUser) return; const fileName = `${Date.now()}_${file.name}`; await supabaseClient.storage.from('school-slides').upload(fileName, file); const { data: { publicUrl } } = supabaseClient.storage.from('school-slides').getPublicUrl(fileName); await supabaseClient.from('slides').insert([{ image_url: publicUrl, caption: caption || "Slide" }]); await loadSlidesFromSupabase(); showToast("Slide uploaded"); }
         async function deleteSlideFromSupabase(slideId, imageUrl) { const urlParts = imageUrl.split('/'); const filePath = urlParts.slice(urlParts.indexOf('school-slides')+1).join('/'); if(filePath) await supabaseClient.storage.from('school-slides').remove([filePath]); await supabaseClient.from('slides').delete().eq('id', slideId); await loadSlidesFromSupabase(); showToast("Deleted"); }
@@ -561,33 +497,21 @@
         function renderContentView(view) {
             const fns = {
                 dashboard: () => document.getElementById("mainContent").innerHTML = `<div class="bg-white p-6"><h2>Welcome ${currentUser.full_name}</h2><div class="grid grid-cols-2 gap-4"><div>Students: ${schoolData.students.length}</div><div>Staff: ${schoolData.teachers.length}</div></div></div>`,
-                students: renderStudentsList,
-                "enroll-student": renderEnrollStudent,
-                "results-management": renderUnifiedResults,   // NEW unified for DG/CEO
-                "record-results": renderRecordResults,       // for teachers/headteacher
-                "staff-management": renderStaffManagement,
-                applications: renderApplicationsList,
-                "manage-announcement": () => {
-                    let html = `<div class="bg-white p-6"><textarea id="announceText" rows="3" class="w-full border"></textarea><button id="saveAnnounce" class="bg-amber-600 p-2 rounded">Update</button></div>`;
-                    document.getElementById("mainContent").innerHTML = html;
-                    supabaseClient.from('site_announcement').select('content').eq('id',1).single().then(d=>{ if(d.data) document.getElementById("announceText").value = d.data.content; });
-                    document.getElementById("saveAnnounce").addEventListener("click", async()=>{ await updateAnnouncement(document.getElementById("announceText").value); });
-                },
-                "manage-slides": renderSlideManager,
-                attendance: renderAttendance,
-                "my-children-results": renderParentResults
-            };
-            if (fns[view]) fns[view]();
-            else document.getElementById("mainContent").innerHTML = "<div class='bg-white p-6'>Module loading...</div>";
+                students: renderStudentsList, "enroll-student": renderEnrollStudent, "results-management": renderUnifiedResults, "record-results": renderRecordResults,
+                "staff-management": renderStaffManagement, applications: renderApplicationsList, "manage-announcement": () => { let html = `<div class="bg-white p-6"><textarea id="announceText" rows="3" class="w-full border"></textarea><button id="saveAnnounce" class="bg-amber-600 p-2 rounded">Update</button></div>`; document.getElementById("mainContent").innerHTML = html; supabaseClient.from('site_announcement').select('content').eq('id',1).single().then(d=>{ if(d.data) document.getElementById("announceText").value = d.data.content; }); document.getElementById("saveAnnounce").addEventListener("click", async()=>{ await updateAnnouncement(document.getElementById("announceText").value); }); },
+                "manage-slides": renderSlideManager, attendance: renderAttendance, "my-children-results": renderParentResults
+            }; if (fns[view]) fns[view](); else document.getElementById("mainContent").innerHTML = "<div class='bg-white p-6'>Module loading...</div>";
         }
         
-        // ========== AUTH & NAVIGATION ==========
+        // ========== AUTHENTICATION (Fixed Admin Role Error) ==========
         async function loginAdmin(email, password) {
             try {
                 const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
                 if (error) throw error;
-                const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', data.user.id).single();
-                if (!profile || !['dg_ceo','umc','daf','do','der','dprpa'].includes(profile.role)) throw new Error("Invalid admin role");
+                const { data: profile, error: profileError } = await supabaseClient.from('profiles').select('*').eq('id', data.user.id).single();
+                if (profileError || !profile) throw new Error("Admin profile not found. Please sign up again or contact support.");
+                const allowedRoles = ['dg_ceo','umc','daf','do','der','dprpa'];
+                if (!allowedRoles.includes(profile.role)) throw new Error(`Invalid admin role: "${profile.role}". Allowed: ${allowedRoles.join(', ')}`);
                 currentUser = { ...profile, full_name: profile.full_name, role: profile.role, assignedSection: profile.section && !profile.section.includes('Oversight') ? profile.section : SECTIONS[0] };
                 await refreshSchoolData();
                 showDashboard();
@@ -610,7 +534,19 @@
             } catch(e) { showToast("Staff login failed: "+e.message, true); }
         }
         async function parentLogin(regNo, pwd) { if(pwd !== "al123") return showToast("Invalid password", true); const student = schoolData.students.find(s=>s.reg_number === regNo); if(!student) return showToast("Not found", true); currentUser = { role:"parent", full_name:`Parent of ${student.name}`, studentId:student.id }; showDashboard(); attachActivityListeners(); resetInactivityTimer(); }
-        async function adminSignup(fullName, email, password, role, code) { if(code !== "ALIFLY2026") return showToast("Invalid code", true); const { error } = await supabaseClient.auth.signUp({ email, password }); if(error) return showToast(error.message, true); const { data: { user } } = await supabaseClient.auth.getUser(); await supabaseClient.from('profiles').insert([{ id: user.id, full_name: fullName, email, role, section: "Oversight" }]); showToast("Admin created, please login"); document.getElementById('adminSignupModal').style.display = 'none'; }
+        async function adminSignup(fullName, email, password, role, code) {
+            if(code !== "ALIFLY2026") return showToast("Invalid registration code", true);
+            try {
+                const { data: { user }, error: signUpError } = await supabaseClient.auth.signUp({ email, password });
+                if (signUpError) throw signUpError;
+                if (!user) throw new Error("Signup failed - no user returned");
+                const { error: insertError } = await supabaseClient.from('profiles').insert([{ id: user.id, full_name: fullName, email, role, section: "Oversight" }]);
+                if (insertError) throw insertError;
+                showToast("Admin account created! Please login.");
+                document.getElementById('adminSignupModal').style.display = 'none';
+                document.getElementById('loginScreen').style.display = 'flex';
+            } catch(err) { showToast("Signup error: "+err.message, true); }
+        }
         async function logoutUser() { if (currentUser && !currentUser.isStaff) await supabaseClient.auth.signOut(); currentUser = null; document.getElementById('appContainer').classList.add('hidden'); document.getElementById('landingPage').style.display = 'block'; fetchAndDisplayAnnouncement(); closeMobileSidebar(); detachActivityListeners(); }
         function showDashboard() { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('parentLoginModal').style.display = 'none'; document.getElementById('landingPage').style.display = 'none'; document.getElementById('appContainer').classList.remove('hidden'); document.getElementById('topUserName').innerText = currentUser.full_name; document.getElementById('topUserRole').innerText = currentUser.role.toUpperCase(); renderNav(); }
         function renderNav() {
@@ -624,25 +560,17 @@
             else items = ["dashboard"];
             const labels = { dashboard:"🏠 Dashboard", students:"📚 Students", "enroll-student":"🎓 Enroll Student", "results-management":"📊 Results Management", "record-results":"📝 Term Results", "staff-management":"👥 Staff Management", applications:"📋 Applications", "manage-announcement":"📢 Announcement", "manage-slides":"🖼️ Slides", attendance:"✅ Attendance", "my-children-results":"📘 My Child's Results" };
             const html = items.map(v=>`<a href="#" data-view="${v}" class="nav-link flex items-center space-x-3 px-4 py-2.5 rounded-lg text-slate-200 hover:bg-white/10"><i class="fas fa-folder w-5"></i><span>${labels[v]||v}</span></a>`).join('');
-            document.getElementById("dynamicNav").innerHTML = html;
-            document.querySelectorAll('.nav-link').forEach(link => link.addEventListener('click', (e)=>{ e.preventDefault(); renderContentView(link.dataset.view); closeMobileSidebar(); resetInactivityTimer(); }));
-            renderContentView(items[0]);
+            document.getElementById("dynamicNav").innerHTML = html; document.querySelectorAll('.nav-link').forEach(link => link.addEventListener('click', (e)=>{ e.preventDefault(); renderContentView(link.dataset.view); closeMobileSidebar(); resetInactivityTimer(); })); renderContentView(items[0]);
         }
         
-        // ========== EVENT BINDINGS ==========
+        // ========== INIT & EVENT BINDINGS ==========
         function closeMobileSidebar() { document.getElementById('dynamicSidebar')?.classList.remove('open'); document.getElementById('sidebarOverlay')?.classList.remove('active'); }
         document.getElementById('mobileMenuToggle')?.addEventListener('click', () => { document.getElementById('dynamicSidebar').classList.toggle('open'); resetInactivityTimer(); });
         document.getElementById('topLogoutBtn')?.addEventListener('click', logoutUser);
         
-        const adminTab = document.getElementById('adminLoginTab');
-        const staffTab = document.getElementById('staffLoginTab');
-        const loginType = document.getElementById('loginType');
-        const loginUsername = document.getElementById('loginUsername');
-        const adminForgot = document.getElementById('adminForgot');
-        const staffForgot = document.getElementById('staffForgot');
+        const adminTab = document.getElementById('adminLoginTab'); const staffTab = document.getElementById('staffLoginTab'); const loginType = document.getElementById('loginType'); const loginUsername = document.getElementById('loginUsername'); const adminForgot = document.getElementById('adminForgot'); const staffForgot = document.getElementById('staffForgot');
         adminTab.addEventListener('click', () => { adminTab.classList.add('text-amber-600','border-b-2','border-amber-600'); staffTab.classList.remove('text-amber-600','border-b-2','border-amber-600'); staffTab.classList.add('text-gray-500'); loginType.value='admin'; loginUsername.placeholder='Email (Admin)'; adminForgot.classList.remove('hidden'); staffForgot.classList.add('hidden'); });
         staffTab.addEventListener('click', () => { staffTab.classList.add('text-amber-600','border-b-2','border-amber-600'); adminTab.classList.remove('text-amber-600','border-b-2','border-amber-600'); adminTab.classList.add('text-gray-500'); loginType.value='staff'; loginUsername.placeholder='Username (Staff)'; adminForgot.classList.add('hidden'); staffForgot.classList.remove('hidden'); });
-        
         document.getElementById('authForm')?.addEventListener('submit', async(e)=>{ e.preventDefault(); const type = loginType.value; const usernameOrEmail = loginUsername.value; const pwd = document.getElementById('loginPassword').value; if(type === 'admin') await loginAdmin(usernameOrEmail, pwd); else await loginStaff(usernameOrEmail, pwd); });
         document.getElementById('parentAuthForm')?.addEventListener('submit', async(e)=>{ e.preventDefault(); await parentLogin(parentRegNo.value, parentPassword.value); });
         document.getElementById('adminSignupForm')?.addEventListener('submit', async(e)=>{ e.preventDefault(); await adminSignup(adminFullName.value, adminEmail.value, adminPassword.value, adminRole.value, adminRegCode.value); });
@@ -657,26 +585,10 @@
         document.getElementById('nextSlide')?.addEventListener('click',()=>goToSlide(currentSlideIndex+1));
         document.getElementById('applyNowBtn')?.addEventListener('click', (e) => { e.preventDefault(); showApplicationFormModal(); resetInactivityTimer(); });
         window.resetPasswordAction = async function() { const email = document.getElementById('loginUsername').value; if(!email) return showToast("Enter email", true); const { error } = await supabaseClient.auth.resetPasswordForEmail(email); showToast(error ? error.message : "Reset link sent!"); };
-        
-        async function checkSession() { 
-            const { data: { session } } = await supabaseClient.auth.getSession(); 
-            if (session) { 
-                const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', session.user.id).single(); 
-                if (profile && ['dg_ceo','umc','daf','do','der','dprpa'].includes(profile.role)) { 
-                    currentUser = { ...profile, full_name: profile.full_name, role: profile.role, assignedSection: profile.section && !profile.section.includes('Oversight') ? profile.section : SECTIONS[0] }; 
-                    await refreshSchoolData(); showDashboard(); attachActivityListeners(); resetInactivityTimer(); return; 
-                } 
-            }
-            document.getElementById('landingPage').style.display = 'block'; document.getElementById('appContainer').classList.add('hidden'); fetchAndDisplayAnnouncement(); 
-        }
+        async function checkSession() { const { data: { session } } = await supabaseClient.auth.getSession(); if (session) { const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', session.user.id).single(); if (profile && ['dg_ceo','umc','daf','do','der','dprpa'].includes(profile.role)) { currentUser = { ...profile, full_name: profile.full_name, role: profile.role, assignedSection: profile.section && !profile.section.includes('Oversight') ? profile.section : SECTIONS[0] }; await refreshSchoolData(); showDashboard(); attachActivityListeners(); resetInactivityTimer(); return; } } document.getElementById('landingPage').style.display = 'block'; document.getElementById('appContainer').classList.add('hidden'); fetchAndDisplayAnnouncement(); }
         function initCookieConsent() { const banner = document.getElementById('cookieBanner'); const acceptBtn = document.getElementById('acceptCookiesBtn'); if (!localStorage.getItem('cookies_accepted')) banner.style.display = 'flex'; acceptBtn.addEventListener('click', () => { localStorage.setItem('cookies_accepted', 'true'); banner.style.display = 'none'; showToast("Cookies accepted ✅"); }); }
         function updateDateTime() { let now=new Date(); if(document.getElementById('liveTime')) document.getElementById('liveTime').innerText=now.toLocaleTimeString('en-NG'); if(document.getElementById('liveDate')) document.getElementById('liveDate').innerText=now.toLocaleDateString('en-NG',{weekday:'long',year:'numeric',month:'long',day:'numeric'}); if(document.getElementById('weatherTemp')) document.getElementById('weatherTemp').innerText = "28"; document.getElementById('weatherDesc').innerText = "Sunny"; }
         setInterval(updateDateTime,1000); updateDateTime();
-        
-        // Placeholder for full application form modal (same as previous enhanced version) – included in final code but omitted here for brevity.
-        // The actual final HTML includes the complete showApplicationFormModal function.
-        window.showApplicationFormModal = function() { /* full implementation in final output */ };
-        
         ensureAnnouncementRowExists().then(()=>{ loadSlidesFromSupabase(); checkSession(); initCookieConsent(); fetchAndDisplayAnnouncement(); });
     </script>
 </body>
