@@ -4,21 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <link rel="icon" href="./favicon.ico">
-    
-    <!-- Supabase JS Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        const SUPABASE_URL = 'https://ivwokrlimcbsttbpfpyv.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_zRwrwzkuWryzB3u11nZGPg_18MBrDFO';
+        const SUPABASE_URL = 'https://tobpgdjmzeseaahbjyje.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_-WRTa9GUY76d_bRI27Udng_GamFEh8Y';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     </script>
-    
     <title>Al‑Istiqaamah Flying Wings Academy | Unified Portal</title>
-    <meta name="description" content="Complete school management: term results, staff appraisal, student filters, enrollment, admissions, and role-based dashboards.">
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
     <style>
         * { font-family: 'Inter', system-ui, sans-serif; }
         @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap');
@@ -50,22 +44,19 @@
         .upload-preview { max-width: 200px; max-height: 120px; margin-top: 8px; border-radius: 8px; border: 1px solid #ccc; }
         .cookie-consent { position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: white; display: flex; justify-content: space-between; align-items: center; padding: 12px 24px; z-index: 1000; gap: 20px; flex-wrap: wrap; }
         .cookie-consent button { background: #f59e0b; border: none; padding: 8px 18px; border-radius: 40px; font-weight: bold; cursor: pointer; }
-        .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid #fff; border-radius: 50%; border-top-color: transparent; animation: spin 0.6s linear infinite; margin-right: 8px; vertical-align: middle; }
-        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="bg-gray-50">
 
-    <!-- COOKIE CONSENT BANNER -->
+    <!-- COOKIE CONSENT -->
     <div id="cookieBanner" class="cookie-consent" style="display: none;">
-        <div class="flex-1 text-sm md:text-base">🍪 We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.</div>
+        <div class="flex-1 text-sm md:text-base">🍪 We use cookies to enhance your experience.</div>
         <button id="acceptCookiesBtn">Accept All Cookies</button>
     </div>
 
     <!-- LANDING PAGE -->
     <div id="landingPage" class="min-h-screen relative">
         <div class="hero-pattern text-white relative overflow-hidden">
-            <div class="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.2"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
             <div class="relative container mx-auto px-6 py-20 md:py-28">
                 <div class="flex flex-col lg:flex-row justify-between items-start gap-10">
                     <div class="max-w-2xl">
@@ -75,8 +66,7 @@
                         </div>
                         <div class="bg-amber-900/30 border-l-4 border-amber-400 p-3 rounded-r-xl mb-3">
                             <p class="text-sm italic">“The best of mankind are those who are most beneficial to humanity.”</p>
-                            <p class="text-xs text-amber-200">— Prophetic Saying (Ṣaḥīḥ al-Jāmiʿ, 3289)</p>
-                            <p class="text-sm font-semibold mt-1"><i class="fas fa-feather-alt"></i> Faith • Knowledge • Leadership</p>
+                            <p class="text-xs text-amber-200">— Prophetic Saying</p>
                         </div>
                         <p class="text-amber-200 text-sm"><i class="fas fa-map-marker-alt mr-1"></i> No. 10 Federal Government Layout, Samaru, Zaria, Kaduna State</p>
                         <div class="flex flex-wrap gap-4 mt-4 text-sm">
@@ -92,7 +82,6 @@
                     <div class="bg-white/10 backdrop-blur-md rounded-2xl p-5 shadow-xl border border-white/20 w-80">
                         <div class="flex items-center justify-between border-b border-white/20 pb-2 mb-3"><span class="text-amber-200"><i class="fas fa-clock"></i> Local Time</span><span id="liveTime" class="font-mono text-xl font-bold">--:--:--</span></div>
                         <div><p class="text-sm opacity-80"><i class="fas fa-calendar-alt mr-1"></i> <span id="liveDate"></span></p><p class="text-3xl font-bold mt-1">Zaria</p><p class="text-sm capitalize">Nigeria</p></div>
-                        <p class="text-xs mt-3 text-center text-gray-200"><i class="fas fa-location-dot"></i> Samaru, Zaria</p>
                     </div>
                 </div>
             </div>
@@ -110,8 +99,8 @@
             </div>
         </div>
         
-        <div class="container mx-auto px-6 py-10"><div class="grid md:grid-cols-2 gap-10"><div class="bg-white rounded-2xl shadow-xl p-8 card-hover border-t-8 border-emerald-600"><div class="text-emerald-600 text-4xl mb-4"><i class="fas fa-eye"></i></div><h2 class="text-2xl font-bold text-gray-800 mb-3">🌙 Vision Statement</h2><p class="text-gray-700 italic">To cultivate a community of believers and learners who embody faith, knowledge, and inspiration — beacons of guidance and service.</p></div>
-        <div class="bg-white rounded-2xl shadow-xl p-8 card-hover border-t-8 border-amber-500"><div class="text-amber-500 text-4xl mb-4"><i class="fas fa-bullhorn"></i></div><h2 class="text-2xl font-bold text-gray-800 mb-3">🌿 Mission Statement</h2><p class="text-gray-700">Promoting academic excellence, leadership, and Islamic values, nurturing learners who live by the Qur’an and Sunnah.</p></div></div></div>
+        <div class="container mx-auto px-6 py-10"><div class="grid md:grid-cols-2 gap-10"><div class="bg-white rounded-2xl shadow-xl p-8 border-t-8 border-emerald-600"><div class="text-emerald-600 text-4xl mb-4"><i class="fas fa-eye"></i></div><h2 class="text-2xl font-bold text-gray-800 mb-3">🌙 Vision Statement</h2><p class="text-gray-700 italic">To cultivate a community of believers and learners who embody faith, knowledge, and inspiration — beacons of guidance and service.</p></div>
+        <div class="bg-white rounded-2xl shadow-xl p-8 border-t-8 border-amber-500"><div class="text-amber-500 text-4xl mb-4"><i class="fas fa-bullhorn"></i></div><h2 class="text-2xl font-bold text-gray-800 mb-3">🌿 Mission Statement</h2><p class="text-gray-700">Promoting academic excellence, leadership, and Islamic values, nurturing learners who live by the Qur’an and Sunnah.</p></div></div></div>
         
         <div class="bg-gray-100 py-16"><div class="container mx-auto px-6"><h2 class="text-3xl font-bold text-center text-gray-800 mb-4">🌸 Core <span class="text-amber-600">Objectives</span></h2><div class="grid md:grid-cols-3 gap-6 mt-8"><div class="bg-white p-5 rounded-xl shadow-md"><i class="fas fa-quran text-emerald-600 text-2xl"></i><p class="mt-2">Authentic Qur’anic & Prophetic knowledge</p></div><div class="bg-white p-5 rounded-xl shadow-md"><i class="fas fa-book-open text-emerald-600 text-2xl"></i><p class="mt-2">Joyful Qur’anic memorization</p></div><div class="bg-white p-5 rounded-xl shadow-md"><i class="fas fa-crown text-emerald-600 text-2xl"></i><p class="mt-2">Confident, principled leaders</p></div></div></div></div>
         
@@ -119,7 +108,7 @@
         
         <footer class="bg-slate-900 text-gray-400 py-8 text-center text-sm">
             <div>© 2026 Al‑Istiqaamah Flying Wings Academy — Samaru, Zaria, Kaduna State. RC: 1983033</div>
-            <div class="powered-by mt-3"><i class="fas fa-microchip"></i> Powered by <span class="font-semibold text-amber-400">Arrahmahtelecommunications.NG</span> | <i class="fas fa-globe"></i> Seamless Connectivity</div>
+            <div class="powered-by mt-3"><i class="fas fa-microchip"></i> Powered by Arrahmahtelecommunications.NG</div>
         </footer>
     </div>
 
@@ -128,7 +117,7 @@
     <div id="parentLoginModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70"><div class="bg-white rounded-2xl p-8 w-96 relative"><h2 class="text-2xl font-bold mb-4">Parent Login</h2><form id="parentAuthForm"><input type="text" id="parentRegNo" placeholder="Student Registration Number" class="w-full border p-2 rounded mb-3"><input type="password" id="parentPassword" placeholder="Password (default: al123)" value="al123" class="w-full border p-2 rounded mb-4"><button type="submit" class="w-full bg-emerald-600 text-white py-2 rounded-lg">Access Dashboard</button></form><button id="closeParentLoginBtn" class="absolute top-3 right-4 text-2xl">&times;</button></div></div>
     <div id="adminSignupModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70"><div class="bg-white rounded-2xl p-8 w-96 relative"><h2 class="text-2xl font-bold mb-4">Admin Signup</h2><form id="adminSignupForm"><input type="text" id="adminFullName" placeholder="Full Name" class="w-full border p-2 rounded mb-2"><input type="email" id="adminEmail" placeholder="Email" class="w-full border p-2 rounded mb-2"><input type="password" id="adminPassword" placeholder="Password" class="w-full border p-2 rounded mb-2"><select id="adminRole"><option value="dg_ceo">DG/CEO</option><option value="umc">UMC</option><option value="daf">DAF</option><option value="do">DO</option><option value="der">DER</option><option value="dprpa">DPRPA</option></select><input type="text" id="adminRegCode" placeholder="Registration Code (ALIFLY2026)" class="w-full border p-2 rounded mt-2"><button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-lg mt-3">Create Account</button></form><button id="closeAdminSignupBtn" class="absolute top-3 right-4 text-2xl">&times;</button></div></div>
 
-    <!-- DASHBOARD APP CONTAINER -->
+    <!-- DASHBOARD -->
     <div id="appContainer" class="hidden flex h-screen w-full fixed inset-0 z-40 bg-white flex-col">
         <div class="top-bar"><div class="flex items-center gap-3"><button id="mobileMenuToggle" class="text-gray-700 text-2xl md:hidden"><i class="fas fa-bars"></i></button><img src="logo.jpg" class="h-10 w-auto" onerror="this.src='https://placehold.co/100x40'"><span class="font-semibold hidden sm:inline">Al‑Istiqaamah Flying Wings</span></div><div class="flex items-center gap-4"><div class="user-info"><i class="fas fa-user-circle text-xl"></i><div><p class="text-xs text-gray-500">Logged in as</p><p class="text-sm font-bold"><span id="topUserName"></span> (<span id="topUserRole"></span>)</p></div></div><button id="topLogoutBtn" class="logout-top-btn"><i class="fas fa-sign-out-alt mr-1"></i> Logout</button></div></div>
         <div class="flex flex-1 overflow-hidden relative"><div id="sidebarOverlay" class="sidebar-overlay"></div><aside id="dynamicSidebar" class="sidebar text-white w-80 flex flex-col overflow-y-auto"><div class="p-4 border-b flex justify-between items-center"><p class="text-sm"><i class="fas fa-school"></i> Navigation</p><button id="closeMobileSidebar" class="text-white md:hidden"><i class="fas fa-times"></i></button></div><nav id="dynamicNav" class="flex-1 px-3 mt-4 space-y-1"></nav></aside><main class="flex-1 overflow-auto bg-gray-100 p-6" id="mainContent"></main></div>
@@ -171,7 +160,7 @@
                 const { data: teachers } = await supabaseClient.from('teachers').select('*'); 
                 if (teachers) schoolData.teachers = teachers;
                 else schoolData.teachers = [];
-            } catch(e) { console.error("refreshSchoolData error", e); }
+            } catch(e) { console.error("refreshSchoolData error", e); showToast("Error loading data: "+e.message, true); }
         }
         
         function resetInactivityTimer() { 
@@ -194,7 +183,7 @@
             }); 
         }
         
-        // ============ STORAGE BUCKET ============
+        // ============ STORAGE BUCKETS ============
         async function ensureStorageBuckets() {
             try {
                 const { data: buckets } = await supabaseClient.storage.listBuckets();
@@ -318,27 +307,28 @@
             const form = modalDiv.querySelector('#admissionFormNew');
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const surname = form.querySelector('[name="surname"]').value.trim(); 
-                const firstname = form.querySelector('[name="firstname"]').value.trim(); 
-                const declarant = form.querySelector('[name="declarantName"]').value.trim();
-                if (!surname || !firstname || !declarant) { showToast("Please fill surname, firstname and declarant name", true); return; }
-                const applicantName = `${firstname} ${surname}`;
-                const textData = {}; 
-                const fileFields = ['birthCert', 'prevReport', 'medicalReport'];
-                for (let field of fileFields) { 
-                    const file = form.querySelector(`[name="${field}"]`).files[0]; 
-                    if (file) {
-                        try {
+                try {
+                    const surname = form.querySelector('[name="surname"]').value.trim(); 
+                    const firstname = form.querySelector('[name="firstname"]').value.trim(); 
+                    const declarant = form.querySelector('[name="declarantName"]').value.trim();
+                    if (!surname || !firstname || !declarant) { showToast("Please fill surname, firstname and declarant name", true); return; }
+                    const applicantName = `${firstname} ${surname}`;
+                    const textData = {}; 
+                    const fileFields = ['birthCert', 'prevReport', 'medicalReport'];
+                    for (let field of fileFields) { 
+                        const file = form.querySelector(`[name="${field}"]`).files[0]; 
+                        if (file) {
                             textData[field + "_url"] = await uploadFile(file, applicantName);
-                        } catch(err) { showToast("File upload failed: "+err.message, true); return; }
+                        }
                     }
-                }
-                const formValues = {}; 
-                for (let el of form.elements) if (el.name && !fileFields.includes(el.name)) formValues[el.name] = el.value;
-                const finalPayload = { ...formValues, attachments: textData };
-                const { error } = await supabaseClient.from('admission_applications').insert([{ form_data: finalPayload, full_name: applicantName, parent_email: formValues.parentEmail || null, phone: formValues.parentPhone || null, submitted_at: new Date(), status: 'pending' }]);
-                if (error) { showToast(error.message, true); return; }
-                showToast("Application submitted successfully! Our admission team will contact you."); closeModal();
+                    const formValues = {}; 
+                    for (let el of form.elements) if (el.name && !fileFields.includes(el.name)) formValues[el.name] = el.value;
+                    const finalPayload = { ...formValues, attachments: textData };
+                    const { error } = await supabaseClient.from('admission_applications').insert([{ form_data: finalPayload, full_name: applicantName, parent_email: formValues.parentEmail || null, phone: formValues.parentPhone || null, submitted_at: new Date(), status: 'pending' }]);
+                    if (error) throw error;
+                    showToast("Application submitted successfully! Our admission team will contact you."); 
+                    closeModal();
+                } catch(err) { showToast("Submission failed: "+err.message, true); console.error(err); }
             });
         };
         
@@ -361,7 +351,7 @@
             } catch(e) { showToast("Error loading applications", true); }
         }
 
-        // ============ RESULTS, STUDENTS, FEE ============
+        // ============ RESULTS ============
         async function saveStudentResult(studentId, term, year, subject, ca1, ca2, exam) { 
             const total = ca1+ca2+exam; 
             const grade = total>=80?'A':total>=70?'B':total>=60?'C':total>=50?'D':'E'; 
@@ -373,39 +363,41 @@
             let html = `<div class="bg-white rounded-xl shadow p-6"><h2 class="text-2xl font-bold mb-4">📊 Results Management</h2><div class="grid md:grid-cols-3 gap-4"><select id="resStudent" class="border p-2 rounded"><option>Select Student</option>${schoolData.students.map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}</select><select id="resTerm"><option value="1">Term1</option><option value="2">Term2</option><option value="3">Term3</option></select><input id="resYear" value="2026" class="border p-2 rounded"></div><button id="loadResultsBtn" class="bg-emerald-600 text-white px-4 py-2 rounded-lg mt-3">Load</button><div id="resEditor" class="mt-5"></div></div>`; 
             document.getElementById("mainContent").innerHTML = html; 
             document.getElementById("loadResultsBtn").onclick = async () => { 
-                const studentId = document.getElementById("resStudent").value, term = document.getElementById("resTerm").value, year = document.getElementById("resYear").value; 
-                if (!studentId) return; 
-                const { data: results } = await supabaseClient.from('student_results').select('*').eq('student_id', studentId).eq('term', term).eq('year', year); 
-                const container = document.getElementById("resEditor"); 
-                container.innerHTML = `<table class="w-full border"><thead><tr><th>Subject</th><th>CA1(20)</th><th>CA2(20)</th><th>Exam(60)</th><th>Total</th><th>Grade</th><th><button id="addSubjRow" class="bg-amber-500 text-white px-2 py-1 rounded text-sm">+Add</button></th></tr></thead><tbody id="resBody"></tbody></table><button id="saveResultsBtn" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded-lg">Save All</button>`; 
-                const tbody = document.getElementById("resBody"); 
-                const addRow = (r = null) => { 
-                    const tr = document.createElement('tr'); 
-                    tr.innerHTML = `<td><input class="subj w-32 border p-1" value="${r?.subject || ''}"></td><td><input class="ca1 w-20 border p-1" value="${r?.ca1 || 0}" min="0" max="20"></td><td><input class="ca2 w-20 border p-1" value="${r?.ca2 || 0}" min="0" max="20"></td><td><input class="ex w-20 border p-1" value="${r?.exam || 0}" min="0" max="60"></td><td class="totalCell font-bold"></td><td class="gradeCell"></td><td><button class="delRow bg-red-500 text-white px-2 rounded">X</button></td>`; 
-                    const update = () => { 
-                        let c1 = +tr.querySelector('.ca1').value || 0, c2 = +tr.querySelector('.ca2').value || 0, ex = +tr.querySelector('.ex').value || 0, tot = c1 + c2 + ex; 
-                        tr.querySelector('.totalCell').innerText = tot; 
-                        tr.querySelector('.gradeCell').innerText = tot >= 80 ? 'A' : tot >= 70 ? 'B' : tot >= 60 ? 'C' : tot >= 50 ? 'D' : 'E'; 
+                try {
+                    const studentId = document.getElementById("resStudent").value, term = document.getElementById("resTerm").value, year = document.getElementById("resYear").value; 
+                    if (!studentId) return; 
+                    const { data: results } = await supabaseClient.from('student_results').select('*').eq('student_id', studentId).eq('term', term).eq('year', year); 
+                    const container = document.getElementById("resEditor"); 
+                    container.innerHTML = `<table class="w-full border"><thead><tr><th>Subject</th><th>CA1(20)</th><th>CA2(20)</th><th>Exam(60)</th><th>Total</th><th>Grade</th><th><button id="addSubjRow" class="bg-amber-500 text-white px-2 py-1 rounded text-sm">+Add</button></th></tr></thead><tbody id="resBody"></tbody></table><button id="saveResultsBtn" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded-lg">Save All</button>`; 
+                    const tbody = document.getElementById("resBody"); 
+                    const addRow = (r = null) => { 
+                        const tr = document.createElement('tr'); 
+                        tr.innerHTML = `<td><input class="subj w-32 border p-1" value="${r?.subject || ''}"></td><td><input class="ca1 w-20 border p-1" value="${r?.ca1 || 0}" min="0" max="20"></td><td><input class="ca2 w-20 border p-1" value="${r?.ca2 || 0}" min="0" max="20"></td><td><input class="ex w-20 border p-1" value="${r?.exam || 0}" min="0" max="60"></td><td class="totalCell font-bold"></td><td class="gradeCell"></td><td><button class="delRow bg-red-500 text-white px-2 rounded">X</button></td>`; 
+                        const update = () => { 
+                            let c1 = +tr.querySelector('.ca1').value || 0, c2 = +tr.querySelector('.ca2').value || 0, ex = +tr.querySelector('.ex').value || 0, tot = c1 + c2 + ex; 
+                            tr.querySelector('.totalCell').innerText = tot; 
+                            tr.querySelector('.gradeCell').innerText = tot >= 80 ? 'A' : tot >= 70 ? 'B' : tot >= 60 ? 'C' : tot >= 50 ? 'D' : 'E'; 
+                        }; 
+                        tr.querySelector('.ca1').addEventListener('input', update); 
+                        tr.querySelector('.ca2').addEventListener('input', update); 
+                        tr.querySelector('.ex').addEventListener('input', update); 
+                        tr.querySelector('.delRow').addEventListener('click', () => tr.remove()); 
+                        update(); 
+                        tbody.appendChild(tr); 
                     }; 
-                    tr.querySelector('.ca1').addEventListener('input', update); 
-                    tr.querySelector('.ca2').addEventListener('input', update); 
-                    tr.querySelector('.ex').addEventListener('input', update); 
-                    tr.querySelector('.delRow').addEventListener('click', () => tr.remove()); 
-                    update(); 
-                    tbody.appendChild(tr); 
-                }; 
-                if (results?.length) results.forEach(addRow); else addRow(null); 
-                document.getElementById("addSubjRow").onclick = () => addRow(null); 
-                document.getElementById("saveResultsBtn").onclick = async () => { 
-                    await supabaseClient.from('student_results').delete().eq('student_id', studentId).eq('term', term).eq('year', year); 
-                    for (let row of tbody.querySelectorAll('tr')) { 
-                        let subj = row.querySelector('.subj').value.trim(); 
-                        if (!subj) continue; 
-                        let ca1 = +row.querySelector('.ca1').value, ca2 = +row.querySelector('.ca2').value, ex = +row.querySelector('.ex').value; 
-                        await saveStudentResult(studentId, term, year, subj, ca1||0, ca2||0, ex||0); 
-                    } 
-                    showToast("Results saved"); 
-                }; 
+                    if (results?.length) results.forEach(addRow); else addRow(null); 
+                    document.getElementById("addSubjRow").onclick = () => addRow(null); 
+                    document.getElementById("saveResultsBtn").onclick = async () => { 
+                        await supabaseClient.from('student_results').delete().eq('student_id', studentId).eq('term', term).eq('year', year); 
+                        for (let row of tbody.querySelectorAll('tr')) { 
+                            let subj = row.querySelector('.subj').value.trim(); 
+                            if (!subj) continue; 
+                            let ca1 = +row.querySelector('.ca1').value, ca2 = +row.querySelector('.ca2').value, ex = +row.querySelector('.ex').value; 
+                            await saveStudentResult(studentId, term, year, subj, ca1||0, ca2||0, ex||0); 
+                        } 
+                        showToast("Results saved"); 
+                    }; 
+                } catch(e) { showToast("Error loading results: "+e.message, true); }
             }; 
         }
         
@@ -442,9 +434,12 @@
                 const level = parseInt(document.getElementById('level').value);
                 const secSelect = document.getElementById('secSelect').value;
                 if (!regNum || !stuName) { showToast("Reg Number and Name required", true); return; }
-                await supabaseClient.from('students').insert([{ reg_number: regNum, name: stuName, parent_name: parentName, level: level || 1, section: secSelect, fee_status:'Pending', status:'active' }]); 
-                await refreshSchoolData(); 
-                renderStudentsList(); 
+                try {
+                    await supabaseClient.from('students').insert([{ reg_number: regNum, name: stuName, parent_name: parentName, level: level || 1, section: secSelect, fee_status:'Pending', status:'active' }]); 
+                    await refreshSchoolData(); 
+                    renderStudentsList(); 
+                    showToast("Student enrolled successfully");
+                } catch(e) { showToast("Enrollment failed: "+e.message, true); }
             }); 
         }
         
@@ -455,9 +450,11 @@
                 if(data && document.getElementById("announceText")) document.getElementById("announceText").value = data.content; 
             }).catch(()=>{}); 
             document.getElementById("saveAnnounce").onclick=async()=>{ 
-                await supabaseClient.from('site_announcement').update({ content: document.getElementById("announceText").value }).eq('id',1); 
-                showToast("Updated"); 
-                fetchAndDisplayAnnouncement(); 
+                try {
+                    await supabaseClient.from('site_announcement').update({ content: document.getElementById("announceText").value }).eq('id',1); 
+                    showToast("Updated"); 
+                    fetchAndDisplayAnnouncement(); 
+                } catch(e) { showToast("Update failed: "+e.message, true); }
             }; 
         }
         
@@ -468,14 +465,16 @@
                 let html = `<div class="bg-white p-6 rounded-xl"><h2>📸 Manage Slides</h2><div class="mb-4"><input type="file" id="slideUpload" accept="image/*"><input id="slideCaption" placeholder="Caption" class="border p-2 rounded ml-2"><button id="uploadSlideBtn" class="bg-emerald-600 text-white p-2 rounded">Upload</button></div><div class="grid grid-cols-3 gap-4">${slides?.map(s=>`<div class="border rounded p-2"><img src="${s.image_url}" class="h-24 object-cover"><p>${s.caption}</p><button data-id="${s.id}" class="delSlide bg-red-500 text-white px-2 py-1 rounded text-xs mt-1">Delete</button></div>`).join('')}</div></div>`; 
                 document.getElementById("mainContent").innerHTML = html; 
                 document.getElementById("uploadSlideBtn").onclick = async () => { 
-                    const file = document.getElementById("slideUpload").files[0]; 
-                    const caption = document.getElementById("slideCaption").value; 
-                    if (!file || !caption) { showToast("Select image and caption", true); return; } 
-                    const url = await uploadSlideImage(file); 
-                    await supabaseClient.from('slides').insert([{ image_url: url, caption }]); 
-                    showToast("Slide added"); 
-                    renderManageSlides(); 
-                    loadSlidesFromSupabase(); 
+                    try {
+                        const file = document.getElementById("slideUpload").files[0]; 
+                        const caption = document.getElementById("slideCaption").value; 
+                        if (!file || !caption) { showToast("Select image and caption", true); return; } 
+                        const url = await uploadSlideImage(file); 
+                        await supabaseClient.from('slides').insert([{ image_url: url, caption }]); 
+                        showToast("Slide added"); 
+                        renderManageSlides(); 
+                        loadSlidesFromSupabase(); 
+                    } catch(e) { showToast("Upload failed: "+e.message, true); }
                 }; 
                 document.querySelectorAll('.delSlide').forEach(btn => btn.onclick = async () => { 
                     await supabaseClient.from('slides').delete().eq('id', btn.dataset.id); 
@@ -525,28 +524,30 @@
             let html = `<div class="bg-white rounded-xl shadow p-6"><h2 class="text-2xl font-bold mb-4"><i class="fas fa-coins text-amber-500"></i> Fee Management</h2><div class="grid md:grid-cols-3 gap-4 mb-4"><select id="feeStudentId" class="border p-2 rounded"><option value="">-- Student --</option>${schoolData.students.map(s=>`<option value="${s.id}">${s.reg_number} - ${s.name}</option>`).join('')}</select><select id="feeTerm"><option value="1">First Term</option><option value="2">Second Term</option><option value="3">Third Term</option></select><input id="feeYear" value="2026" class="border p-2 rounded"></div><button id="loadFeeDetailsBtn" class="bg-emerald-600 text-white px-4 py-2 rounded-lg">Load Details</button><div id="feeDetailsContainer" class="mt-6"></div><div id="recordPaymentPanel" class="hidden mt-4 border-t pt-4"><h3 class="text-xl font-bold">Record Payment</h3><div class="flex gap-3 mt-2"><input id="paymentAmount" type="number" placeholder="Amount (₦)" class="border p-2 rounded"><select id="paymentMethod"><option value="cash">Cash</option><option value="bank_transfer">Bank Transfer</option></select><button id="recordPaymentBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg">Pay</button></div></div></div>`; 
             document.getElementById("mainContent").innerHTML = html; 
             document.getElementById("loadFeeDetailsBtn").onclick = async () => { 
-                let studentId = document.getElementById("feeStudentId").value, term = document.getElementById("feeTerm").value, year = document.getElementById("feeYear").value; 
-                if (!studentId) return showToast("Select student", true); 
-                let balance = await getOrCreateFeeBalance(studentId, term, year); 
-                let { data: transactions } = await supabaseClient.from('fee_transactions').select('*').eq('student_id', studentId).eq('term', term).eq('year', year); 
-                let student = schoolData.students.find(s=>s.id == studentId); 
-                document.getElementById("feeDetailsContainer").innerHTML = `<div class="bg-gray-50 p-4 rounded"><p><strong>${student.name}</strong> | Total: ₦${balance.total_fees} | Paid: ₦${balance.paid_amount} | Balance: ₦${balance.balance}</p><table class="w-full text-sm border mt-2"><thead class="bg-gray-200"><tr><th>Date</th><th>Amount</th><th>Receipt</th><th>Status</th><th>Action</th></tr></thead><tbody>${transactions.map(tx=>`<tr><td>${new Date(tx.payment_date).toLocaleDateString()}</td><td>₦${tx.amount_paid}</td><td>${tx.receipt_no}</td><td class="${tx.status==='authorized'?'text-green-600':'text-amber-600'}">${tx.status}</td><td>${tx.status!=='authorized'&&(['dg_ceo','daf'].includes(currentUser.role)?`<button class="authTxBtn text-blue-600" data-id="${tx.id}">Authorize</button>`:'-')}</td></tr>`).join('')}</tbody></table><button id="showPaymentPanelBtn" class="mt-2 bg-amber-500 text-white px-3 py-1 rounded text-sm">+ New Payment</button></div>`; 
-                document.getElementById("recordPaymentPanel").classList.remove("hidden"); 
-                document.getElementById("showPaymentPanelBtn")?.addEventListener("click",()=>document.getElementById("recordPaymentPanel").scrollIntoView()); 
-                document.getElementById("recordPaymentBtn").onclick = async () => { 
-                    let amount = parseFloat(document.getElementById("paymentAmount").value); 
-                    if(isNaN(amount)||amount<=0) return showToast("Valid amount",true); 
-                    let method = document.getElementById("paymentMethod").value; 
-                    let isAuth = ['dg_ceo','daf'].includes(currentUser.role); 
-                    await recordPayment(studentId, term, year, amount, method, isAuth); 
-                    showToast(`Payment recorded. ${isAuth?'Authorized':'Pending'}`); 
-                    await refreshSchoolData(); 
-                    document.getElementById("loadFeeDetailsBtn").click(); 
-                }; 
-                document.querySelectorAll('.authTxBtn').forEach(btn=>btn.onclick=async()=>{ 
-                    await authorizeReceipt(btn.dataset.id); 
-                    document.getElementById("loadFeeDetailsBtn").click(); 
-                }); 
+                try {
+                    let studentId = document.getElementById("feeStudentId").value, term = document.getElementById("feeTerm").value, year = document.getElementById("feeYear").value; 
+                    if (!studentId) return showToast("Select student", true); 
+                    let balance = await getOrCreateFeeBalance(studentId, term, year); 
+                    let { data: transactions } = await supabaseClient.from('fee_transactions').select('*').eq('student_id', studentId).eq('term', term).eq('year', year); 
+                    let student = schoolData.students.find(s=>s.id == studentId); 
+                    document.getElementById("feeDetailsContainer").innerHTML = `<div class="bg-gray-50 p-4 rounded"><p><strong>${student.name}</strong> | Total: ₦${balance.total_fees} | Paid: ₦${balance.paid_amount} | Balance: ₦${balance.balance}</p><table class="w-full text-sm border mt-2"><thead class="bg-gray-200"><tr><th>Date</th><th>Amount</th><th>Receipt</th><th>Status</th><th>Action</th></tr></thead><tbody>${transactions.map(tx=>`<tr><td>${new Date(tx.payment_date).toLocaleDateString()}</td><td>₦${tx.amount_paid}</td><td>${tx.receipt_no}</td><td class="${tx.status==='authorized'?'text-green-600':'text-amber-600'}">${tx.status}</td><td>${tx.status!=='authorized'&&(['dg_ceo','daf'].includes(currentUser.role)?`<button class="authTxBtn text-blue-600" data-id="${tx.id}">Authorize</button>`:'-')}</td></tr>`).join('')}</tbody></table><button id="showPaymentPanelBtn" class="mt-2 bg-amber-500 text-white px-3 py-1 rounded text-sm">+ New Payment</button></div>`; 
+                    document.getElementById("recordPaymentPanel").classList.remove("hidden"); 
+                    document.getElementById("showPaymentPanelBtn")?.addEventListener("click",()=>document.getElementById("recordPaymentPanel").scrollIntoView()); 
+                    document.getElementById("recordPaymentBtn").onclick = async () => { 
+                        let amount = parseFloat(document.getElementById("paymentAmount").value); 
+                        if(isNaN(amount)||amount<=0) return showToast("Valid amount",true); 
+                        let method = document.getElementById("paymentMethod").value; 
+                        let isAuth = ['dg_ceo','daf'].includes(currentUser.role); 
+                        await recordPayment(studentId, term, year, amount, method, isAuth); 
+                        showToast(`Payment recorded. ${isAuth?'Authorized':'Pending'}`); 
+                        await refreshSchoolData(); 
+                        document.getElementById("loadFeeDetailsBtn").click(); 
+                    }; 
+                    document.querySelectorAll('.authTxBtn').forEach(btn=>btn.onclick=async()=>{ 
+                        await authorizeReceipt(btn.dataset.id); 
+                        document.getElementById("loadFeeDetailsBtn").click(); 
+                    }); 
+                } catch(e) { showToast("Error loading fee details: "+e.message, true); }
             }; 
         }
         
