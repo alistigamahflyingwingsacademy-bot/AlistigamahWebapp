@@ -44,6 +44,10 @@
         .upload-preview { max-width: 200px; max-height: 120px; margin-top: 8px; border-radius: 8px; border: 1px solid #ccc; }
         .cookie-consent { position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: white; display: flex; justify-content: space-between; align-items: center; padding: 12px 24px; z-index: 1000; gap: 20px; flex-wrap: wrap; }
         .cookie-consent button { background: #f59e0b; border: none; padding: 8px 18px; border-radius: 40px; font-weight: bold; cursor: pointer; }
+        .modal-detail { max-height: 80vh; overflow-y: auto; }
+        .download-btn-group { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1rem 0; }
+        .download-btn { background: #2c3e66; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+        .download-btn:hover { background: #1e2a4a; transform: scale(1.02); }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -332,23 +336,151 @@
             });
         };
         
-        // ============ ADMIN APPLICATIONS ============
+        // ============ ADMIN APPLICATIONS with DETAILS & DOWNLOAD ============
         async function renderApplicationsList() {
             if (!currentUser || !['dg_ceo', 'umc'].includes(currentUser.role)) { showToast("Access denied", true); return; }
             try {
                 const { data: apps } = await supabaseClient.from('admission_applications').select('*').order('submitted_at', { ascending: false });
-                let html = `<div class="bg-white rounded-xl shadow p-6"><h2 class="text-2xl font-bold mb-4">📋 Admission Applications</h2><div class="overflow-x-auto"><table class="min-w-full border"><thead class="bg-gray-100"><tr><th>Name</th><th>Email/Phone</th><th>Date</th><th>Status</th><th>Action</th></tr></thead><tbody>`;
+                let html = `<div class="bg-white rounded-xl shadow p-6"><h2 class="text-2xl font-bold mb-4">📋 Admission Applications</h2><div class="overflow-x-auto"><table class="min-w-full border"><thead class="bg-gray-100"><tr><th>Name</th><th>Email/Phone</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead><tbody>`;
                 for (let app of apps || []) {
-                    html += `<tr class="border-b"><td class="p-2">${escapeHtml(app.full_name)}</td><td class="p-2">${escapeHtml(app.parent_email || app.phone || '-')}</td><td class="p-2">${new Date(app.submitted_at).toLocaleDateString()}</td><td class="p-2"><span class="status-badge status-${app.status}">${app.status}</span></td><td class="p-2"><select data-id="${app.id}" class="statusUpdateSelect border rounded p-1"><option value="pending" ${app.status==='pending'?'selected':''}>Pending</option><option value="reviewed" ${app.status==='reviewed'?'selected':''}>Reviewed</option><option value="accepted" ${app.status==='accepted'?'selected':''}>Accepted</option><option value="rejected" ${app.status==='rejected'?'selected':''}>Rejected</option></select></td></tr>`;
+                    html += `<tr class="border-b"><td class="p-2">${escapeHtml(app.full_name)}</td>
+                    <td class="p-2">${escapeHtml(app.parent_email || app.phone || '-')}</td>
+                    <td class="p-2">${new Date(app.submitted_at).toLocaleDateString()}</td>
+                    <td class="p-2"><span class="status-badge status-${app.status}">${app.status}</span></td>
+                    <td class="p-2">
+                        <select data-id="${app.id}" class="statusUpdateSelect border rounded p-1">
+                            <option value="pending" ${app.status==='pending'?'selected':''}>Pending</option>
+                            <option value="reviewed" ${app.status==='reviewed'?'selected':''}>Reviewed</option>
+                            <option value="accepted" ${app.status==='accepted'?'selected':''}>Accepted</option>
+                            <option value="rejected" ${app.status==='rejected'?'selected':''}>Rejected</option>
+                        </select>
+                        <button data-app='${JSON.stringify(app).replace(/'/g, "&#39;")}' class="viewDetailsBtn ml-2 bg-blue-600 text-white px-2 py-1 rounded text-xs">📄 View Details</button>
+                    </td></tr>`;
                 }
                 html += `</tbody></table></div></div>`;
                 document.getElementById("mainContent").innerHTML = html;
+                // Status update
                 document.querySelectorAll('.statusUpdateSelect').forEach(sel => sel.addEventListener('change', async (e) => {
                     const id = sel.dataset.id; const newStatus = sel.value;
                     await supabaseClient.from('admission_applications').update({ status: newStatus }).eq('id', id);
                     showToast("Status updated"); renderApplicationsList();
                 }));
+                // View Details button listeners
+                document.querySelectorAll('.viewDetailsBtn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const appData = JSON.parse(btn.dataset.app);
+                        showApplicationDetailsModal(appData);
+                    });
+                });
             } catch(e) { showToast("Error loading applications", true); }
+        }
+
+        function showApplicationDetailsModal(app) {
+            const formData = app.form_data || {};
+            const attachments = formData.attachments || {};
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 z-[200] bg-black/70 flex items-center justify-center p-4 overflow-y-auto';
+            modal.innerHTML = `
+                <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative">
+                    <div class="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
+                        <h3 class="text-2xl font-bold text-emerald-800">📋 Application Details</h3>
+                        <button class="closeModalBtn text-3xl text-gray-500 hover:text-gray-700">&times;</button>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div><strong>Full Name:</strong> ${escapeHtml(app.full_name)}</div>
+                        <div><strong>Submitted:</strong> ${new Date(app.submitted_at).toLocaleString()}</div>
+                        <div><strong>Status:</strong> <span class="status-badge status-${app.status}">${app.status}</span></div>
+                        <hr class="my-2">
+                        <h4 class="font-bold text-lg">Form Data</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                            ${Object.entries(formData).filter(([k]) => !k.startsWith('attachments')).map(([k,v]) => `<div><strong>${k}:</strong> ${escapeHtml(String(v))}</div>`).join('')}
+                        </div>
+                        <hr class="my-2">
+                        <h4 class="font-bold text-lg">Attachments</h4>
+                        <div class="flex flex-wrap gap-4">
+                            ${attachments.birthCert_url ? `<a href="${attachments.birthCert_url}" target="_blank" class="bg-amber-100 text-amber-800 px-3 py-2 rounded flex items-center gap-2"><i class="fas fa-file-pdf"></i> Birth Certificate</a>` : ''}
+                            ${attachments.prevReport_url ? `<a href="${attachments.prevReport_url}" target="_blank" class="bg-amber-100 text-amber-800 px-3 py-2 rounded flex items-center gap-2"><i class="fas fa-file-alt"></i> Previous Report</a>` : ''}
+                            ${attachments.medicalReport_url ? `<a href="${attachments.medicalReport_url}" target="_blank" class="bg-amber-100 text-amber-800 px-3 py-2 rounded flex items-center gap-2"><i class="fas fa-notes-medical"></i> Medical Report</a>` : ''}
+                            ${!attachments.birthCert_url && !attachments.prevReport_url && !attachments.medicalReport_url ? '<div class="text-gray-500">No attachments uploaded</div>' : ''}
+                        </div>
+                    </div>
+                    <div class="sticky bottom-0 bg-gray-50 p-4 text-right border-t">
+                        <button class="closeModalBtn bg-gray-500 text-white px-4 py-2 rounded-lg">Close</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            const closeButtons = modal.querySelectorAll('.closeModalBtn');
+            closeButtons.forEach(btn => btn.addEventListener('click', () => modal.remove()));
+            modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+        }
+
+        // ============ DOWNLOAD RECORDS (CSV) ============
+        function downloadCSV(data, filename) {
+            if (!data || data.length === 0) { showToast("No data to export", true); return; }
+            const headers = Object.keys(data[0]);
+            const csvRows = [headers.join(',')];
+            for (const row of data) {
+                const values = headers.map(header => {
+                    const val = row[header] === undefined ? '' : row[header];
+                    return `"${String(val).replace(/"/g, '""')}"`;
+                });
+                csvRows.push(values.join(','));
+            }
+            const blob = new Blob([csvRows.join('\n')], { type: 'text/csv' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            showToast(`Downloaded ${filename}`);
+        }
+
+        async function downloadStudents() {
+            const { data } = await supabaseClient.from('students').select('*');
+            if (data && data.length) downloadCSV(data, 'students_export.csv');
+            else showToast("No student data", true);
+        }
+
+        async function downloadResults() {
+            const { data } = await supabaseClient.from('student_results').select('*');
+            if (data && data.length) downloadCSV(data, 'results_export.csv');
+            else showToast("No results data", true);
+        }
+
+        async function downloadFeeTransactions() {
+            const { data } = await supabaseClient.from('fee_transactions').select('*');
+            if (data && data.length) downloadCSV(data, 'fee_transactions_export.csv');
+            else showToast("No fee transactions", true);
+        }
+
+        async function downloadStaff() {
+            const { data } = await supabaseClient.from('teachers').select('*');
+            if (data && data.length) downloadCSV(data, 'staff_export.csv');
+            else showToast("No staff data", true);
+        }
+
+        function renderDownloadRecords() {
+            if (!currentUser || currentUser.role !== 'dg_ceo') { showToast("Access denied", true); return; }
+            const html = `
+                <div class="bg-white rounded-xl p-6 shadow">
+                    <h2 class="text-2xl font-bold mb-4">📥 Download Records</h2>
+                    <div class="download-btn-group">
+                        <button id="downloadStudentsBtn" class="download-btn"><i class="fas fa-users"></i> Students CSV</button>
+                        <button id="downloadResultsBtn" class="download-btn"><i class="fas fa-chart-line"></i> Results CSV</button>
+                        <button id="downloadFeeBtn" class="download-btn"><i class="fas fa-coins"></i> Fee Transactions CSV</button>
+                        <button id="downloadStaffBtn" class="download-btn"><i class="fas fa-chalkboard-user"></i> Staff CSV</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById("mainContent").innerHTML = html;
+            document.getElementById("downloadStudentsBtn").onclick = downloadStudents;
+            document.getElementById("downloadResultsBtn").onclick = downloadResults;
+            document.getElementById("downloadFeeBtn").onclick = downloadFeeTransactions;
+            document.getElementById("downloadStaffBtn").onclick = downloadStaff;
         }
 
         // ============ RESULTS ============
@@ -402,7 +534,7 @@
         }
         
         function renderStudentsList() { 
-            let html=`<div class="bg-white p-5 rounded-xl"><h2>📋 Students</h2><div class="filter-bar flex gap-4"><select id="sectionFilter"><option>All Sections</option>${SECTIONS.map(s=>`<option>${s}</option>`).join('')}</select><input id="searchStudent" placeholder="Search"></div><table class="w-full border"><thead><tr><th>Reg No</th><th>Name</th><th>Parent</th><th>Section</th><th>Status</th>${(currentUser.role==='dg_ceo'||currentUser.role==='umc')?'<th>Action</th>':''}</tr></thead><tbody id="stuTbody"></tbody></table></div>`; 
+            let html=`<div class="bg-white p-5 rounded-xl"><h2>📋 Students</h2><div class="filter-bar flex gap-4"><select id="sectionFilter"><option>All Sections</option>${SECTIONS.map(s=>`<option>${s}</option>`).join('')}</select><input id="searchStudent" placeholder="Search"></div><table class="w-full border"><thead><tr><th>Reg No</th><th>Name</th><th>Parent</th><th>Section</th><th>Status</th>${(currentUser.role==='dg_ceo'||currentUser.role==='umc')?'<th>Action</th>':''} </thead><tbody id="stuTbody"></tbody> </div>`; 
             document.getElementById("mainContent").innerHTML=html; 
             const update=()=>{ 
                 let filtered=schoolData.students.filter(s=>document.getElementById("sectionFilter").value==='All Sections'||s.section===document.getElementById("sectionFilter").value); 
@@ -666,12 +798,12 @@
             document.getElementById('topUserRole').innerText=currentUser.role.toUpperCase(); 
             let items = [];
             let viewMap = {};
-            if(currentUser.role==='dg_ceo') items = ["dashboard","students","enroll-student","results-management","fee-management","staff-management","applications","manage-announcement","manage-slides"];
+            if(currentUser.role==='dg_ceo') items = ["dashboard","students","enroll-student","results-management","fee-management","staff-management","applications","download-records","manage-announcement","manage-slides"];
             else if(currentUser.role==='umc') items = ["dashboard","students","enroll-student","staff-management","applications"];
             else if(['headteacher','teacher'].includes(currentUser.role)) items = ["dashboard","students"];
             else if(currentUser.role==='parent') items = ["fee-statement"];
             else items = ["dashboard"];
-            const labels = { dashboard:"🏠 Dashboard", students:"📚 Students", "enroll-student":"🎓 Enroll", "results-management":"📊 Results", "staff-management":"👥 Staff", applications:"📋 Apps", "fee-management":"💰 Fees", "manage-announcement":"📢 Announce", "manage-slides":"🎞️ Slides", "fee-statement":"💰 Fee Statement" };
+            const labels = { dashboard:"🏠 Dashboard", students:"📚 Students", "enroll-student":"🎓 Enroll", "results-management":"📊 Results", "staff-management":"👥 Staff", applications:"📋 Apps", "fee-management":"💰 Fees", "manage-announcement":"📢 Announce", "manage-slides":"🎞️ Slides", "fee-statement":"💰 Fee Statement", "download-records":"📥 Download Records" };
             const navHtml = items.map(v=>`<a href="#" data-view="${v}" class="nav-link flex items-center space-x-3 px-4 py-2.5 rounded-lg text-slate-200 hover:bg-white/10"><i class="fas fa-folder w-5"></i><span>${labels[v]||v}</span></a>`).join(''); 
             document.getElementById("dynamicNav").innerHTML=navHtml; 
             document.querySelectorAll('.nav-link').forEach(link=>link.addEventListener('click',(e)=>{ e.preventDefault(); renderContentView(link.dataset.view); closeMobileSidebar(); resetInactivityTimer(); })); 
@@ -703,7 +835,8 @@
                 "fee-management":renderFeeManagement, 
                 "manage-announcement":renderManageAnnouncement, 
                 "manage-slides":renderManageSlides,
-                "fee-statement":renderParentFees 
+                "fee-statement":renderParentFees,
+                "download-records":renderDownloadRecords 
             }; 
             if(views[view]) views[view](); 
             else if(currentUser.role==='parent') renderParentFees(); 
