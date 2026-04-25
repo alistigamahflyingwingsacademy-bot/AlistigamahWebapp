@@ -48,6 +48,11 @@
         .btn-primary:hover { background-color: #047857; transform: translateY(-1px); }
         .card-hover { transition: all 0.2s; }
         .card-hover:hover { transform: translateY(-2px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        @media print {
+            body * { visibility: hidden; }
+            #reportSheetContainer, #parentReportContainer { visibility: visible; position: absolute; top: 0; left: 0; width: 100%; }
+            .no-print { display: none !important; }
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -58,7 +63,7 @@
         <button id="acceptCookiesBtn" class="bg-amber-500 hover:bg-amber-600 text-gray-900 px-4 py-2 rounded-full font-bold">Accept All Cookies</button>
     </div>
 
-    <!-- LANDING PAGE (unchanged, but UI slightly improved) -->
+    <!-- LANDING PAGE (unchanged) -->
     <div id="landingPage" class="min-h-screen relative">
         <div class="hero-pattern text-white relative overflow-hidden">
             <div class="relative container mx-auto px-6 py-20 md:py-28">
@@ -198,7 +203,7 @@
             } catch(e) { console.warn("Storage buckets creation skipped", e); }
         }
         
-        // ============ SLIDES ============
+        // ============ SLIDES (unchanged) ============
         async function loadSlidesFromSupabase() { 
             try {
                 const { data } = await supabaseClient.from('slides').select('*').order('created_at', { ascending: true }); 
@@ -224,7 +229,7 @@
             const { data: { publicUrl } } = supabaseClient.storage.from('application_attachments').getPublicUrl(`applications/${safeName}`); 
             return publicUrl; 
         }
-        window.showApplicationFormModal = async function() { /* kept same as before, fully functional */ 
+        window.showApplicationFormModal = async function() { /* same as before, fully functional */ 
             const modalDiv = document.createElement('div');
             modalDiv.className = 'fixed inset-0 z-[100] flex items-center justify-center bg-black/80 overflow-y-auto p-4';
             modalDiv.style.backdropFilter = 'blur(4px)';
@@ -275,7 +280,7 @@
         };
         
         // ============ ADMIN APPLICATIONS ============
-        async function renderApplicationsList() { /* same as before, fully functional */ 
+        async function renderApplicationsList() { 
             if (!currentUser || !['dg_ceo', 'umc'].includes(currentUser.role)) { showToast("Access denied", true); return; }
             try {
                 const { data: apps } = await supabaseClient.from('admission_applications').select('*').order('submitted_at', { ascending: false });
@@ -293,7 +298,7 @@
                 document.querySelectorAll('.viewDetailsBtn').forEach(btn => btn.addEventListener('click', () => { const appData = JSON.parse(btn.dataset.app); showApplicationDetailsModal(appData); }));
             } catch(e) { showToast("Error loading applications", true); }
         }
-        function showApplicationDetailsModal(app) { /* same as before */ 
+        function showApplicationDetailsModal(app) { 
             const formData = app.form_data || {};
             const attachments = formData.attachments || {};
             const modal = document.createElement('div');
@@ -334,38 +339,329 @@
             document.getElementById("downloadStaffBtn").onclick = downloadStaff;
         }
         
-        // ============ RESULTS MANAGEMENT (DG/CEO only) ============
-        async function saveStudentResult(studentId, term, year, subject, ca1, ca2, exam) { 
-            const total = ca1+ca2+exam; const grade = total>=80?'A':total>=70?'B':total>=60?'C':total>=50?'D':'E'; 
-            await supabaseClient.from('student_results').upsert({ student_id: studentId, term, year, subject, ca1, ca2, exam, total, grade }, { onConflict: 'student_id,term,year,subject' }); 
+        // ============ SAVE STUDENT RESULT HELPER ============
+        async function saveStudentResult(studentId, term, year, subject, ca1, ca2, exam) {
+            const total = ca1 + ca2 + exam;
+            const grade = total >= 80 ? 'A' : total >= 70 ? 'B' : total >= 60 ? 'C' : total >= 50 ? 'D' : 'E';
+            await supabaseClient.from('student_results').upsert({
+                student_id: studentId, term, year, subject, ca1, ca2, exam, total, grade
+            }, { onConflict: 'student_id,term,year,subject' });
         }
-        async function renderUnifiedResults() { 
-            if (!currentUser || currentUser.role !== 'dg_ceo') { showToast("Access denied", true); renderContentView("dashboard"); return; } 
-            let html = `<div class="bg-white rounded-xl shadow p-6"><h2 class="text-2xl font-bold mb-4">📊 Results Management</h2><div class="grid md:grid-cols-3 gap-4"><select id="resStudent" class="border p-2 rounded"><option>Select Student</option>${schoolData.students.map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}</select><select id="resTerm"><option value="1">Term1</option><option value="2">Term2</option><option value="3">Term3</option></select><input id="resYear" value="2026" class="border p-2 rounded"></div><button id="loadResultsBtn" class="bg-emerald-600 text-white px-4 py-2 rounded-lg mt-3 hover:bg-emerald-700">Load</button><div id="resEditor" class="mt-5"></div></div>`; 
-            document.getElementById("mainContent").innerHTML = html; 
-            document.getElementById("loadResultsBtn").onclick = async () => { 
-                try {
-                    const studentId = document.getElementById("resStudent").value, term = document.getElementById("resTerm").value, year = document.getElementById("resYear").value; 
-                    if (!studentId) return; 
-                    const { data: results } = await supabaseClient.from('student_results').select('*').eq('student_id', studentId).eq('term', term).eq('year', year); 
-                    const container = document.getElementById("resEditor"); 
-                    container.innerHTML = `<table class="w-full border"><thead><tr><th>Subject</th><th>CA1(20)</th><th>CA2(20)</th><th>Exam(60)</th><th>Total</th><th>Grade</th><th><button id="addSubjRow" class="bg-amber-500 text-white px-2 py-1 rounded text-sm">+Add</button></th></tr></thead><tbody id="resBody"></tbody></table><button id="saveResultsBtn" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Save All</button>`; 
-                    const tbody = document.getElementById("resBody"); 
-                    const addRow = (r = null) => { 
-                        const tr = document.createElement('tr'); 
-                        tr.innerHTML = `<td><input class="subj w-32 border p-1" value="${r?.subject || ''}"></td><td><input class="ca1 w-20 border p-1" value="${r?.ca1 || 0}" min="0" max="20"></td><td><input class="ca2 w-20 border p-1" value="${r?.ca2 || 0}" min="0" max="20"></td><td><input class="ex w-20 border p-1" value="${r?.exam || 0}" min="0" max="60"></td><td class="totalCell font-bold"></td><td class="gradeCell"></td><td><button class="delRow bg-red-500 text-white px-2 rounded">X</button></td>`; 
-                        const update = () => { let c1 = +tr.querySelector('.ca1').value || 0, c2 = +tr.querySelector('.ca2').value || 0, ex = +tr.querySelector('.ex').value || 0, tot = c1 + c2 + ex; tr.querySelector('.totalCell').innerText = tot; tr.querySelector('.gradeCell').innerText = tot >= 80 ? 'A' : tot >= 70 ? 'B' : tot >= 60 ? 'C' : tot >= 50 ? 'D' : 'E'; }; 
-                        tr.querySelector('.ca1').addEventListener('input', update); tr.querySelector('.ca2').addEventListener('input', update); tr.querySelector('.ex').addEventListener('input', update); tr.querySelector('.delRow').addEventListener('click', () => tr.remove()); update(); tbody.appendChild(tr); 
-                    }; 
-                    if (results?.length) results.forEach(addRow); else addRow(null); 
-                    document.getElementById("addSubjRow").onclick = () => addRow(null); 
-                    document.getElementById("saveResultsBtn").onclick = async () => { 
-                        await supabaseClient.from('student_results').delete().eq('student_id', studentId).eq('term', term).eq('year', year); 
-                        for (let row of tbody.querySelectorAll('tr')) { let subj = row.querySelector('.subj').value.trim(); if (!subj) continue; let ca1 = +row.querySelector('.ca1').value, ca2 = +row.querySelector('.ca2').value, ex = +row.querySelector('.ex').value; await saveStudentResult(studentId, term, year, subj, ca1||0, ca2||0, ex||0); } 
-                        showToast("Results saved"); 
-                    }; 
-                } catch(e) { showToast("Error loading results: "+e.message, true); }
-            }; 
+        
+        // ============ RESULTS MANAGEMENT (DG/CEO) with Report Sheet ============
+        async function renderUnifiedResults() {
+            if (!currentUser || currentUser.role !== 'dg_ceo') { showToast("Access denied", true); renderContentView("dashboard"); return; }
+            let html = `
+                <div class="bg-white rounded-xl shadow p-6">
+                    <h2 class="text-2xl font-bold mb-4">📊 Termly Report Sheet Management</h2>
+                    <div class="grid md:grid-cols-4 gap-4 mb-4">
+                        <select id="resStudent" class="border p-2 rounded">
+                            <option value="">Select Student</option>
+                            ${schoolData.students.map(s => `<option value="${s.id}">${s.name} (${s.reg_number})</option>`).join('')}
+                        </select>
+                        <select id="resTerm" class="border p-2 rounded">
+                            <option value="1">First Term</option><option value="2">Second Term</option><option value="3">Third Term</option>
+                        </select>
+                        <input id="resYear" value="2026" class="border p-2 rounded" placeholder="Year">
+                        <button id="loadReportSheetBtn" class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700">Load Report Sheet</button>
+                    </div>
+                    <div id="reportSheetContainer" class="mt-5"></div>
+                    <div id="resultEditor" class="mt-5 hidden">
+                        <h3 class="text-xl font-bold mb-2">Edit/Add Subjects</h3>
+                        <table class="w-full border">
+                            <thead class="bg-gray-100"><tr><th>Subject</th><th>CA1 (20)</th><th>CA2 (20)</th><th>Exam (60)</th><th>Total</th><th>Grade</th><th></th></tr></thead>
+                            <tbody id="resBody"></tbody>
+                        </table>
+                        <button id="addSubjRow" class="mt-2 bg-amber-500 text-white px-3 py-1 rounded text-sm">+ Add Subject</button>
+                        <button id="saveResultsBtn" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded-lg">Save All Changes</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById("mainContent").innerHTML = html;
+
+            const loadReportSheet = async () => {
+                const studentId = document.getElementById("resStudent").value;
+                const term = document.getElementById("resTerm").value;
+                const year = document.getElementById("resYear").value;
+                if (!studentId) return showToast("Select a student", true);
+                const { data: results } = await supabaseClient
+                    .from('student_results')
+                    .select('*')
+                    .eq('student_id', studentId)
+                    .eq('term', term)
+                    .eq('year', year);
+                const student = schoolData.students.find(s => s.id == studentId);
+                let totalScore = 0;
+                let subjectCount = results.length;
+                results.forEach(r => { totalScore += (r.ca1 + r.ca2 + r.exam); });
+                const average = subjectCount ? (totalScore / subjectCount).toFixed(2) : 0;
+
+                let reportHtml = `
+                    <div class="border rounded-lg p-4 bg-gray-50" id="reportSheetContent">
+                        <div class="text-center border-b pb-2 mb-3">
+                            <h3 class="text-xl font-bold">Al‑Istiqaamah Flying Wings Academy</h3>
+                            <h4 class="text-lg">TERMLY REPORT SHEET</h4>
+                            <p><strong>Student:</strong> ${student.name} (${student.reg_number}) | <strong>Section:</strong> ${student.section} | <strong>Term:</strong> ${term} | <strong>Year:</strong> ${year}</p>
+                        </div>
+                        <table class="w-full border">
+                            <thead class="bg-gray-200"><tr><th>Subject</th><th>CA1 (20)</th><th>CA2 (20)</th><th>Exam (60)</th><th>Total (100)</th><th>Grade</th></tr></thead>
+                            <tbody>
+                                ${results.map(r => `
+                                    <tr><td>${r.subject}</td><td class="text-center">${r.ca1}</td><td class="text-center">${r.ca2}</td><td class="text-center">${r.exam}</td><td class="text-center font-bold">${r.ca1 + r.ca2 + r.exam}</td><td class="text-center">${r.grade}</td></tr>
+                                `).join('')}
+                                ${results.length === 0 ? '<tr><td colspan="6" class="text-center text-gray-500">No results recorded yet.</td></tr>' : ''}
+                            </tbody>
+                            ${results.length ? `
+                            <tfoot class="bg-gray-100 font-bold">
+                                <tr><td colspan="3">Total Score: ${totalScore}</td><td colspan="3">Average: ${average}%</td></tr>
+                                <tr><td colspan="6" class="text-sm text-gray-600">Remarks: ${average >= 75 ? 'Excellent' : average >= 60 ? 'Good' : average >= 50 ? 'Satisfactory' : 'Needs Improvement'}</td></tr>
+                            </tfoot>
+                            ` : ''}
+                        </table>
+                        <div class="mt-3 flex gap-2">
+                            <button id="printReportBtn" class="bg-blue-600 text-white px-3 py-1 rounded">Print Report Sheet</button>
+                            <button id="editResultsBtn" class="bg-amber-600 text-white px-3 py-1 rounded">Edit Subjects/Grades</button>
+                        </div>
+                    </div>
+                `;
+                document.getElementById("reportSheetContainer").innerHTML = reportHtml;
+                document.getElementById("printReportBtn").onclick = () => {
+                    const printContent = document.getElementById("reportSheetContent").innerHTML;
+                    const originalTitle = document.title;
+                    document.title = "Report Sheet";
+                    const printWindow = window.open('', '_blank');
+                    printWindow.document.write(`<html><head><title>Report Sheet</title><link href="https://cdn.tailwindcss.com" rel="stylesheet"><style>body { padding: 20px; }</style></head><body>${printContent}</body></html>`);
+                    printWindow.document.close();
+                    printWindow.print();
+                    document.title = originalTitle;
+                };
+                document.getElementById("editResultsBtn").onclick = () => {
+                    document.getElementById("resultEditor").classList.remove("hidden");
+                    loadEditorTable(studentId, term, year);
+                };
+            };
+
+            const loadEditorTable = async (studentId, term, year) => {
+                const { data: results } = await supabaseClient
+                    .from('student_results')
+                    .select('*')
+                    .eq('student_id', studentId)
+                    .eq('term', term)
+                    .eq('year', year);
+                const tbody = document.getElementById("resBody");
+                tbody.innerHTML = '';
+                const addRow = (r = null) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><input class="subj w-32 border p-1" value="${r?.subject || ''}"></td>
+                        <td><input class="ca1 w-20 border p-1" value="${r?.ca1 || 0}" min="0" max="20" type="number"></td>
+                        <td><input class="ca2 w-20 border p-1" value="${r?.ca2 || 0}" min="0" max="20" type="number"></td>
+                        <td><input class="ex w-20 border p-1" value="${r?.exam || 0}" min="0" max="60" type="number"></td>
+                        <td class="totalCell font-bold">${(r?.ca1 || 0) + (r?.ca2 || 0) + (r?.exam || 0)}</td>
+                        <td class="gradeCell"></td>
+                        <td><button class="delRow bg-red-500 text-white px-2 rounded">X</button></td>
+                    `;
+                    const update = () => {
+                        let c1 = +tr.querySelector('.ca1').value || 0, c2 = +tr.querySelector('.ca2').value || 0, ex = +tr.querySelector('.ex').value || 0, tot = c1 + c2 + ex;
+                        tr.querySelector('.totalCell').innerText = tot;
+                        tr.querySelector('.gradeCell').innerText = tot >= 80 ? 'A' : tot >= 70 ? 'B' : tot >= 60 ? 'C' : tot >= 50 ? 'D' : 'E';
+                    };
+                    tr.querySelector('.ca1').addEventListener('input', update);
+                    tr.querySelector('.ca2').addEventListener('input', update);
+                    tr.querySelector('.ex').addEventListener('input', update);
+                    tr.querySelector('.delRow').addEventListener('click', () => tr.remove());
+                    update();
+                    tbody.appendChild(tr);
+                };
+                if (results?.length) results.forEach(addRow);
+                else addRow(null);
+                document.getElementById("addSubjRow").onclick = () => addRow(null);
+                document.getElementById("saveResultsBtn").onclick = async () => {
+                    await supabaseClient.from('student_results').delete().eq('student_id', studentId).eq('term', term).eq('year', year);
+                    for (let row of tbody.querySelectorAll('tr')) {
+                        let subj = row.querySelector('.subj').value.trim();
+                        if (!subj) continue;
+                        let ca1 = +row.querySelector('.ca1').value || 0, ca2 = +row.querySelector('.ca2').value || 0, ex = +row.querySelector('.ex').value || 0;
+                        await saveStudentResult(studentId, term, year, subj, ca1, ca2, ex);
+                    }
+                    showToast("Results saved");
+                    document.getElementById("resultEditor").classList.add("hidden");
+                    loadReportSheet();
+                };
+            };
+
+            document.getElementById("loadReportSheetBtn").onclick = loadReportSheet;
+        }
+        
+        // ============ PARENT REPORT CARD ============
+        async function renderParentReportCard() {
+            if (!currentUser.studentId) return showToast("No child linked", true);
+            const student = schoolData.students.find(s => s.id == currentUser.studentId);
+            let html = `
+                <div class="bg-white rounded-xl shadow p-6">
+                    <h2 class="text-2xl font-bold mb-4">📄 Student Report Card</h2>
+                    <div class="grid md:grid-cols-3 gap-4 mb-4">
+                        <select id="parentTerm" class="border p-2 rounded">
+                            <option value="1">First Term</option><option value="2">Second Term</option><option value="3">Third Term</option>
+                        </select>
+                        <input id="parentYear" value="2026" class="border p-2 rounded">
+                        <button id="loadParentReportBtn" class="bg-emerald-600 text-white px-4 py-2 rounded">Load Report</button>
+                    </div>
+                    <div id="parentReportContainer"></div>
+                </div>
+            `;
+            document.getElementById("mainContent").innerHTML = html;
+
+            document.getElementById("loadParentReportBtn").onclick = async () => {
+                const term = document.getElementById("parentTerm").value;
+                const year = document.getElementById("parentYear").value;
+                const { data: results } = await supabaseClient
+                    .from('student_results')
+                    .select('*')
+                    .eq('student_id', student.id)
+                    .eq('term', term)
+                    .eq('year', year);
+                if (!results.length) {
+                    document.getElementById("parentReportContainer").innerHTML = '<p class="text-gray-500">No results found for this term.</p>';
+                    return;
+                }
+                let total = 0;
+                results.forEach(r => total += (r.ca1 + r.ca2 + r.exam));
+                let average = (total / results.length).toFixed(2);
+                let htmlReport = `
+                    <div class="border rounded-lg p-4 bg-gray-50" id="parentReportContent">
+                        <div class="text-center border-b pb-2 mb-3">
+                            <h3 class="text-xl font-bold">Al‑Istiqaamah Flying Wings Academy</h3>
+                            <h4 class="text-lg">TERMLY REPORT CARD</h4>
+                            <p><strong>Student:</strong> ${student.name} (${student.reg_number}) | <strong>Section:</strong> ${student.section} | <strong>Term:</strong> ${term} | <strong>Year:</strong> ${year}</p>
+                        </div>
+                        <table class="w-full border">
+                            <thead class="bg-gray-200"><tr><th>Subject</th><th>CA1</th><th>CA2</th><th>Exam</th><th>Total</th><th>Grade</th></tr></thead>
+                            <tbody>
+                                ${results.map(r => `<tr><td>${r.subject}</td><td class="text-center">${r.ca1}</td><td class="text-center">${r.ca2}</td><td class="text-center">${r.exam}</td><td class="text-center">${r.ca1+r.ca2+r.exam}</td><td class="text-center">${r.grade}</td></tr>`).join('')}
+                            </tbody>
+                            <tfoot class="bg-gray-100 font-bold">
+                                <tr><td colspan="3">Total: ${total}</td><td colspan="3">Average: ${average}%</td></tr>
+                                <tr><td colspan="6" class="text-sm">Remarks: ${average >= 75 ? 'Excellent' : average >= 60 ? 'Good' : average >= 50 ? 'Satisfactory' : 'Needs Improvement'}</td></tr>
+                            </tfoot>
+                        </table>
+                        <div class="mt-3"><button id="printParentReport" class="bg-blue-600 text-white px-3 py-1 rounded">Print Report</button></div>
+                    </div>
+                `;
+                document.getElementById("parentReportContainer").innerHTML = htmlReport;
+                document.getElementById("printParentReport").onclick = () => {
+                    const printContent = document.getElementById("parentReportContent").innerHTML;
+                    const printWindow = window.open('', '_blank');
+                    printWindow.document.write(`<html><head><title>Report Card</title><link href="https://cdn.tailwindcss.com" rel="stylesheet"><style>body { padding: 20px; }</style></head><body>${printContent}</body></html>`);
+                    printWindow.document.close();
+                    printWindow.print();
+                };
+            };
+        }
+        
+        // ============ FEE MANAGEMENT with multiple payment methods ============
+        async function getOrCreateFeeBalance(studentId, term, year) { 
+            const { data: existing } = await supabaseClient.from('fee_balances').select('*').eq('student_id', studentId).eq('term', term).eq('year', year).maybeSingle(); 
+            if (existing) return existing; 
+            const defaultFee = 50000; 
+            const { data: newBalance, error } = await supabaseClient.from('fee_balances').insert({ student_id: studentId, term, year, total_fees: defaultFee, balance: defaultFee, paid_amount: 0 }).select().single(); 
+            if (error) throw error; 
+            return newBalance; 
+        }
+        async function recordPayment(studentId, term, year, amountPaid, paymentMethod = 'cash', receiptAuthorized = false, reference = '') { 
+            if (amountPaid <= 0) throw new Error("Amount must be positive"); 
+            const balance = await getOrCreateFeeBalance(studentId, term, year); 
+            const newPaid = (balance.paid_amount || 0) + amountPaid; 
+            const newBalanceAmt = balance.total_fees - newPaid; 
+            if (newBalanceAmt < 0) throw new Error("Amount exceeds total fee"); 
+            const receiptNo = `REC/${year}/${term}/${studentId}/${Date.now()}`; 
+            const { error: txError } = await supabaseClient.from('fee_transactions').insert({ student_id: studentId, term, year, amount_paid: amountPaid, payment_date: new Date(), receipt_no: receiptNo, payment_method: `${paymentMethod}${reference ? ' ('+reference+')' : ''}`, status: receiptAuthorized ? 'authorized' : 'pending', authorized_by: receiptAuthorized ? currentUser?.full_name : null }); 
+            if (txError) throw txError; 
+            await supabaseClient.from('fee_balances').update({ paid_amount: newPaid, balance: newBalanceAmt, updated_at: new Date() }).eq('id', balance.id); 
+            const feeStatus = newBalanceAmt <= 0 ? 'Paid' : 'Partial'; 
+            await supabaseClient.from('students').update({ fee_status: feeStatus }).eq('id', studentId); 
+            return { receiptNo, newBalance: newBalanceAmt }; 
+        }
+        async function authorizeReceipt(transactionId) { 
+            await supabaseClient.from('fee_transactions').update({ status: 'authorized', authorized_by: currentUser.full_name, authorized_at: new Date() }).eq('id', transactionId); 
+            showToast("Receipt authorized"); 
+        }
+        async function renderFeeManagement() { 
+            if (!['dg_ceo','daf','do'].includes(currentUser.role)) { showToast("Access denied", true); return; }
+            let html = `
+                <div class="bg-white rounded-xl shadow p-6">
+                    <h2 class="text-2xl font-bold mb-4"><i class="fas fa-coins"></i> Fee Management</h2>
+                    <div class="grid md:grid-cols-4 gap-4 mb-4">
+                        <select id="feeStudentId" class="border p-2 rounded">
+                            <option value="">-- Student --</option>
+                            ${schoolData.students.map(s => `<option value="${s.id}">${s.reg_number} - ${s.name}</option>`).join('')}
+                        </select>
+                        <select id="feeTerm" class="border p-2 rounded"><option value="1">First Term</option><option value="2">Second Term</option><option value="3">Third Term</option></select>
+                        <input id="feeYear" value="2026" class="border p-2 rounded">
+                        <button id="loadFeeDetailsBtn" class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700">Load Details</button>
+                    </div>
+                    <div id="feeDetailsContainer" class="mt-6"></div>
+                    <div id="recordPaymentPanel" class="hidden mt-4 border-t pt-4">
+                        <h3 class="text-xl font-bold">Record Payment</h3>
+                        <div class="grid md:grid-cols-4 gap-3 mt-2">
+                            <input id="paymentAmount" type="number" placeholder="Amount (₦)" class="border p-2 rounded">
+                            <select id="paymentMethod" class="border p-2 rounded">
+                                <option value="cash">💵 Cash</option>
+                                <option value="bank_transfer">🏦 Bank Transfer</option>
+                                <option value="card">💳 Card Payment</option>
+                                <option value="online">🌐 Online Transfer</option>
+                                <option value="cheque">📝 Cheque</option>
+                            </select>
+                            <input id="transactionRef" placeholder="Reference (optional)" class="border p-2 rounded">
+                            <button id="recordPaymentBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Record Payment</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById("mainContent").innerHTML = html;
+
+            document.getElementById("loadFeeDetailsBtn").onclick = async () => {
+                const studentId = document.getElementById("feeStudentId").value;
+                const term = document.getElementById("feeTerm").value;
+                const year = document.getElementById("feeYear").value;
+                if (!studentId) return showToast("Select student", true);
+                const balance = await getOrCreateFeeBalance(studentId, term, year);
+                let { data: transactions } = await supabaseClient.from('fee_transactions').select('*').eq('student_id', studentId).eq('term', term).eq('year', year);
+                const student = schoolData.students.find(s => s.id == studentId);
+                const percentPaid = (balance.paid_amount / balance.total_fees) * 100;
+                document.getElementById("feeDetailsContainer").innerHTML = `
+                    <div class="bg-gray-50 p-4 rounded">
+                        <p><strong>${student.name}</strong> | Total: ₦${balance.total_fees.toLocaleString()} | Paid: ₦${balance.paid_amount.toLocaleString()} | Balance: <span class="font-bold ${balance.balance>0?'text-red-600':'text-green-600'}">₦${balance.balance.toLocaleString()}</span></p>
+                        <div class="progress-bar mt-2"><div class="progress-fill" style="width: ${percentPaid}%;"></div></div>
+                        <table class="w-full text-sm border mt-4">
+                            <thead class="bg-gray-200"><tr><th>Date</th><th>Amount</th><th>Method</th><th>Receipt</th><th>Status</th><th>Action</th></tr></thead>
+                            <tbody>
+                                ${transactions.map(tx => `
+                                    <tr><td>${new Date(tx.payment_date).toLocaleDateString()}</td><td>₦${tx.amount_paid.toLocaleString()}</td><td>${tx.payment_method || '-'}</td><td>${tx.receipt_no}</td><td class="${tx.status==='authorized'?'text-green-600':'text-amber-600'}">${tx.status}</td><td>${tx.status!=='authorized' && (['dg_ceo','daf','do'].includes(currentUser.role)) ? `<button class="authTxBtn text-blue-600" data-id="${tx.id}">Authorize</button>` : '-'}</td></tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                        <button id="showPaymentPanelBtn" class="mt-2 bg-amber-500 text-white px-3 py-1 rounded text-sm hover:bg-amber-600">+ New Payment</button>
+                    </div>
+                `;
+                document.getElementById("recordPaymentPanel").classList.remove("hidden");
+                document.getElementById("showPaymentPanelBtn").onclick = () => document.getElementById("recordPaymentPanel").scrollIntoView();
+                document.getElementById("recordPaymentBtn").onclick = async () => {
+                    const amount = parseFloat(document.getElementById("paymentAmount").value);
+                    if (isNaN(amount) || amount <= 0) return showToast("Valid amount required", true);
+                    const method = document.getElementById("paymentMethod").value;
+                    const ref = document.getElementById("transactionRef").value;
+                    const isAuth = ['dg_ceo','daf','do'].includes(currentUser.role);
+                    await recordPayment(studentId, term, year, amount, method, isAuth, ref);
+                    showToast(`Payment recorded. ${isAuth ? 'Authorized' : 'Pending'}`);
+                    await refreshSchoolData();
+                    document.getElementById("loadFeeDetailsBtn").click();
+                };
+                document.querySelectorAll('.authTxBtn').forEach(btn => btn.onclick = async () => {
+                    await authorizeReceipt(btn.dataset.id);
+                    document.getElementById("loadFeeDetailsBtn").click();
+                });
+            };
         }
         
         // ============ STUDENTS LIST WITH DELETE ============
@@ -428,62 +724,27 @@
             } catch(e) { showToast("Error managing slides", true); }
         }
         
-        // ==================== FEE MANAGEMENT (DAF, DG/CEO, DO) ====================
-        async function getOrCreateFeeBalance(studentId, term, year) { 
-            const { data: existing } = await supabaseClient.from('fee_balances').select('*').eq('student_id', studentId).eq('term', term).eq('year', year).maybeSingle(); 
-            if (existing) return existing; 
-            const defaultFee = 50000; 
-            const { data: newBalance, error } = await supabaseClient.from('fee_balances').insert({ student_id: studentId, term, year, total_fees: defaultFee, balance: defaultFee, paid_amount: 0 }).select().single(); 
-            if (error) throw error; 
-            return newBalance; 
-        }
-        async function recordPayment(studentId, term, year, amountPaid, paymentMethod = 'cash', receiptAuthorized = false) { 
-            if (amountPaid <= 0) throw new Error("Amount must be positive"); 
-            const balance = await getOrCreateFeeBalance(studentId, term, year); 
-            const newPaid = (balance.paid_amount || 0) + amountPaid; 
-            const newBalanceAmt = balance.total_fees - newPaid; 
-            if (newBalanceAmt < 0) throw new Error("Amount exceeds total fee"); 
-            const receiptNo = `REC/${year}/${term}/${studentId}/${Date.now()}`; 
-            const { error: txError } = await supabaseClient.from('fee_transactions').insert({ student_id: studentId, term, year, amount_paid: amountPaid, payment_date: new Date(), receipt_no: receiptNo, payment_method: paymentMethod, status: receiptAuthorized ? 'authorized' : 'pending', authorized_by: receiptAuthorized ? currentUser?.full_name : null }); 
-            if (txError) throw txError; 
-            await supabaseClient.from('fee_balances').update({ paid_amount: newPaid, balance: newBalanceAmt, updated_at: new Date() }).eq('id', balance.id); 
-            const feeStatus = newBalanceAmt <= 0 ? 'Paid' : 'Partial'; 
-            await supabaseClient.from('students').update({ fee_status: feeStatus }).eq('id', studentId); 
-            return { receiptNo, newBalance: newBalanceAmt }; 
-        }
-        async function authorizeReceipt(transactionId) { 
-            await supabaseClient.from('fee_transactions').update({ status: 'authorized', authorized_by: currentUser.full_name, authorized_at: new Date() }).eq('id', transactionId); 
-            showToast("Receipt authorized"); 
-        }
-        async function renderFeeManagement() { 
-            if (!['dg_ceo','daf','do'].includes(currentUser.role)) { showToast("Access denied", true); return; }
-            let html = `<div class="bg-white rounded-xl shadow p-6"><h2 class="text-2xl font-bold mb-4"><i class="fas fa-coins"></i> Fee Management</h2><div class="grid md:grid-cols-3 gap-4 mb-4"><select id="feeStudentId" class="border p-2 rounded"><option value="">-- Student --</option>${schoolData.students.map(s=>`<option value="${s.id}">${s.reg_number} - ${s.name}</option>`).join('')}</select><select id="feeTerm" class="border p-2 rounded"><option value="1">First Term</option><option value="2">Second Term</option><option value="3">Third Term</option></select><input id="feeYear" value="2026" class="border p-2 rounded"></div><button id="loadFeeDetailsBtn" class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700">Load Details</button><div id="feeDetailsContainer" class="mt-6"></div><div id="recordPaymentPanel" class="hidden mt-4 border-t pt-4"><h3 class="text-xl font-bold">Record Payment</h3><div class="flex gap-3 mt-2"><input id="paymentAmount" type="number" placeholder="Amount (₦)" class="border p-2 rounded"><select id="paymentMethod" class="border p-2 rounded"><option value="cash">Cash</option><option value="bank_transfer">Bank Transfer</option></select><button id="recordPaymentBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Pay</button></div></div></div>`; 
+        // ============ STAFF MANAGEMENT ============
+        async function renderStaffManagement() { 
+            if(!currentUser || !['dg_ceo','umc','der','do'].includes(currentUser.role)) return showToast("Access denied",true); 
+            const {data:teachers}=await supabaseClient.from('teachers').select('*'); 
+            let html=`<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">👥 Staff Management</h2><form id="staffForm" class="mt-4 grid md:grid-cols-2 gap-3"><input id="staffName" placeholder="Full Name" required class="border p-2 rounded"><input id="staffUsername" placeholder="Username" required class="border p-2 rounded"><select id="staffRole" class="border p-2 rounded"><option value="teacher">Teacher</option><option value="headteacher">Head Teacher</option></select><input id="staffLevel" placeholder="Level (teacher only)" class="border p-2 rounded"><select id="staffSection" class="border p-2 rounded">${SECTIONS.map(s=>`<option>${s}</option>`).join('')}</select><input id="staffPassword" value="password123" class="border p-2 rounded"><button type="submit" class="bg-emerald-600 text-white p-2 rounded hover:bg-emerald-700">Register Staff</button></form><div class="overflow-x-auto mt-6"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Name</th><th>Username</th><th>Role</th><th>Section</th><th>Appraisal</th><th>Actions</th></tr></thead><tbody id="staffTableBody"></tbody></table></div></div>`;
             document.getElementById("mainContent").innerHTML = html; 
-            document.getElementById("loadFeeDetailsBtn").onclick = async () => { 
-                try {
-                    let studentId = document.getElementById("feeStudentId").value, term = document.getElementById("feeTerm").value, year = document.getElementById("feeYear").value; 
-                    if (!studentId) return showToast("Select student", true); 
-                    let balance = await getOrCreateFeeBalance(studentId, term, year); 
-                    let { data: transactions } = await supabaseClient.from('fee_transactions').select('*').eq('student_id', studentId).eq('term', term).eq('year', year); 
-                    let student = schoolData.students.find(s=>s.id == studentId); 
-                    let percentPaid = (balance.paid_amount / balance.total_fees) * 100;
-                    document.getElementById("feeDetailsContainer").innerHTML = `<div class="bg-gray-50 p-4 rounded"><p><strong>${student.name}</strong> | Total: ₦${balance.total_fees.toLocaleString()} | Paid: ₦${balance.paid_amount.toLocaleString()} | Balance: <span class="font-bold ${balance.balance>0?'text-red-600':'text-green-600'}">₦${balance.balance.toLocaleString()}</span></p><div class="progress-bar mt-2"><div class="progress-fill" style="width: ${percentPaid}%;"></div></div><table class="w-full text-sm border mt-4"><thead class="bg-gray-200"><tr><th>Date</th><th>Amount</th><th>Receipt</th><th>Status</th><th>Action</th></tr></thead><tbody>${transactions.map(tx=>`<tr><td>${new Date(tx.payment_date).toLocaleDateString()}</td><td>₦${tx.amount_paid}</td><td>${tx.receipt_no}</td><td class="${tx.status==='authorized'?'text-green-600':'text-amber-600'}">${tx.status}</td><td>${tx.status!=='authorized'&&(['dg_ceo','daf','do'].includes(currentUser.role)?`<button class="authTxBtn text-blue-600" data-id="${tx.id}">Authorize</button>`:'-')}</td></tr>`).join('')}</tbody></table><button id="showPaymentPanelBtn" class="mt-2 bg-amber-500 text-white px-3 py-1 rounded text-sm hover:bg-amber-600">+ New Payment</button></div>`; 
-                    document.getElementById("recordPaymentPanel").classList.remove("hidden"); 
-                    document.getElementById("showPaymentPanelBtn")?.addEventListener("click",()=>document.getElementById("recordPaymentPanel").scrollIntoView()); 
-                    document.getElementById("recordPaymentBtn").onclick = async () => { 
-                        let amount = parseFloat(document.getElementById("paymentAmount").value); 
-                        if(isNaN(amount)||amount<=0) return showToast("Valid amount",true); 
-                        let method = document.getElementById("paymentMethod").value; 
-                        let isAuth = ['dg_ceo','daf','do'].includes(currentUser.role); 
-                        await recordPayment(studentId, term, year, amount, method, isAuth); 
-                        showToast(`Payment recorded. ${isAuth?'Authorized':'Pending'}`); 
-                        await refreshSchoolData(); 
-                        document.getElementById("loadFeeDetailsBtn").click(); 
-                    }; 
-                    document.querySelectorAll('.authTxBtn').forEach(btn=>btn.onclick=async()=>{ await authorizeReceipt(btn.dataset.id); document.getElementById("loadFeeDetailsBtn").click(); }); 
-                } catch(e) { showToast("Error loading fee details: "+e.message, true); }
+            const renderStaff=async()=>{ 
+                const tb=document.getElementById("staffTableBody"); tb.innerHTML=""; 
+                for(let st of teachers||[]){ 
+                    const {data:cred}=await supabaseClient.from('staff_credentials').select('username').eq('staff_id',st.id).single(); 
+                    const {data:appr}=await supabaseClient.from('staff_appraisals').select('rating').eq('staff_id',st.id).order('created_at',{ascending:false}).limit(1); 
+                    const apprText=appr?.length?`⭐ ${appr[0].rating}/5`:'Not rated'; 
+                    tb.innerHTML+=`<tr><td>${st.name}</td><td>${cred?.username||'-'}</td><td>${st.role}</td><td>${st.assigned_section}</td><td>${apprText}</td><td><button class="appraiseBtn bg-amber-500 text-white px-2 py-1 rounded text-xs mr-1" data-id="${st.id}" data-name="${st.name}">Appraise</button><button class="deleteStaffBtn bg-red-600 text-white px-2 py-1 rounded text-xs" data-id="${st.id}">Delete</button></td></tr>`; 
+                } 
+                document.querySelectorAll('.appraiseBtn').forEach(btn=>btn.addEventListener('click',()=>{ let id=btn.dataset.id, name=btn.dataset.name; let r=prompt(`Rate ${name} (1-5):`); if(r) saveStaffAppraisal(id,parseInt(r),'Appraised').then(renderStaff); }));
+                document.querySelectorAll('.deleteStaffBtn').forEach(btn=>btn.addEventListener('click',async()=>{ if(confirm("Delete staff?")){ await supabaseClient.from('teachers').delete().eq('id', btn.dataset.id); await refreshSchoolData(); renderStaffManagement(); showToast("Staff deleted"); } }));
             }; 
+            await renderStaff(); 
+            document.getElementById("staffForm")?.addEventListener("submit",async(e)=>{ e.preventDefault(); let role=document.getElementById("staffRole").value; let level=role==='teacher'?document.getElementById("staffLevel").value:null; const {data:newT}=await supabaseClient.from('teachers').insert({ name:document.getElementById("staffName").value, role, assigned_section:document.getElementById("staffSection").value, level }).select().single(); await supabaseClient.from('staff_credentials').insert({ staff_id:newT.id, username:document.getElementById("staffUsername").value, password_hash:document.getElementById("staffPassword").value, role }); await refreshSchoolData(); renderStaffManagement(); }); 
         }
+        async function saveStaffAppraisal(staffId, rating, comments) { await supabaseClient.from('staff_appraisals').insert({ staff_id: staffId, rating, comments, appraised_by: currentUser.full_name }); showToast("Appraisal saved"); }
         
         // DAF specific: Receipt generator, Payroll, Payment report
         async function renderReceiptGenerator() {
@@ -567,7 +828,7 @@
         }
         
         // DER specific: Students, Staff, Section analysis (reuse existing functions)
-        // DO: Dashboard, Fees, Students, Staff (fees already, students/staff reuse)
+        // DO: Dashboard, Fees, Students, Staff
         function renderDashboard() { 
             document.getElementById("mainContent").innerHTML = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold">Welcome ${currentUser.full_name}</h2><p class="mt-2">Total Students: ${schoolData.students.length}</p><p>Total Staff: ${schoolData.teachers.length}</p></div>`; 
         }
@@ -614,7 +875,7 @@
                 document.getElementById("gradeEditor").innerHTML = tbl;
                 const addRow = (r = null) => {
                     let tr = document.createElement('tr');
-                    tr.innerHTML = `<td><input class="subj w-32 border p-1" value="${r?.subject || ''}"></td><td><input class="ca1 w-20 border p-1" value="${r?.ca1 || 0}" min="0" max="20"></td><td><input class="ca2 w-20 border p-1" value="${r?.ca2 || 0}" min="0" max="20"></td><td><input class="ex w-20 border p-1" value="${r?.exam || 0}" min="0" max="60"></td><td class="totCell"></td><td class="grCell"></td><td><button class="delRow bg-red-500 text-white px-1 rounded">X</button></td>`;
+                    tr.innerHTML = `<td><input class="subj w-32 border p-1" value="${r?.subject || ''}"></td><td><input class="ca1 w-20 border p-1" value="${r?.ca1 || 0}" min="0" max="20" type="number"></td><td><input class="ca2 w-20 border p-1" value="${r?.ca2 || 0}" min="0" max="20" type="number"></td><td><input class="ex w-20 border p-1" value="${r?.exam || 0}" min="0" max="60" type="number"></td><td class="totCell"></td><td class="grCell"></td><td><button class="delRow bg-red-500 text-white px-1 rounded">X</button></td>`;
                     const update = () => { let c1 = +tr.querySelector('.ca1').value || 0, c2 = +tr.querySelector('.ca2').value || 0, ex = +tr.querySelector('.ex').value || 0, tot = c1+c2+ex; tr.querySelector('.totCell').innerText = tot; tr.querySelector('.grCell').innerText = tot>=80?'A':tot>=70?'B':tot>=60?'C':tot>=50?'D':'E'; };
                     tr.querySelector('.ca1').addEventListener('input', update); tr.querySelector('.ca2').addEventListener('input', update); tr.querySelector('.ex').addEventListener('input', update);
                     tr.querySelector('.delRow').addEventListener('click', () => tr.remove());
@@ -661,24 +922,7 @@
             };
         }
         
-        // ==================== PARENT SECTION (FULLY FUNCTIONAL) ====================
-        async function renderParentChildReports() {
-            if (!currentUser.studentId) return showToast("No child linked", true);
-            let student = schoolData.students.find(s => s.id == currentUser.studentId);
-            let { data: results } = await supabaseClient.from('student_results').select('*').eq('student_id', student.id).order('year', {ascending:false}).order('term');
-            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">👨‍🎓 Child Reports: ${student.name}</h2>`;
-            if (results.length === 0) html += `<p class="text-gray-500">No results available yet.</p>`;
-            else {
-                html += `<div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Year</th><th>Term</th><th>Subject</th><th>CA1</th><th>CA2</th><th>Exam</th><th>Total</th><th>Grade</th></tr></thead><tbody>`;
-                results.forEach(r => {
-                    html += `<tr><td>${r.year}</td><td>${r.term}</td><td>${r.subject}</td><td>${r.ca1}</td><td>${r.ca2}</td><td>${r.exam}</td><td>${r.ca1+r.ca2+r.exam}</td><td class="font-bold">${r.grade}</td></tr>`;
-                });
-                html += `</tbody></table></div>`;
-            }
-            html += `</div>`;
-            document.getElementById("mainContent").innerHTML = html;
-        }
-        
+        // ============ PARENT FEE PAYMENT (with payment method display) ============
         async function renderParentFeePayment() {
             if (!currentUser.studentId) return;
             const student = schoolData.students.find(s => s.id === currentUser.studentId);
@@ -691,12 +935,12 @@
                 html += `<div class="border p-4 mt-4 rounded-lg"><h3 class="text-xl font-semibold">${termName} Term - ${b.year}</h3>
                 <div class="grid grid-cols-3 gap-2 mt-2"><p>Total: ₦${b.total_fees.toLocaleString()}</p><p>Paid: ₦${b.paid_amount.toLocaleString()}</p><p class="font-bold ${b.balance>0?'text-red-600':'text-green-600'}">Balance: ₦${b.balance.toLocaleString()}</p></div>
                 <div class="progress-bar mt-2"><div class="progress-fill" style="width: ${percentPaid}%;"></div></div>
-                <div class="overflow-x-auto mt-4"><table class="w-full text-sm border"><thead class="bg-gray-100"><tr><th>Date</th><th>Amount</th><th>Receipt No</th><th>Status</th><th>Receipt</th></tr></thead><tbody>`;
+                <div class="overflow-x-auto mt-4"><table class="w-full text-sm border"><thead class="bg-gray-100"><tr><th>Date</th><th>Amount</th><th>Method</th><th>Receipt No</th><th>Status</th><th>Receipt</th></tr></thead><tbody>`;
                 let termTx = transactions.filter(t=>t.term==b.term&&t.year==b.year);
-                if (termTx.length === 0) html += `<tr><td colspan="5" class="text-center">No payments recorded</td></tr>`;
+                if (termTx.length === 0) html += `<tr><td colspan="6" class="text-center">No payments recorded</td></tr>`;
                 else {
                     termTx.forEach(tx => {
-                        html += `<tr><td>${new Date(tx.payment_date).toLocaleDateString()}</td><td>₦${tx.amount_paid.toLocaleString()}</td><td>${tx.receipt_no}</td><td class="${tx.status==='authorized'?'text-green-600':'text-amber-600'}">${tx.status}</td><td><button onclick="window.viewSingleReceipt('${tx.id}', '${student.id}')" class="text-blue-600 text-sm hover:underline">View/Print</button></td></tr>`;
+                        html += `<tr><td>${new Date(tx.payment_date).toLocaleDateString()}</td><td>₦${tx.amount_paid.toLocaleString()}</td><td>${tx.payment_method || '-'}</td><td>${tx.receipt_no}</td><td class="${tx.status==='authorized'?'text-green-600':'text-amber-600'}">${tx.status}</td><td><button onclick="window.viewSingleReceipt('${tx.id}', '${student.id}')" class="text-blue-600 text-sm hover:underline">View/Print</button></td></tr>`;
                     });
                 }
                 html += `</tbody></table></div>`;
@@ -737,33 +981,8 @@
         
         function generateParentReceiptHTML(transaction, student, termName, totalPaid=null) {
             let amount = totalPaid !== null ? totalPaid : transaction.amount_paid;
-            return `<div class="receipt-card"><div class="text-center border-b pb-3"><h3 class="text-xl font-bold">Al‑Istiqaamah Flying Wings Academy</h3><h4>OFFICIAL RECEIPT</h4></div><div class="mt-3 space-y-2"><div><strong>Receipt No:</strong> ${transaction.receipt_no}</div><div><strong>Date:</strong> ${new Date().toLocaleDateString()}</div><div><strong>Student:</strong> ${student.name} (${student.reg_number})</div><div><strong>Term:</strong> ${termName} ${transaction.year}</div><div><strong>Amount:</strong> ₦${amount.toLocaleString()}</div><div><strong>Status:</strong> <span class="text-green-600 font-bold">${transaction.status.toUpperCase()}</span></div></div><div class="text-center mt-4"><button onclick="window.print()" class="bg-blue-600 text-white px-4 py-2 rounded">Print Receipt</button></div></div>`;
+            return `<div class="receipt-card"><div class="text-center border-b pb-3"><h3 class="text-xl font-bold">Al‑Istiqaamah Flying Wings Academy</h3><h4>OFFICIAL RECEIPT</h4></div><div class="mt-3 space-y-2"><div><strong>Receipt No:</strong> ${transaction.receipt_no}</div><div><strong>Date:</strong> ${new Date().toLocaleDateString()}</div><div><strong>Student:</strong> ${student.name} (${student.reg_number})</div><div><strong>Term:</strong> ${termName} ${transaction.year}</div><div><strong>Amount:</strong> ₦${amount.toLocaleString()}</div><div><strong>Payment Method:</strong> ${transaction.payment_method || 'Cash'}</div><div><strong>Status:</strong> <span class="text-green-600 font-bold">${transaction.status.toUpperCase()}</span></div></div><div class="text-center mt-4"><button onclick="window.print()" class="bg-blue-600 text-white px-4 py-2 rounded">Print Receipt</button></div></div>`;
         }
-        
-        async function renderParentResult() { await renderParentChildReports(); }
-        async function renderParentPaymentHistory() { await renderParentFeePayment(); }
-        
-        // Staff management (reused)
-        async function renderStaffManagement() { 
-            if(!currentUser || !['dg_ceo','umc','der','do'].includes(currentUser.role)) return showToast("Access denied",true); 
-            const {data:teachers}=await supabaseClient.from('teachers').select('*'); 
-            let html=`<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">👥 Staff Management</h2><form id="staffForm" class="mt-4 grid md:grid-cols-2 gap-3"><input id="staffName" placeholder="Full Name" required class="border p-2 rounded"><input id="staffUsername" placeholder="Username" required class="border p-2 rounded"><select id="staffRole" class="border p-2 rounded"><option value="teacher">Teacher</option><option value="headteacher">Head Teacher</option></select><input id="staffLevel" placeholder="Level (teacher only)" class="border p-2 rounded"><select id="staffSection" class="border p-2 rounded">${SECTIONS.map(s=>`<option>${s}</option>`).join('')}</select><input id="staffPassword" value="password123" class="border p-2 rounded"><button type="submit" class="bg-emerald-600 text-white p-2 rounded hover:bg-emerald-700">Register Staff</button></form><div class="overflow-x-auto mt-6"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Name</th><th>Username</th><th>Role</th><th>Section</th><th>Appraisal</th><th>Actions</th></tr></thead><tbody id="staffTableBody"></tbody></table></div></div>`;
-            document.getElementById("mainContent").innerHTML = html; 
-            const renderStaff=async()=>{ 
-                const tb=document.getElementById("staffTableBody"); tb.innerHTML=""; 
-                for(let st of teachers||[]){ 
-                    const {data:cred}=await supabaseClient.from('staff_credentials').select('username').eq('staff_id',st.id).single(); 
-                    const {data:appr}=await supabaseClient.from('staff_appraisals').select('rating').eq('staff_id',st.id).order('created_at',{ascending:false}).limit(1); 
-                    const apprText=appr?.length?`⭐ ${appr[0].rating}/5`:'Not rated'; 
-                    tb.innerHTML+=`<tr><td>${st.name}</td><td>${cred?.username||'-'}</td><td>${st.role}</td><td>${st.assigned_section}</td><td>${apprText}</td><td><button class="appraiseBtn bg-amber-500 text-white px-2 py-1 rounded text-xs mr-1" data-id="${st.id}" data-name="${st.name}">Appraise</button><button class="deleteStaffBtn bg-red-600 text-white px-2 py-1 rounded text-xs" data-id="${st.id}">Delete</button></td></tr>`; 
-                } 
-                document.querySelectorAll('.appraiseBtn').forEach(btn=>btn.addEventListener('click',()=>{ let id=btn.dataset.id, name=btn.dataset.name; let r=prompt(`Rate ${name} (1-5):`); if(r) saveStaffAppraisal(id,parseInt(r),'Appraised').then(renderStaff); }));
-                document.querySelectorAll('.deleteStaffBtn').forEach(btn=>btn.addEventListener('click',async()=>{ if(confirm("Delete staff?")){ await supabaseClient.from('teachers').delete().eq('id', btn.dataset.id); await refreshSchoolData(); renderStaffManagement(); showToast("Staff deleted"); } }));
-            }; 
-            await renderStaff(); 
-            document.getElementById("staffForm")?.addEventListener("submit",async(e)=>{ e.preventDefault(); let role=document.getElementById("staffRole").value; let level=role==='teacher'?document.getElementById("staffLevel").value:null; const {data:newT}=await supabaseClient.from('teachers').insert({ name:document.getElementById("staffName").value, role, assigned_section:document.getElementById("staffSection").value, level }).select().single(); await supabaseClient.from('staff_credentials').insert({ staff_id:newT.id, username:document.getElementById("staffUsername").value, password_hash:document.getElementById("staffPassword").value, role }); await refreshSchoolData(); renderStaffManagement(); }); 
-        }
-        async function saveStaffAppraisal(staffId, rating, comments) { await supabaseClient.from('staff_appraisals').insert({ staff_id: staffId, rating, comments, appraised_by: currentUser.full_name }); showToast("Appraisal saved"); }
         
         // ============ AUTHENTICATION ============
         async function loginAdmin(email, password) { 
@@ -858,10 +1077,10 @@
                 "my-class": renderMyClass,
                 "grade-student": renderGradeStudent,
                 "attendance-appraisal": renderAttendanceAndAppraisal,
-                "child-reports": renderParentChildReports,
+                "child-reports": renderParentReportCard,
                 "fee-payment": renderParentFeePayment,
-                result: renderParentResult,
-                "payment-history": renderParentPaymentHistory
+                result: renderParentReportCard,
+                "payment-history": renderParentFeePayment
             };
             if (views[view]) views[view]();
             else document.getElementById("mainContent").innerHTML = "<div class='bg-white p-6 rounded-xl shadow'>Content not available</div>";
@@ -917,4 +1136,4 @@
         })();
     </script>
 </body>
-    </html>
+</html>
