@@ -6,15 +6,14 @@
     <link rel="icon" href="./favicon.ico">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        const SUPABASE_URL = 'https://ksjvfwwiejrmkeeidzjs.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_f8vXQVGjNvw98jLrCuuTKw_JzmfyDCk';
+        const SUPABASE_URL = 'https://xzrkqmwbynugbdwkhvil.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_RGluuAFyRbZs9jcBnTTM_g_xULPAUzX';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     </script>
     <title>Al‑Istiqaamah Flying Wings Academy | Unified Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Same styles as before, plus progress bar etc. */
         * { font-family: 'Inter', system-ui, sans-serif; }
         @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap');
         .hero-pattern { background: linear-gradient(135deg, #0a2e2c 0%, #0f3b38 100%); }
@@ -44,18 +43,22 @@
         }
         .progress-bar { height: 8px; border-radius: 4px; background-color: #e2e8f0; overflow: hidden; }
         .progress-fill { background-color: #10b981; height: 100%; width: 0%; transition: width 0.3s; }
-        .attendance-table input { width: 60px; text-align: center; }
+        .receipt-card { background: white; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); max-width: 600px; margin: 0 auto; }
+        .btn-primary { background-color: #059669; transition: all 0.2s; }
+        .btn-primary:hover { background-color: #047857; transform: translateY(-1px); }
+        .card-hover { transition: all 0.2s; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body class="bg-gray-50">
 
-    <!-- COOKIE CONSENT (unchanged) -->
+    <!-- COOKIE CONSENT -->
     <div id="cookieBanner" class="cookie-consent" style="display: none;">
         <div class="flex-1 text-sm md:text-base">🍪 We use cookies to enhance your experience.</div>
-        <button id="acceptCookiesBtn">Accept All Cookies</button>
+        <button id="acceptCookiesBtn" class="bg-amber-500 hover:bg-amber-600 text-gray-900 px-4 py-2 rounded-full font-bold">Accept All Cookies</button>
     </div>
 
-    <!-- LANDING PAGE (unchanged - same as previous) -->
+    <!-- LANDING PAGE (unchanged, but UI slightly improved) -->
     <div id="landingPage" class="min-h-screen relative">
         <div class="hero-pattern text-white relative overflow-hidden">
             <div class="relative container mx-auto px-6 py-20 md:py-28">
@@ -75,9 +78,9 @@
                             <span><i class="fas fa-envelope text-amber-300 mr-1"></i> alistiqaamah.gi@outlook.com</span>
                         </div>
                         <div class="flex flex-wrap gap-4 mt-6">
-                            <button id="loginBtnHero" class="bg-amber-500 hover:bg-amber-600 text-gray-900 font-bold px-6 py-2.5 rounded-full shadow-lg"><i class="fas fa-chalkboard-user"></i> Staff / Admin Login</button>
-                            <button id="parentLoginBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2.5 rounded-full"><i class="fas fa-user-friends"></i> Parent Login</button>
-                            <button id="adminSignupBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-2.5 rounded-full"><i class="fas fa-user-shield"></i> Admin Sign Up</button>
+                            <button id="loginBtnHero" class="bg-amber-500 hover:bg-amber-600 text-gray-900 font-bold px-6 py-2.5 rounded-full shadow-lg transition"><i class="fas fa-chalkboard-user"></i> Staff / Admin Login</button>
+                            <button id="parentLoginBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2.5 rounded-full transition"><i class="fas fa-user-friends"></i> Parent Login</button>
+                            <button id="adminSignupBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-2.5 rounded-full transition"><i class="fas fa-user-shield"></i> Admin Sign Up</button>
                         </div>
                     </div>
                     <div class="bg-white/10 backdrop-blur-md rounded-2xl p-5 shadow-xl border border-white/20 w-80">
@@ -100,12 +103,12 @@
             </div>
         </div>
         
-        <div class="container mx-auto px-6 py-10"><div class="grid md:grid-cols-2 gap-10"><div class="bg-white rounded-2xl shadow-xl p-8 border-t-8 border-emerald-600"><div class="text-emerald-600 text-4xl mb-4"><i class="fas fa-eye"></i></div><h2 class="text-2xl font-bold text-gray-800 mb-3">🌙 Vision Statement</h2><p class="text-gray-700 italic">To cultivate a community of believers and learners who embody faith, knowledge, and inspiration — beacons of guidance and service.</p></div>
-        <div class="bg-white rounded-2xl shadow-xl p-8 border-t-8 border-amber-500"><div class="text-amber-500 text-4xl mb-4"><i class="fas fa-bullhorn"></i></div><h2 class="text-2xl font-bold text-gray-800 mb-3">🌿 Mission Statement</h2><p class="text-gray-700">Promoting academic excellence, leadership, and Islamic values, nurturing learners who live by the Qur'an and Sunnah.</p></div></div></div>
+        <div class="container mx-auto px-6 py-10"><div class="grid md:grid-cols-2 gap-10"><div class="bg-white rounded-2xl shadow-xl p-8 border-t-8 border-emerald-600 card-hover"><div class="text-emerald-600 text-4xl mb-4"><i class="fas fa-eye"></i></div><h2 class="text-2xl font-bold text-gray-800 mb-3">🌙 Vision Statement</h2><p class="text-gray-700 italic">To cultivate a community of believers and learners who embody faith, knowledge, and inspiration — beacons of guidance and service.</p></div>
+        <div class="bg-white rounded-2xl shadow-xl p-8 border-t-8 border-amber-500 card-hover"><div class="text-amber-500 text-4xl mb-4"><i class="fas fa-bullhorn"></i></div><h2 class="text-2xl font-bold text-gray-800 mb-3">🌿 Mission Statement</h2><p class="text-gray-700">Promoting academic excellence, leadership, and Islamic values, nurturing learners who live by the Qur'an and Sunnah.</p></div></div></div>
         
-        <div class="bg-gray-100 py-16"><div class="container mx-auto px-6"><h2 class="text-3xl font-bold text-center text-gray-800 mb-4">🌸 Core <span class="text-amber-600">Objectives</span></h2><div class="grid md:grid-cols-3 gap-6 mt-8"><div class="bg-white p-5 rounded-xl shadow-md"><i class="fas fa-quran text-emerald-600 text-2xl"></i><p class="mt-2">Authentic Qur'anic & Prophetic knowledge</p></div><div class="bg-white p-5 rounded-xl shadow-md"><i class="fas fa-book-open text-emerald-600 text-2xl"></i><p class="mt-2">Joyful Qur'anic memorization</p></div><div class="bg-white p-5 rounded-xl shadow-md"><i class="fas fa-crown text-emerald-600 text-2xl"></i><p class="mt-2">Confident, principled leaders</p></div></div></div></div>
+        <div class="bg-gray-100 py-16"><div class="container mx-auto px-6"><h2 class="text-3xl font-bold text-center text-gray-800 mb-4">🌸 Core <span class="text-amber-600">Objectives</span></h2><div class="grid md:grid-cols-3 gap-6 mt-8"><div class="bg-white p-5 rounded-xl shadow-md card-hover"><i class="fas fa-quran text-emerald-600 text-2xl"></i><p class="mt-2">Authentic Qur'anic & Prophetic knowledge</p></div><div class="bg-white p-5 rounded-xl shadow-md card-hover"><i class="fas fa-book-open text-emerald-600 text-2xl"></i><p class="mt-2">Joyful Qur'anic memorization</p></div><div class="bg-white p-5 rounded-xl shadow-md card-hover"><i class="fas fa-crown text-emerald-600 text-2xl"></i><p class="mt-2">Confident, principled leaders</p></div></div></div></div>
         
-        <div class="bg-emerald-900 text-white py-12 text-center"><div class="container mx-auto px-6"><h2 class="text-3xl font-bold mb-3">Begin Your Child's Journey of Faith & Excellence</h2><p class="mb-6">Admissions open. Contact our admission office.</p><div class="flex flex-wrap justify-center gap-4"><a href="tel:08067990749" class="bg-amber-500 hover:bg-amber-600 text-gray-900 px-6 py-3 rounded-full inline-flex gap-2 shadow-lg">📞 Call Us</a><button id="loginBtnFooter" class="border-2 border-amber-400 hover:bg-amber-400 hover:text-gray-900 px-6 py-3 rounded-full font-semibold">👥 Staff Dashboard</button><button id="applyNowBtn" class="apply-btn text-gray-900 font-bold px-8 py-3 rounded-full shadow-lg"><i class="fas fa-pen-alt mr-2"></i> Apply Now</button></div></div></div>
+        <div class="bg-emerald-900 text-white py-12 text-center"><div class="container mx-auto px-6"><h2 class="text-3xl font-bold mb-3">Begin Your Child's Journey of Faith & Excellence</h2><p class="mb-6">Admissions open. Contact our admission office.</p><div class="flex flex-wrap justify-center gap-4"><a href="tel:08067990749" class="bg-amber-500 hover:bg-amber-600 text-gray-900 px-6 py-3 rounded-full inline-flex gap-2 shadow-lg transition">📞 Call Us</a><button id="loginBtnFooter" class="border-2 border-amber-400 hover:bg-amber-400 hover:text-gray-900 px-6 py-3 rounded-full font-semibold transition">👥 Staff Dashboard</button><button id="applyNowBtn" class="apply-btn text-gray-900 font-bold px-8 py-3 rounded-full shadow-lg transition"><i class="fas fa-pen-alt mr-2"></i> Apply Now</button></div></div></div>
         
         <footer class="bg-slate-900 text-gray-400 py-8 text-center text-sm">
             <div>© 2026 Al‑Istiqaamah Flying Wings Academy — Samaru, Zaria, Kaduna State. RC: 1983033</div>
@@ -114,13 +117,13 @@
     </div>
 
     <!-- LOGIN MODALS (unchanged) -->
-    <div id="loginScreen" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70"><div class="bg-white rounded-2xl p-8 w-96 relative"><h2 class="text-2xl font-bold mb-4">Login</h2><div class="flex gap-4 mb-4 border-b pb-2"><button id="adminLoginTab" class="admin-tab-btn font-semibold px-4 py-1 rounded-t-lg text-amber-600 border-b-2 border-amber-600">Admin</button><button id="staffLoginTab" class="staff-tab-btn font-semibold px-4 py-1 rounded-t-lg text-gray-500">Staff</button></div><form id="authForm"><input type="text" id="loginUsername" placeholder="Email (Admin)" class="w-full border p-2 rounded mb-3"><input type="password" id="loginPassword" placeholder="Password" class="w-full border p-2 rounded mb-4"><input type="hidden" id="loginType" value="admin"><button type="submit" class="w-full bg-amber-600 text-white py-2 rounded-lg">Login</button><div id="adminForgot" class="text-right mt-2"><button type="button" id="forgotPasswordBtn" class="text-xs text-amber-600">Forgot Password?</button></div><div id="staffForgot" class="text-right mt-2 hidden"><p class="text-xs text-gray-400">Contact DG/CEO to reset staff password.</p></div></form><button id="closeLoginBtn" class="absolute top-3 right-4 text-2xl">&times;</button></div></div>
-    <div id="parentLoginModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70"><div class="bg-white rounded-2xl p-8 w-96 relative"><h2 class="text-2xl font-bold mb-4">Parent Login</h2><form id="parentAuthForm"><input type="text" id="parentRegNo" placeholder="Student Registration Number" class="w-full border p-2 rounded mb-3"><input type="password" id="parentPassword" placeholder="Password (default: al123)" value="al123" class="w-full border p-2 rounded mb-4"><button type="submit" class="w-full bg-emerald-600 text-white py-2 rounded-lg">Access Dashboard</button></form><button id="closeParentLoginBtn" class="absolute top-3 right-4 text-2xl">&times;</button></div></div>
-    <div id="adminSignupModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70"><div class="bg-white rounded-2xl p-8 w-96 relative"><h2 class="text-2xl font-bold mb-4">Admin Signup</h2><form id="adminSignupForm"><input type="text" id="adminFullName" placeholder="Full Name" class="w-full border p-2 rounded mb-2"><input type="email" id="adminEmail" placeholder="Email" class="w-full border p-2 rounded mb-2"><input type="password" id="adminPassword" placeholder="Password" class="w-full border p-2 rounded mb-2"><select id="adminRole"><option value="dg_ceo">DG/CEO</option><option value="umc">UMC</option><option value="daf">DAF</option><option value="do">DO</option><option value="der">DER</option><option value="dprpa">DPRPA</option></select><input type="text" id="adminRegCode" placeholder="Registration Code (ALIFLY2026)" class="w-full border p-2 rounded mt-2"><button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-lg mt-3">Create Account</button></form><button id="closeAdminSignupBtn" class="absolute top-3 right-4 text-2xl">&times;</button></div></div>
+    <div id="loginScreen" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70"><div class="bg-white rounded-2xl p-8 w-96 relative shadow-2xl"><h2 class="text-2xl font-bold mb-4">Login</h2><div class="flex gap-4 mb-4 border-b pb-2"><button id="adminLoginTab" class="admin-tab-btn font-semibold px-4 py-1 rounded-t-lg text-amber-600 border-b-2 border-amber-600">Admin</button><button id="staffLoginTab" class="staff-tab-btn font-semibold px-4 py-1 rounded-t-lg text-gray-500">Staff</button></div><form id="authForm"><input type="text" id="loginUsername" placeholder="Email (Admin)" class="w-full border p-2 rounded mb-3"><input type="password" id="loginPassword" placeholder="Password" class="w-full border p-2 rounded mb-4"><input type="hidden" id="loginType" value="admin"><button type="submit" class="w-full bg-amber-600 text-white py-2 rounded-lg hover:bg-amber-700 transition">Login</button><div id="adminForgot" class="text-right mt-2"><button type="button" id="forgotPasswordBtn" class="text-xs text-amber-600 hover:underline">Forgot Password?</button></div><div id="staffForgot" class="text-right mt-2 hidden"><p class="text-xs text-gray-400">Contact DG/CEO to reset staff password.</p></div></form><button id="closeLoginBtn" class="absolute top-3 right-4 text-2xl cursor-pointer">&times;</button></div></div>
+    <div id="parentLoginModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70"><div class="bg-white rounded-2xl p-8 w-96 relative shadow-2xl"><h2 class="text-2xl font-bold mb-4">Parent Login</h2><form id="parentAuthForm"><input type="text" id="parentRegNo" placeholder="Student Registration Number" class="w-full border p-2 rounded mb-3"><input type="password" id="parentPassword" placeholder="Password (default: al123)" value="al123" class="w-full border p-2 rounded mb-4"><button type="submit" class="w-full bg-emerald-600 text-white py-2 rounded-lg hover:bg-emerald-700 transition">Access Dashboard</button></form><button id="closeParentLoginBtn" class="absolute top-3 right-4 text-2xl cursor-pointer">&times;</button></div></div>
+    <div id="adminSignupModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70"><div class="bg-white rounded-2xl p-8 w-96 relative shadow-2xl"><h2 class="text-2xl font-bold mb-4">Admin Signup</h2><form id="adminSignupForm"><input type="text" id="adminFullName" placeholder="Full Name" class="w-full border p-2 rounded mb-2"><input type="email" id="adminEmail" placeholder="Email" class="w-full border p-2 rounded mb-2"><input type="password" id="adminPassword" placeholder="Password" class="w-full border p-2 rounded mb-2"><select id="adminRole" class="border p-2 rounded w-full"><option value="dg_ceo">DG/CEO</option><option value="umc">UMC</option><option value="daf">DAF</option><option value="do">DO</option><option value="der">DER</option><option value="dprpa">DPRPA</option></select><input type="text" id="adminRegCode" placeholder="Registration Code (ALIFLY2026)" class="w-full border p-2 rounded mt-2"><button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-lg mt-3 hover:bg-indigo-700 transition">Create Account</button></form><button id="closeAdminSignupBtn" class="absolute top-3 right-4 text-2xl cursor-pointer">&times;</button></div></div>
 
     <!-- DASHBOARD -->
     <div id="appContainer" class="hidden flex h-screen w-full fixed inset-0 z-40 bg-white flex-col">
-        <div class="top-bar"><div class="flex items-center gap-3"><button id="mobileMenuToggle" class="text-gray-700 text-2xl md:hidden"><i class="fas fa-bars"></i></button><img src="logo.jpg" class="h-10 w-auto" onerror="this.src='https://placehold.co/100x40'"><span class="font-semibold hidden sm:inline">Al‑Istiqaamah Flying Wings</span></div><div class="flex items-center gap-4"><div class="user-info"><i class="fas fa-user-circle text-xl"></i><div><p class="text-xs text-gray-500">Logged in as</p><p class="text-sm font-bold"><span id="topUserName"></span> (<span id="topUserRole"></span>)</p></div></div><button id="topLogoutBtn" class="logout-top-btn"><i class="fas fa-sign-out-alt mr-1"></i> Logout</button></div></div>
+        <div class="top-bar"><div class="flex items-center gap-3"><button id="mobileMenuToggle" class="text-gray-700 text-2xl md:hidden"><i class="fas fa-bars"></i></button><img src="logo.jpg" class="h-10 w-auto" onerror="this.src='https://placehold.co/100x40'"><span class="font-semibold hidden sm:inline">Al‑Istiqaamah Flying Wings</span></div><div class="flex items-center gap-4"><div class="user-info"><i class="fas fa-user-circle text-xl"></i><div><p class="text-xs text-gray-500">Logged in as</p><p class="text-sm font-bold"><span id="topUserName"></span> (<span id="topUserRole"></span>)</p></div></div><button id="topLogoutBtn" class="logout-top-btn transition"><i class="fas fa-sign-out-alt mr-1"></i> Logout</button></div></div>
         <div class="flex flex-1 overflow-hidden relative"><div id="sidebarOverlay" class="sidebar-overlay"></div><aside id="dynamicSidebar" class="sidebar text-white w-80 flex flex-col overflow-y-auto"><div class="p-4 border-b flex justify-between items-center"><p class="text-sm"><i class="fas fa-school"></i> Navigation</p><button id="closeMobileSidebar" class="text-white md:hidden"><i class="fas fa-times"></i></button></div><nav id="dynamicNav" class="flex-1 px-3 mt-4 space-y-1"></nav></aside><main class="flex-1 overflow-auto bg-gray-100 p-6" id="mainContent"></main></div>
     </div>
     <div id="toastMsg" class="toast-notify"></div>
@@ -132,7 +135,7 @@
         let currentUser = null;
         let slidesData = [], currentSlideIndex = 0, slideInterval;
         let inactivityTimer = null;
-        const INACTIVITY_TIMEOUT_MS = 30000;
+        const INACTIVITY_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
 
         function showToast(msg, isError=false) { 
             let t = document.getElementById('toastMsg'); 
@@ -169,7 +172,7 @@
             if (inactivityTimer) clearTimeout(inactivityTimer); 
             inactivityTimer = setTimeout(() => { 
                 if (currentUser) { 
-                    showToast("Session expired due to inactivity.", false); 
+                    showToast("Session expired due to inactivity. Please login again.", false); 
                     logoutUser(); 
                 } 
             }, INACTIVITY_TIMEOUT_MS); 
@@ -195,7 +198,7 @@
             } catch(e) { console.warn("Storage buckets creation skipped", e); }
         }
         
-        // ============ SLIDES (simplified, unchanged) ============
+        // ============ SLIDES ============
         async function loadSlidesFromSupabase() { 
             try {
                 const { data } = await supabaseClient.from('slides').select('*').order('created_at', { ascending: true }); 
@@ -204,12 +207,12 @@
                 rebuildSlideshow(); 
             } catch(e) { slidesData = [{ url: "https://picsum.photos/id/20/1200/600", caption: "Our Campus" }]; rebuildSlideshow(); }
         }
-        function rebuildSlideshow() { /* same as before */ 
+        function rebuildSlideshow() { 
             const container = document.getElementById('slidesContainer'); 
             if(!container) return; container.innerHTML=''; const dots=document.getElementById('dotsContainer'); if(dots) dots.innerHTML=''; 
             slidesData.forEach((slide,idx)=>{ let div=document.createElement('div'); div.className=`carousel-slide absolute inset-0 w-full h-full transition-opacity duration-500 ${idx===currentSlideIndex?'opacity-100 z-10':'opacity-0 z-0'}`; div.style.backgroundImage=`linear-gradient(0deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2)), url('${slide.url}')`; div.style.backgroundSize='cover'; let cap=document.createElement('div'); cap.className='absolute bottom-0 bg-black/60 text-white p-2 w-full text-center'; cap.innerText=slide.caption; div.appendChild(cap); container.appendChild(div); if(dots){ let dot=document.createElement('button'); dot.className=`dot w-3 h-3 rounded-full mx-1 ${idx===currentSlideIndex?'bg-amber-400 w-4':'bg-white/60'}`; dot.addEventListener('click',()=>goToSlide(idx)); dots.appendChild(dot); } }); resetAutoSlide(); 
         }
-        function goToSlide(index) { /* unchanged */ let slides=document.querySelectorAll('#slidesContainer .carousel-slide'); if(!slides.length) return; if(index<0) index=slides.length-1; if(index>=slides.length) index=0; slides.forEach((s,i)=>{ if(i===index){ s.classList.add('opacity-100','z-10'); s.classList.remove('opacity-0','z-0'); } else { s.classList.remove('opacity-100','z-10'); s.classList.add('opacity-0','z-0'); } }); const dotsContainer = document.getElementById('dotsContainer'); if (dotsContainer) { document.querySelectorAll('#dotsContainer .dot').forEach((d,i)=>{ if(i===index) d.classList.add('bg-amber-400','w-4'); else d.classList.remove('bg-amber-400','w-4'); }); } currentSlideIndex=index; resetAutoSlide(); }
+        function goToSlide(index) { let slides=document.querySelectorAll('#slidesContainer .carousel-slide'); if(!slides.length) return; if(index<0) index=slides.length-1; if(index>=slides.length) index=0; slides.forEach((s,i)=>{ if(i===index){ s.classList.add('opacity-100','z-10'); s.classList.remove('opacity-0','z-0'); } else { s.classList.remove('opacity-100','z-10'); s.classList.add('opacity-0','z-0'); } }); const dotsContainer = document.getElementById('dotsContainer'); if (dotsContainer) { document.querySelectorAll('#dotsContainer .dot').forEach((d,i)=>{ if(i===index) d.classList.add('bg-amber-400','w-4'); else d.classList.remove('bg-amber-400','w-4'); }); } currentSlideIndex=index; resetAutoSlide(); }
         function resetAutoSlide() { if(slideInterval) clearInterval(slideInterval); if(slidesData.length>1) slideInterval = setInterval(()=>goToSlide(currentSlideIndex+1),5000); }
         async function uploadSlideImage(file) { const fileExt = file.name.split('.').pop(); const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`; const { error } = await supabaseClient.storage.from('slides').upload(`slides/${fileName}`, file); if (error) throw new Error(error.message); const { data: publicUrlData } = supabaseClient.storage.from('slides').getPublicUrl(`slides/${fileName}`); return publicUrlData.publicUrl; }
         
@@ -221,11 +224,11 @@
             const { data: { publicUrl } } = supabaseClient.storage.from('application_attachments').getPublicUrl(`applications/${safeName}`); 
             return publicUrl; 
         }
-        window.showApplicationFormModal = async function() { /* same as before, omitted for brevity but fully functional */ 
+        window.showApplicationFormModal = async function() { /* kept same as before, fully functional */ 
             const modalDiv = document.createElement('div');
             modalDiv.className = 'fixed inset-0 z-[100] flex items-center justify-center bg-black/80 overflow-y-auto p-4';
             modalDiv.style.backdropFilter = 'blur(4px)';
-            modalDiv.innerHTML = `<div class="bg-white rounded-2xl w-full max-w-6xl max-h-[90vh] overflow-y-auto relative shadow-2xl"><div class="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center z-10"><h2 class="text-2xl font-bold text-emerald-800"><i class="fas fa-file-alt mr-2"></i> Admission Application Form</h2><button id="closeAppModalNew" class="text-gray-500 text-3xl hover:text-gray-700">&times;</button></div><div class="p-6"><form id="admissionFormNew" class="space-y-8"><div class="bg-white rounded-2xl border p-6"><h3 class="font-bold text-xl border-b pb-2 mb-3">A. Applicant Information</h3><div class="grid md:grid-cols-3 gap-4"><input type="text" name="surname" placeholder="Surname *" required class="border rounded p-2"><input type="text" name="firstname" placeholder="First Name *" required class="border rounded p-2"><input type="text" name="othernames" placeholder="Other Names" class="border rounded p-2"><select name="gender" class="border rounded p-2"><option>Male</option><option>Female</option></select><input type="date" name="dob" id="dobModal" class="border rounded p-2"><input type="number" name="age" id="ageModal" readonly placeholder="Age" class="bg-gray-100 border rounded p-2"><input type="text" name="nationality" placeholder="Nationality" value="Nigerian" class="border rounded p-2"><input type="text" name="stateOfOrigin" placeholder="State of Origin" class="border rounded p-2"><input type="text" name="homeAddress" placeholder="Home Address" class="border rounded p-2 md:col-span-2"></div></div><div class="bg-white rounded-2xl border p-6"><h3 class="font-bold text-xl border-b pb-2">B. Academic & Parent Info</h3><div class="grid md:grid-cols-2 gap-4 mt-2"><select name="classLevel" class="border rounded p-2">${SECTIONS.map(s=>`<option>${s}</option>`).join('')}</select><input type="text" name="prevSchool" placeholder="Previous School" class="border rounded p-2"><input type="text" name="fatherName" placeholder="Father's Name" class="border rounded p-2"><input type="text" name="motherName" placeholder="Mother's Name" class="border rounded p-2"><input type="text" name="parentPhone" placeholder="Parent Phone" class="border rounded p-2"><input type="email" name="parentEmail" placeholder="Parent Email" class="border rounded p-2"></div></div><div class="bg-white rounded-2xl border p-6"><h3 class="font-bold text-xl border-b pb-2">C. Health & Religious Info</h3><div class="grid md:grid-cols-2 gap-4 mt-2"><input type="text" name="bloodGroup" placeholder="Blood Group"><input type="text" name="allergies" placeholder="Allergies"><input type="text" name="quranMemorization" placeholder="Quran Memorization (Juz)"><select name="quranReading"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select></div></div><div class="bg-white rounded-2xl border p-6"><h3 class="font-bold text-xl border-b pb-2">D. Parent Declaration</h3><div class="grid md:grid-cols-2 gap-4"><input type="text" name="declarantName" placeholder="Parent/Guardian Name *" required class="border rounded p-2"><input type="date" name="declarationDate" class="border rounded p-2"></div></div><div class="bg-white rounded-2xl border p-6"><h3 class="font-bold text-xl border-b pb-2">E. Attachments (docs/images)</h3><div class="grid md:grid-cols-2 gap-3"><div><label>Birth Certificate</label><input type="file" name="birthCert" accept="image/*,application/pdf"></div><div><label>Previous Report</label><input type="file" name="prevReport" accept="image/*,application/pdf"></div><div><label>Medical Report</label><input type="file" name="medicalReport"></div></div></div><button type="submit" class="w-full bg-emerald-700 text-white py-3 rounded-xl font-bold">Submit Application</button></form></div></div>`;
+            modalDiv.innerHTML = `<div class="bg-white rounded-2xl w-full max-w-6xl max-h-[90vh] overflow-y-auto relative shadow-2xl"><div class="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center z-10"><h2 class="text-2xl font-bold text-emerald-800"><i class="fas fa-file-alt mr-2"></i> Admission Application Form</h2><button id="closeAppModalNew" class="text-gray-500 text-3xl hover:text-gray-700">&times;</button></div><div class="p-6"><form id="admissionFormNew" class="space-y-8"><div class="bg-white rounded-2xl border p-6"><h3 class="font-bold text-xl border-b pb-2 mb-3">A. Applicant Information</h3><div class="grid md:grid-cols-3 gap-4"><input type="text" name="surname" placeholder="Surname *" required class="border rounded p-2"><input type="text" name="firstname" placeholder="First Name *" required class="border rounded p-2"><input type="text" name="othernames" placeholder="Other Names" class="border rounded p-2"><select name="gender" class="border rounded p-2"><option>Male</option><option>Female</option></select><input type="date" name="dob" id="dobModal" class="border rounded p-2"><input type="number" name="age" id="ageModal" readonly placeholder="Age" class="bg-gray-100 border rounded p-2"><input type="text" name="nationality" placeholder="Nationality" value="Nigerian" class="border rounded p-2"><input type="text" name="stateOfOrigin" placeholder="State of Origin" class="border rounded p-2"><input type="text" name="homeAddress" placeholder="Home Address" class="border rounded p-2 md:col-span-2"></div></div><div class="bg-white rounded-2xl border p-6"><h3 class="font-bold text-xl border-b pb-2">B. Academic & Parent Info</h3><div class="grid md:grid-cols-2 gap-4 mt-2"><select name="classLevel" class="border rounded p-2">${SECTIONS.map(s=>`<option>${s}</option>`).join('')}</select><input type="text" name="prevSchool" placeholder="Previous School" class="border rounded p-2"><input type="text" name="fatherName" placeholder="Father's Name" class="border rounded p-2"><input type="text" name="motherName" placeholder="Mother's Name" class="border rounded p-2"><input type="text" name="parentPhone" placeholder="Parent Phone" class="border rounded p-2"><input type="email" name="parentEmail" placeholder="Parent Email" class="border rounded p-2"></div></div><div class="bg-white rounded-2xl border p-6"><h3 class="font-bold text-xl border-b pb-2">C. Health & Religious Info</h3><div class="grid md:grid-cols-2 gap-4 mt-2"><input type="text" name="bloodGroup" placeholder="Blood Group"><input type="text" name="allergies" placeholder="Allergies"><input type="text" name="quranMemorization" placeholder="Quran Memorization (Juz)"><select name="quranReading"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select></div></div><div class="bg-white rounded-2xl border p-6"><h3 class="font-bold text-xl border-b pb-2">D. Parent Declaration</h3><div class="grid md:grid-cols-2 gap-4"><input type="text" name="declarantName" placeholder="Parent/Guardian Name *" required class="border rounded p-2"><input type="date" name="declarationDate" class="border rounded p-2"></div></div><div class="bg-white rounded-2xl border p-6"><h3 class="font-bold text-xl border-b pb-2">E. Attachments (docs/images)</h3><div class="grid md:grid-cols-2 gap-3"><div><label>Birth Certificate</label><input type="file" name="birthCert" accept="image/*,application/pdf"></div><div><label>Previous Report</label><input type="file" name="prevReport" accept="image/*,application/pdf"></div><div><label>Medical Report</label><input type="file" name="medicalReport"></div></div></div><button type="submit" class="w-full bg-emerald-700 text-white py-3 rounded-xl font-bold hover:bg-emerald-800 transition">Submit Application</button></form></div></div>`;
             document.body.appendChild(modalDiv);
             const closeBtn = modalDiv.querySelector('#closeAppModalNew'); 
             const closeModal = () => modalDiv.remove(); 
@@ -271,14 +274,14 @@
             });
         };
         
-        // ============ ADMIN APPLICATIONS (same as before) ============
-        async function renderApplicationsList() { /* unchanged but required for DG/CEO & UMC */ 
+        // ============ ADMIN APPLICATIONS ============
+        async function renderApplicationsList() { /* same as before, fully functional */ 
             if (!currentUser || !['dg_ceo', 'umc'].includes(currentUser.role)) { showToast("Access denied", true); return; }
             try {
                 const { data: apps } = await supabaseClient.from('admission_applications').select('*').order('submitted_at', { ascending: false });
                 let html = `<div class="bg-white rounded-xl shadow p-6"><h2 class="text-2xl font-bold mb-4">📋 Admission Applications</h2><div class="overflow-x-auto"><table class="min-w-full border"><thead class="bg-gray-100"><tr><th>Name</th><th>Email/Phone</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead><tbody>`;
                 for (let app of apps || []) {
-                    html += `<tr class="border-b"><td class="p-2">${escapeHtml(app.full_name)}</td><td class="p-2">${escapeHtml(app.parent_email || app.phone || '-')}</td><td class="p-2">${new Date(app.submitted_at).toLocaleDateString()}</td><td class="p-2"><span class="status-badge status-${app.status}">${app.status}</span></td><td class="p-2"><select data-id="${app.id}" class="statusUpdateSelect border rounded p-1"><option value="pending" ${app.status==='pending'?'selected':''}>Pending</option><option value="reviewed" ${app.status==='reviewed'?'selected':''}>Reviewed</option><option value="accepted" ${app.status==='accepted'?'selected':''}>Accepted</option><option value="rejected" ${app.status==='rejected'?'selected':''}>Rejected</option></select> <button data-app='${JSON.stringify(app).replace(/'/g, "&#39;")}' class="viewDetailsBtn ml-2 bg-blue-600 text-white px-2 py-1 rounded text-xs">📄 View Details</button></td></tr>`;
+                    html += `<tr class="border-b"><td class="p-2">${escapeHtml(app.full_name)}</td><td class="p-2">${escapeHtml(app.parent_email || app.phone || '-')}</td><td class="p-2">${new Date(app.submitted_at).toLocaleDateString()}</td><td class="p-2"><span class="status-badge status-${app.status}">${app.status}</span></td><td class="p-2"><select data-id="${app.id}" class="statusUpdateSelect border rounded p-1"><option value="pending" ${app.status==='pending'?'selected':''}>Pending</option><option value="reviewed" ${app.status==='reviewed'?'selected':''}>Reviewed</option><option value="accepted" ${app.status==='accepted'?'selected':''}>Accepted</option><option value="rejected" ${app.status==='rejected'?'selected':''}>Rejected</option></select> <button data-app='${JSON.stringify(app).replace(/'/g, "&#39;")}' class="viewDetailsBtn ml-2 bg-blue-600 text-white px-2 py-1 rounded text-xs hover:bg-blue-700">📄 View Details</button></td></tr>`;
                 }
                 html += `</tbody></table></div></div>`;
                 document.getElementById("mainContent").innerHTML = html;
@@ -290,7 +293,7 @@
                 document.querySelectorAll('.viewDetailsBtn').forEach(btn => btn.addEventListener('click', () => { const appData = JSON.parse(btn.dataset.app); showApplicationDetailsModal(appData); }));
             } catch(e) { showToast("Error loading applications", true); }
         }
-        function showApplicationDetailsModal(app) { /* same as before, omitted for brevity but works */ 
+        function showApplicationDetailsModal(app) { /* same as before */ 
             const formData = app.form_data || {};
             const attachments = formData.attachments || {};
             const modal = document.createElement('div');
@@ -301,7 +304,7 @@
             modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
         }
         
-        // ============ DOWNLOAD RECORDS (CSV) - reusable ============
+        // ============ DOWNLOAD RECORDS (CSV) ============
         function downloadCSV(data, filename) {
             if (!data || data.length === 0) { showToast("No data to export", true); return; }
             const headers = Object.keys(data[0]);
@@ -322,8 +325,8 @@
         async function downloadResults() { const { data } = await supabaseClient.from('student_results').select('*'); if(data) downloadCSV(data, 'results.csv'); else showToast("No data",true); }
         async function downloadFeeTransactions() { const { data } = await supabaseClient.from('fee_transactions').select('*'); if(data) downloadCSV(data, 'fee_transactions.csv'); else showToast("No data",true); }
         async function downloadStaff() { const { data } = await supabaseClient.from('teachers').select('*'); if(data) downloadCSV(data, 'staff.csv'); else showToast("No data",true); }
-        function renderDownloadRecords() { /* generic download panel, used by multiple roles */ 
-            const html = `<div class="bg-white rounded-xl p-6 shadow"><h2 class="text-2xl font-bold mb-4">📥 Download Records</h2><div class="download-btn-group flex gap-4 flex-wrap"><button id="downloadStudentsBtn" class="bg-blue-600 text-white px-4 py-2 rounded">Students CSV</button><button id="downloadResultsBtn" class="bg-blue-600 text-white px-4 py-2 rounded">Results CSV</button><button id="downloadFeeBtn" class="bg-blue-600 text-white px-4 py-2 rounded">Fee Transactions CSV</button><button id="downloadStaffBtn" class="bg-blue-600 text-white px-4 py-2 rounded">Staff CSV</button></div></div>`;
+        function renderDownloadRecords() { 
+            const html = `<div class="bg-white rounded-xl p-6 shadow"><h2 class="text-2xl font-bold mb-4">📥 Download Records</h2><div class="flex flex-wrap gap-4"><button id="downloadStudentsBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Students CSV</button><button id="downloadResultsBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Results CSV</button><button id="downloadFeeBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Fee Transactions CSV</button><button id="downloadStaffBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Staff CSV</button></div></div>`;
             document.getElementById("mainContent").innerHTML = html;
             document.getElementById("downloadStudentsBtn").onclick = downloadStudents;
             document.getElementById("downloadResultsBtn").onclick = downloadResults;
@@ -331,14 +334,14 @@
             document.getElementById("downloadStaffBtn").onclick = downloadStaff;
         }
         
-        // ============ RESULTS MANAGEMENT (DG/CEO only, already exists) ============
+        // ============ RESULTS MANAGEMENT (DG/CEO only) ============
         async function saveStudentResult(studentId, term, year, subject, ca1, ca2, exam) { 
             const total = ca1+ca2+exam; const grade = total>=80?'A':total>=70?'B':total>=60?'C':total>=50?'D':'E'; 
             await supabaseClient.from('student_results').upsert({ student_id: studentId, term, year, subject, ca1, ca2, exam, total, grade }, { onConflict: 'student_id,term,year,subject' }); 
         }
-        async function renderUnifiedResults() { /* same as before */ 
+        async function renderUnifiedResults() { 
             if (!currentUser || currentUser.role !== 'dg_ceo') { showToast("Access denied", true); renderContentView("dashboard"); return; } 
-            let html = `<div class="bg-white rounded-xl shadow p-6"><h2 class="text-2xl font-bold mb-4">📊 Results Management</h2><div class="grid md:grid-cols-3 gap-4"><select id="resStudent" class="border p-2 rounded"><option>Select Student</option>${schoolData.students.map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}</select><select id="resTerm"><option value="1">Term1</option><option value="2">Term2</option><option value="3">Term3</option></select><input id="resYear" value="2026" class="border p-2 rounded"></div><button id="loadResultsBtn" class="bg-emerald-600 text-white px-4 py-2 rounded-lg mt-3">Load</button><div id="resEditor" class="mt-5"></div></div>`; 
+            let html = `<div class="bg-white rounded-xl shadow p-6"><h2 class="text-2xl font-bold mb-4">📊 Results Management</h2><div class="grid md:grid-cols-3 gap-4"><select id="resStudent" class="border p-2 rounded"><option>Select Student</option>${schoolData.students.map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}</select><select id="resTerm"><option value="1">Term1</option><option value="2">Term2</option><option value="3">Term3</option></select><input id="resYear" value="2026" class="border p-2 rounded"></div><button id="loadResultsBtn" class="bg-emerald-600 text-white px-4 py-2 rounded-lg mt-3 hover:bg-emerald-700">Load</button><div id="resEditor" class="mt-5"></div></div>`; 
             document.getElementById("mainContent").innerHTML = html; 
             document.getElementById("loadResultsBtn").onclick = async () => { 
                 try {
@@ -346,7 +349,7 @@
                     if (!studentId) return; 
                     const { data: results } = await supabaseClient.from('student_results').select('*').eq('student_id', studentId).eq('term', term).eq('year', year); 
                     const container = document.getElementById("resEditor"); 
-                    container.innerHTML = `<table class="w-full border"><thead><tr><th>Subject</th><th>CA1(20)</th><th>CA2(20)</th><th>Exam(60)</th><th>Total</th><th>Grade</th><th><button id="addSubjRow" class="bg-amber-500 text-white px-2 py-1 rounded text-sm">+Add</button></th></tr></thead><tbody id="resBody"></tbody></table><button id="saveResultsBtn" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded-lg">Save All</button>`; 
+                    container.innerHTML = `<table class="w-full border"><thead><tr><th>Subject</th><th>CA1(20)</th><th>CA2(20)</th><th>Exam(60)</th><th>Total</th><th>Grade</th><th><button id="addSubjRow" class="bg-amber-500 text-white px-2 py-1 rounded text-sm">+Add</button></th></tr></thead><tbody id="resBody"></tbody></table><button id="saveResultsBtn" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Save All</button>`; 
                     const tbody = document.getElementById("resBody"); 
                     const addRow = (r = null) => { 
                         const tr = document.createElement('tr'); 
@@ -365,34 +368,67 @@
             }; 
         }
         
-        // ============ STUDENTS LIST WITH DELETE (reused) ============
+        // ============ STUDENTS LIST WITH DELETE ============
         function renderStudentsList(withDelete=true) { 
-            let html=`<div class="bg-white p-5 rounded-xl"><h2>📋 Students</h2><div class="filter-bar flex gap-4"><select id="sectionFilter"><option>All Sections</option>${SECTIONS.map(s=>`<option>${s}</option>`).join('')}</select><input id="searchStudent" placeholder="Search"></div><table class="w-full border"><thead><tr><th>Reg No</th><th>Name</th><th>Parent</th><th>Section</th><th>Status</th>${(currentUser.role==='dg_ceo'||currentUser.role==='umc'||currentUser.role==='daf'||currentUser.role==='dprpa'||currentUser.role==='der'||currentUser.role==='do')?'<th>Actions</th>':''} </thead><tbody id="stuTbody"></tbody></table></div>`; 
+            let html=`<div class="bg-white p-5 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">📋 Students</h2><div class="filter-bar flex gap-4"><select id="sectionFilter" class="border rounded p-2"><option>All Sections</option>${SECTIONS.map(s=>`<option>${s}</option>`).join('')}</select><input id="searchStudent" placeholder="Search by name or reg no" class="border rounded p-2 flex-1"></div><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Reg No</th><th>Name</th><th>Parent</th><th>Section</th><th>Status</th>${(currentUser.role==='dg_ceo'||currentUser.role==='umc'||currentUser.role==='daf'||currentUser.role==='dprpa'||currentUser.role==='der'||currentUser.role==='do')?'<th>Actions</th>':''}</tr></thead><tbody id="stuTbody"></tbody></table></div></div>`; 
             document.getElementById("mainContent").innerHTML=html; 
             const update=()=>{ 
                 let filtered=schoolData.students.filter(s=>document.getElementById("sectionFilter").value==='All Sections'||s.section===document.getElementById("sectionFilter").value); 
                 let term=document.getElementById("searchStudent").value.toLowerCase(); 
                 if(term) filtered=filtered.filter(s=>s.name.toLowerCase().includes(term)||s.reg_number.toLowerCase().includes(term)); 
                 let canEdit = ['dg_ceo','umc','daf','dprpa','der','do'].includes(currentUser.role);
-                let rows = filtered.map(s=>`<tr><td>${s.reg_number}</td><td>${s.name}</td><td>${s.parent_name||'-'}</td><td>${s.section}</td><td><span class="px-2 py-1 rounded text-xs ${s.status==='active'?'bg-green-100 text-green-800':'bg-orange-100 text-orange-800'}">${s.status}</span>${canEdit?`<td><button onclick="window.toggleStudentStatus('${s.id}','${s.status}')" class="bg-amber-600 text-white px-2 py-1 rounded text-xs mr-1">Toggle</button><button onclick="window.deleteStudent('${s.id}')" class="bg-red-600 text-white px-2 py-1 rounded text-xs">Delete</button></td>`:''}</tr>`).join('');
+                let rows = filtered.map(s=>`<tr><td class="p-2">${s.reg_number}</td><td class="p-2">${s.name}</td><td class="p-2">${s.parent_name||'-'}</td><td class="p-2">${s.section}</td><td class="p-2"><span class="px-2 py-1 rounded text-xs ${s.status==='active'?'bg-green-100 text-green-800':'bg-orange-100 text-orange-800'}">${s.status}</span></td>${canEdit?`<td class="p-2"><button onclick="window.toggleStudentStatus('${s.id}','${s.status}')" class="bg-amber-600 text-white px-2 py-1 rounded text-xs mr-1 hover:bg-amber-700">Toggle</button><button onclick="window.deleteStudent('${s.id}')" class="bg-red-600 text-white px-2 py-1 rounded text-xs hover:bg-red-700">Delete</button></td>`:''}</tr>`).join('');
                 document.getElementById("stuTbody").innerHTML=rows; 
             }; 
             document.getElementById("sectionFilter").addEventListener("change",update); 
             document.getElementById("searchStudent").addEventListener("input",update); 
             update(); 
             window.toggleStudentStatus=async(id,cur)=>{ let newStat=cur==='active'?'suspended':'active'; await supabaseClient.from('students').update({status:newStat}).eq('id',id); await refreshSchoolData(); renderStudentsList(); }; 
-            window.deleteStudent = async (id) => { if (confirm("Delete student?")) { await supabaseClient.from('students').delete().eq('id', id); await refreshSchoolData(); renderStudentsList(); showToast("Deleted"); } };
+            window.deleteStudent = async (id) => { if (confirm("Delete this student permanently?")) { await supabaseClient.from('students').delete().eq('id', id); await refreshSchoolData(); renderStudentsList(); showToast("Student deleted"); } };
         }
         
         function renderEnrollStudent() { 
             if (!['dg_ceo','umc','headteacher'].includes(currentUser.role)) { showToast("Access denied", true); return; }
             let ops=SECTIONS.map(s=>`<option>${s}</option>`).join(''); 
-            let html=`<div class="bg-white p-6 rounded-xl"><h2>🎓 Enroll Student</h2><form id="enrollForm"><input id="regNum" placeholder="Reg Number" required class="border p-2 w-full mb-2"><input id="stuName" placeholder="Student Name" required class="border p-2 w-full mb-2"><input id="parentName" placeholder="Parent Name" class="border p-2 w-full mb-2"><input id="level" type="number" placeholder="Level" class="border p-2 w-full mb-2"><select id="secSelect" class="border p-2 w-full mb-2">${ops}</select><button type="submit" class="bg-emerald-600 text-white p-2 rounded w-full">Register</button></form></div>`; 
+            let html=`<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">🎓 Enroll Student</h2><form id="enrollForm" class="space-y-3"><input id="regNum" placeholder="Reg Number" required class="border p-2 rounded w-full"><input id="stuName" placeholder="Student Name" required class="border p-2 rounded w-full"><input id="parentName" placeholder="Parent Name" class="border p-2 rounded w-full"><input id="level" type="number" placeholder="Level" class="border p-2 rounded w-full"><select id="secSelect" class="border p-2 rounded w-full">${ops}</select><button type="submit" class="bg-emerald-600 text-white p-2 rounded w-full hover:bg-emerald-700 transition">Register</button></form></div>`; 
             document.getElementById("mainContent").innerHTML=html; 
             document.getElementById("enrollForm").addEventListener("submit", async(e)=>{ e.preventDefault(); const regNum = document.getElementById('regNum').value, stuName = document.getElementById('stuName').value, parentName = document.getElementById('parentName').value, level = parseInt(document.getElementById('level').value), secSelect = document.getElementById('secSelect').value; if (!regNum || !stuName) return showToast("Reg Number and Name required", true); await supabaseClient.from('students').insert([{ reg_number: regNum, name: stuName, parent_name: parentName, level: level || 1, section: secSelect, fee_status:'Pending', status:'active' }]); await refreshSchoolData(); renderStudentsList(); showToast("Student enrolled"); }); 
         }
         
-        // ============ FEE MANAGEMENT (reused for DAF and DG/CEO) ============
+        function renderManageAnnouncement() { 
+            let html=`<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">📢 Update Announcement</h2><textarea id="announceText" rows="3" class="w-full border rounded p-2"></textarea><button id="saveAnnounce" class="mt-3 bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700">Save</button></div>`; 
+            document.getElementById("mainContent").innerHTML=html; 
+            supabaseClient.from('site_announcement').select('content').eq('id',1).single().then(({data})=>{ if(data && document.getElementById("announceText")) document.getElementById("announceText").value = data.content; }); 
+            document.getElementById("saveAnnounce").onclick=async()=>{ await supabaseClient.from('site_announcement').update({ content: document.getElementById("announceText").value }).eq('id',1); showToast("Updated"); fetchAndDisplayAnnouncement(); }; 
+        }
+        
+        async function renderManageSlides() { 
+            if (!currentUser || currentUser.role !== 'dg_ceo') { showToast("Access denied", true); return; } 
+            try {
+                const { data: slides } = await supabaseClient.from('slides').select('*'); 
+                let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">📸 Manage Slides</h2><div class="mb-4 flex gap-2"><input type="file" id="slideUpload" accept="image/*" class="border p-2 rounded"><input id="slideCaption" placeholder="Caption" class="border p-2 rounded flex-1"><button id="uploadSlideBtn" class="bg-emerald-600 text-white p-2 rounded hover:bg-emerald-700">Upload</button></div><div class="grid grid-cols-3 gap-4">${slides?.map(s=>`<div class="border rounded p-2"><img src="${s.image_url}" class="h-24 object-cover w-full"><p class="text-sm mt-1">${s.caption}</p><button data-id="${s.id}" class="delSlide bg-red-500 text-white px-2 py-1 rounded text-xs mt-1 w-full">Delete</button></div>`).join('')}</div></div>`; 
+                document.getElementById("mainContent").innerHTML = html; 
+                document.getElementById("uploadSlideBtn").onclick = async () => { 
+                    try {
+                        const file = document.getElementById("slideUpload").files[0]; 
+                        const caption = document.getElementById("slideCaption").value; 
+                        if (!file || !caption) { showToast("Select image and caption", true); return; } 
+                        const url = await uploadSlideImage(file); 
+                        await supabaseClient.from('slides').insert([{ image_url: url, caption }]); 
+                        showToast("Slide added"); 
+                        renderManageSlides(); 
+                        loadSlidesFromSupabase(); 
+                    } catch(e) { showToast("Upload failed: "+e.message, true); }
+                }; 
+                document.querySelectorAll('.delSlide').forEach(btn => btn.onclick = async () => { 
+                    await supabaseClient.from('slides').delete().eq('id', btn.dataset.id); 
+                    renderManageSlides(); 
+                    loadSlidesFromSupabase(); 
+                });
+            } catch(e) { showToast("Error managing slides", true); }
+        }
+        
+        // ==================== FEE MANAGEMENT (DAF, DG/CEO, DO) ====================
         async function getOrCreateFeeBalance(studentId, term, year) { 
             const { data: existing } = await supabaseClient.from('fee_balances').select('*').eq('student_id', studentId).eq('term', term).eq('year', year).maybeSingle(); 
             if (existing) return existing; 
@@ -421,7 +457,7 @@
         }
         async function renderFeeManagement() { 
             if (!['dg_ceo','daf','do'].includes(currentUser.role)) { showToast("Access denied", true); return; }
-            let html = `<div class="bg-white rounded-xl shadow p-6"><h2 class="text-2xl font-bold mb-4"><i class="fas fa-coins"></i> Fee Management</h2><div class="grid md:grid-cols-3 gap-4 mb-4"><select id="feeStudentId" class="border p-2 rounded"><option value="">-- Student --</option>${schoolData.students.map(s=>`<option value="${s.id}">${s.reg_number} - ${s.name}</option>`).join('')}</select><select id="feeTerm"><option value="1">First Term</option><option value="2">Second Term</option><option value="3">Third Term</option></select><input id="feeYear" value="2026" class="border p-2 rounded"></div><button id="loadFeeDetailsBtn" class="bg-emerald-600 text-white px-4 py-2 rounded-lg">Load Details</button><div id="feeDetailsContainer" class="mt-6"></div><div id="recordPaymentPanel" class="hidden mt-4 border-t pt-4"><h3 class="text-xl font-bold">Record Payment</h3><div class="flex gap-3 mt-2"><input id="paymentAmount" type="number" placeholder="Amount (₦)" class="border p-2 rounded"><select id="paymentMethod"><option value="cash">Cash</option><option value="bank_transfer">Bank Transfer</option></select><button id="recordPaymentBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg">Pay</button></div></div></div>`; 
+            let html = `<div class="bg-white rounded-xl shadow p-6"><h2 class="text-2xl font-bold mb-4"><i class="fas fa-coins"></i> Fee Management</h2><div class="grid md:grid-cols-3 gap-4 mb-4"><select id="feeStudentId" class="border p-2 rounded"><option value="">-- Student --</option>${schoolData.students.map(s=>`<option value="${s.id}">${s.reg_number} - ${s.name}</option>`).join('')}</select><select id="feeTerm" class="border p-2 rounded"><option value="1">First Term</option><option value="2">Second Term</option><option value="3">Third Term</option></select><input id="feeYear" value="2026" class="border p-2 rounded"></div><button id="loadFeeDetailsBtn" class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700">Load Details</button><div id="feeDetailsContainer" class="mt-6"></div><div id="recordPaymentPanel" class="hidden mt-4 border-t pt-4"><h3 class="text-xl font-bold">Record Payment</h3><div class="flex gap-3 mt-2"><input id="paymentAmount" type="number" placeholder="Amount (₦)" class="border p-2 rounded"><select id="paymentMethod" class="border p-2 rounded"><option value="cash">Cash</option><option value="bank_transfer">Bank Transfer</option></select><button id="recordPaymentBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Pay</button></div></div></div>`; 
             document.getElementById("mainContent").innerHTML = html; 
             document.getElementById("loadFeeDetailsBtn").onclick = async () => { 
                 try {
@@ -431,7 +467,7 @@
                     let { data: transactions } = await supabaseClient.from('fee_transactions').select('*').eq('student_id', studentId).eq('term', term).eq('year', year); 
                     let student = schoolData.students.find(s=>s.id == studentId); 
                     let percentPaid = (balance.paid_amount / balance.total_fees) * 100;
-                    document.getElementById("feeDetailsContainer").innerHTML = `<div class="bg-gray-50 p-4 rounded"><p><strong>${student.name}</strong> | Total: ₦${balance.total_fees.toLocaleString()} | Paid: ₦${balance.paid_amount.toLocaleString()} | Balance: <span class="font-bold ${balance.balance>0?'text-red-600':'text-green-600'}">₦${balance.balance.toLocaleString()}</span></p><div class="progress-bar mt-2"><div class="progress-fill" style="width: ${percentPaid}%;"></div></div><table class="w-full text-sm border mt-4"><thead class="bg-gray-200"><tr><th>Date</th><th>Amount</th><th>Receipt</th><th>Status</th><th>Action</th></tr></thead><tbody>${transactions.map(tx=>`<tr><td>${new Date(tx.payment_date).toLocaleDateString()}</td><td>₦${tx.amount_paid}</td><td>${tx.receipt_no}</td><td class="${tx.status==='authorized'?'text-green-600':'text-amber-600'}">${tx.status}</td><td>${tx.status!=='authorized'&&(['dg_ceo','daf','do'].includes(currentUser.role)?`<button class="authTxBtn text-blue-600" data-id="${tx.id}">Authorize</button>`:'-')}</td></tr>`).join('')}</tbody></table><button id="showPaymentPanelBtn" class="mt-2 bg-amber-500 text-white px-3 py-1 rounded text-sm">+ New Payment</button></div>`; 
+                    document.getElementById("feeDetailsContainer").innerHTML = `<div class="bg-gray-50 p-4 rounded"><p><strong>${student.name}</strong> | Total: ₦${balance.total_fees.toLocaleString()} | Paid: ₦${balance.paid_amount.toLocaleString()} | Balance: <span class="font-bold ${balance.balance>0?'text-red-600':'text-green-600'}">₦${balance.balance.toLocaleString()}</span></p><div class="progress-bar mt-2"><div class="progress-fill" style="width: ${percentPaid}%;"></div></div><table class="w-full text-sm border mt-4"><thead class="bg-gray-200"><tr><th>Date</th><th>Amount</th><th>Receipt</th><th>Status</th><th>Action</th></tr></thead><tbody>${transactions.map(tx=>`<tr><td>${new Date(tx.payment_date).toLocaleDateString()}</td><td>₦${tx.amount_paid}</td><td>${tx.receipt_no}</td><td class="${tx.status==='authorized'?'text-green-600':'text-amber-600'}">${tx.status}</td><td>${tx.status!=='authorized'&&(['dg_ceo','daf','do'].includes(currentUser.role)?`<button class="authTxBtn text-blue-600" data-id="${tx.id}">Authorize</button>`:'-')}</td></tr>`).join('')}</tbody></table><button id="showPaymentPanelBtn" class="mt-2 bg-amber-500 text-white px-3 py-1 rounded text-sm hover:bg-amber-600">+ New Payment</button></div>`; 
                     document.getElementById("recordPaymentPanel").classList.remove("hidden"); 
                     document.getElementById("showPaymentPanelBtn")?.addEventListener("click",()=>document.getElementById("recordPaymentPanel").scrollIntoView()); 
                     document.getElementById("recordPaymentBtn").onclick = async () => { 
@@ -451,7 +487,7 @@
         
         // DAF specific: Receipt generator, Payroll, Payment report
         async function renderReceiptGenerator() {
-            let html = `<div class="bg-white p-6 rounded-xl"><h2 class="text-2xl font-bold mb-4">🖨️ Receipt Generator</h2><div class="grid md:grid-cols-2 gap-4"><select id="receiptStudent" class="border p-2 rounded"><option>Select Student</option>${schoolData.students.map(s=>`<option value="${s.id}">${s.reg_number} - ${s.name}</option>`).join('')}</select><select id="receiptTerm"><option value="1">Term 1</option><option value="2">Term 2</option><option value="3">Term 3</option></select><input id="receiptYear" value="2026" class="border p-2 rounded"><button id="generateReceiptBtn" class="bg-emerald-600 text-white px-4 py-2 rounded">Generate Receipt</button></div><div id="receiptOutput" class="mt-6"></div></div>`;
+            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">🖨️ Receipt Generator</h2><div class="grid md:grid-cols-2 gap-4"><select id="receiptStudent" class="border p-2 rounded"><option>Select Student</option>${schoolData.students.map(s=>`<option value="${s.id}">${s.reg_number} - ${s.name}</option>`).join('')}</select><select id="receiptTerm" class="border p-2 rounded"><option value="1">Term 1</option><option value="2">Term 2</option><option value="3">Term 3</option></select><input id="receiptYear" value="2026" class="border p-2 rounded"><button id="generateReceiptBtn" class="bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700">Generate Receipt</button></div><div id="receiptOutput" class="mt-6"></div></div>`;
             document.getElementById("mainContent").innerHTML = html;
             document.getElementById("generateReceiptBtn").onclick = async () => {
                 let studentId = document.getElementById("receiptStudent").value, term = document.getElementById("receiptTerm").value, year = document.getElementById("receiptYear").value;
@@ -461,13 +497,12 @@
                 if (!txList.length) { showToast("No authorized payments for this term", true); return; }
                 let totalPaid = txList.reduce((s,t)=>s+t.amount_paid,0);
                 let termNames = {1:"First",2:"Second",3:"Third"};
-                let dummyTx = { term, year, amount_paid: totalPaid, receipt_no: `GEN_${Date.now()}`, status: 'authorized' };
-                let receiptHtml = `<div class="border p-4 rounded"><div class="text-center"><h3 class="text-xl font-bold">Al‑Istiqaamah Flying Wings Academy</h3><h4>FEE RECEIPT</h4></div><div>Receipt No: ${dummyTx.receipt_no}</div><div>Student: ${student.name} (${student.reg_number})</div><div>Term: ${termNames[term]} ${year}</div><div>Amount Paid: ₦${totalPaid.toLocaleString()}</div><div class="mt-3"><button onclick="window.print()" class="bg-blue-600 text-white px-4 py-1 rounded">Print</button></div></div>`;
+                let receiptHtml = `<div class="receipt-card"><div class="text-center border-b pb-4"><h3 class="text-xl font-bold">Al‑Istiqaamah Flying Wings Academy</h3><h4>FEE RECEIPT</h4></div><div class="mt-4 space-y-2"><div><strong>Receipt No:</strong> GEN_${Date.now()}</div><div><strong>Date:</strong> ${new Date().toLocaleDateString()}</div><div><strong>Student:</strong> ${student.name} (${student.reg_number})</div><div><strong>Term:</strong> ${termNames[term]} ${year}</div><div><strong>Amount Paid:</strong> ₦${totalPaid.toLocaleString()}</div><div><strong>Status:</strong> <span class="text-green-600 font-bold">FULLY PAID</span></div></div><div class="text-center mt-4"><button onclick="window.print()" class="bg-blue-600 text-white px-4 py-2 rounded">Print Receipt</button></div></div>`;
                 document.getElementById("receiptOutput").innerHTML = receiptHtml;
             };
         }
         async function renderPayroll() {
-            let html = `<div class="bg-white p-6 rounded-xl"><h2 class="text-2xl font-bold mb-4">👥 Payroll Management</h2><p class="mb-2">Staff salaries (demo – update via database)</p><table class="w-full border"><thead class="bg-gray-100"><tr><th>Name</th><th>Role</th><th>Basic Salary (₦)</th><th>Allowances</th><th>Total</th></tr></thead><tbody id="payrollBody"></tbody></table><button id="savePayrollBtn" class="mt-3 bg-emerald-600 text-white px-4 py-2 rounded">Save Changes</button></div>`;
+            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">👥 Payroll Management</h2><p class="mb-2 text-gray-600">Staff salaries (demo – update via database)</p><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Name</th><th>Role</th><th>Basic Salary (₦)</th><th>Allowances</th><th>Total</th></tr></thead><tbody id="payrollBody"></tbody></table></div><button id="savePayrollBtn" class="mt-3 bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700">Save Changes</button></div>`;
             document.getElementById("mainContent").innerHTML = html;
             const { data: staff } = await supabaseClient.from('teachers').select('*');
             let payrollData = staff.map(s => ({ ...s, salary: 100000, allowances: 20000 }));
@@ -484,7 +519,7 @@
             document.getElementById("savePayrollBtn").onclick = () => showToast("Payroll saved (demo)");
         }
         async function renderPaymentReport() {
-            let html = `<div class="bg-white p-6 rounded-xl"><h2 class="text-2xl font-bold mb-4">📃 Payment Report</h2><div class="grid md:grid-cols-2 gap-4"><select id="reportYear"><option>2025</option><option>2026</option></select><button id="generateReportBtn" class="bg-emerald-600 text-white px-4 py-2 rounded">Generate Report</button></div><div id="reportOutput" class="mt-6"></div></div>`;
+            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">📃 Payment Report</h2><div class="flex gap-4"><select id="reportYear" class="border p-2 rounded"><option>2025</option><option selected>2026</option></select><button id="generateReportBtn" class="bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700">Generate Report</button></div><div id="reportOutput" class="mt-6"></div></div>`;
             document.getElementById("mainContent").innerHTML = html;
             document.getElementById("generateReportBtn").onclick = async () => {
                 let year = document.getElementById("reportYear").value;
@@ -492,7 +527,7 @@
                 let total = transactions.reduce((s,t)=>s+t.amount_paid,0);
                 let byTerm = {1:0,2:0,3:0};
                 transactions.forEach(t => byTerm[t.term] = (byTerm[t.term]||0) + t.amount_paid);
-                let htmlReport = `<div><h3>Payment Summary for ${year}</h3><p>Total Collected: ₦${total.toLocaleString()}</p><ul><li>Term 1: ₦${byTerm[1].toLocaleString()}</li><li>Term 2: ₦${byTerm[2].toLocaleString()}</li><li>Term 3: ₦${byTerm[3].toLocaleString()}</li></ul><button onclick="window.downloadCSV(${JSON.stringify(transactions)}, 'payment_report_${year}.csv')" class="bg-blue-600 text-white px-3 py-1 rounded mt-2">Export CSV</button></div>`;
+                let htmlReport = `<div><h3 class="text-xl font-bold">Payment Summary for ${year}</h3><p>Total Collected: ₦${total.toLocaleString()}</p><ul class="list-disc pl-5"><li>Term 1: ₦${byTerm[1].toLocaleString()}</li><li>Term 2: ₦${byTerm[2].toLocaleString()}</li><li>Term 3: ₦${byTerm[3].toLocaleString()}</li></ul><button onclick="window.downloadCSV(${JSON.stringify(transactions)}, 'payment_report_${year}.csv')" class="bg-blue-600 text-white px-3 py-1 rounded mt-2">Export CSV</button></div>`;
                 document.getElementById("reportOutput").innerHTML = htmlReport;
             };
             window.downloadCSV = downloadCSV;
@@ -500,7 +535,7 @@
         
         // DPRPA: Academic performance, Section analysis
         async function renderAcademicPerformance() {
-            let html = `<div class="bg-white p-6 rounded-xl"><h2 class="text-2xl font-bold mb-4">📉 Academic Performance Overview</h2><select id="perfYear" class="border p-2 rounded"><option>2025</option><option>2026</option></select><button id="loadPerfBtn" class="bg-emerald-600 text-white px-4 py-2 rounded ml-2">Load</button><div id="perfChart" class="mt-4"></div></div>`;
+            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">📉 Academic Performance Overview</h2><select id="perfYear" class="border p-2 rounded"><option>2025</option><option selected>2026</option></select><button id="loadPerfBtn" class="bg-emerald-600 text-white px-4 py-2 rounded ml-2 hover:bg-emerald-700">Load</button><div id="perfChart" class="mt-4"></div></div>`;
             document.getElementById("mainContent").innerHTML = html;
             document.getElementById("loadPerfBtn").onclick = async () => {
                 let year = document.getElementById("perfYear").value;
@@ -512,16 +547,15 @@
                     sectionGrades[sec].total += (r.ca1 + r.ca2 + r.exam);
                     sectionGrades[sec].count++;
                 });
-                let table = `<table class="w-full border"><thead><tr><th>Section</th><th>Average Score</th></tr></thead><tbody>${Object.entries(sectionGrades).map(([sec,data]) => `<tr><td>${sec}</td><td>${(data.total/data.count).toFixed(2)}%</td></tr>`).join('')}</tbody></table>`;
+                let table = `<table class="w-full border"><thead class="bg-gray-100"><tr><th>Section</th><th>Average Score (%)</th></tr></thead><tbody>${Object.entries(sectionGrades).map(([sec,data]) => `<tr><td>${sec}</td><td>${(data.total/data.count).toFixed(2)}%</td></tr>`).join('')}</tbody></table>`;
                 document.getElementById("perfChart").innerHTML = table;
             };
         }
-        async function renderSectionAnalysis() { // used by DPRPA and DER
-            let html = `<div class="bg-white p-6 rounded-xl"><h2 class="text-2xl font-bold mb-4">📊 Section Analysis</h2><select id="sectionSelect"><option>All Sections</option>${SECTIONS.map(s=>`<option>${s}</option>`).join('')}</select><button id="analyzeBtn" class="bg-emerald-600 text-white px-4 py-2 rounded ml-2">Analyze</button><div id="analysisResult" class="mt-4"></div></div>`;
+        async function renderSectionAnalysis() {
+            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">📊 Section Analysis</h2><select id="sectionSelect" class="border p-2 rounded"><option value="All Sections">All Sections</option>${SECTIONS.map(s=>`<option>${s}</option>`).join('')}</select><button id="analyzeBtn" class="bg-emerald-600 text-white px-4 py-2 rounded ml-2 hover:bg-emerald-700">Analyze</button><div id="analysisResult" class="mt-4"></div></div>`;
             document.getElementById("mainContent").innerHTML = html;
             document.getElementById("analyzeBtn").onclick = async () => {
                 let section = document.getElementById("sectionSelect").value;
-                let filter = section === 'All Sections' ? {} : { section };
                 let query = supabaseClient.from('students').select('*, student_results(grade)');
                 if (section !== 'All Sections') query = query.eq('section', section);
                 let { data: students } = await query;
@@ -535,15 +569,15 @@
         // DER specific: Students, Staff, Section analysis (reuse existing functions)
         // DO: Dashboard, Fees, Students, Staff (fees already, students/staff reuse)
         function renderDashboard() { 
-            document.getElementById("mainContent").innerHTML = `<div class="bg-white p-6 rounded-xl"><h2 class="text-2xl font-bold">Welcome ${currentUser.full_name}</h2><p>Total Students: ${schoolData.students.length}</p><p>Total Staff: ${schoolData.teachers.length}</p></div>`; 
+            document.getElementById("mainContent").innerHTML = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold">Welcome ${currentUser.full_name}</h2><p class="mt-2">Total Students: ${schoolData.students.length}</p><p>Total Staff: ${schoolData.teachers.length}</p></div>`; 
         }
         
-        // Headteacher: Section student (show students in his section), Section fees (fee summary for his section), Enrol student
+        // Headteacher: Section student, Section fees, Enrol student
         async function renderSectionStudents() {
             let section = currentUser.assignedSection;
             if (!section) { showToast("No section assigned", true); return; }
             let students = schoolData.students.filter(s => s.section === section);
-            let html = `<div class="bg-white p-6 rounded-xl"><h2 class="text-2xl font-bold">👨‍🎓 Students in ${section}</h2><table class="w-full border"><thead><tr><th>Reg No</th><th>Name</th><th>Parent</th><th>Status</th></tr></thead><tbody>${students.map(s=>`<tr><td>${s.reg_number}</td><td>${s.name}</td><td>${s.parent_name||'-'}</td><td>${s.status}</td></tr>`).join('')}</tbody></table></div>`;
+            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold">👨‍🎓 Students in ${section}</h2><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Reg No</th><th>Name</th><th>Parent</th><th>Status</th></tr></thead><tbody>${students.map(s=>`<tr><td>${s.reg_number}</td><td>${s.name}</td><td>${s.parent_name||'-'}</td><td>${s.status}</td></tr>`).join('')}</tbody></table></div></div>`;
             document.getElementById("mainContent").innerHTML = html;
         }
         async function renderSectionFees() {
@@ -554,21 +588,21 @@
                 let { data: balances } = await supabaseClient.from('fee_balances').select('paid_amount').eq('student_id', s.id);
                 if (balances) balances.forEach(b => { totalFees += 50000; totalPaid += (b.paid_amount||0); });
             }
-            let html = `<div class="bg-white p-6 rounded-xl"><h2 class="text-2xl font-bold">💰 Section Fees Summary (${section})</h2><p>Total Expected: ₦${totalFees.toLocaleString()}</p><p>Total Paid: ₦${totalPaid.toLocaleString()}</p><p>Outstanding: ₦${(totalFees-totalPaid).toLocaleString()}</p></div>`;
+            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold">💰 Section Fees Summary (${section})</h2><p>Total Expected: ₦${totalFees.toLocaleString()}</p><p>Total Paid: ₦${totalPaid.toLocaleString()}</p><p>Outstanding: ₦${(totalFees-totalPaid).toLocaleString()}</p></div>`;
             document.getElementById("mainContent").innerHTML = html;
         }
         
-        // Teacher: My class (students in his section), Grade student (input results for his section), Attendance and appraisal
+        // Teacher: My class, Grade student, Attendance and appraisal
         async function renderMyClass() {
             let section = currentUser.assignedSection;
             let students = schoolData.students.filter(s => s.section === section);
-            let html = `<div class="bg-white p-6 rounded-xl"><h2 class="text-2xl font-bold">👩‍🏫 My Class - ${section}</h2><table class="w-full border"><thead><tr><th>Name</th><th>Reg No</th><th>Parent</th></tr></thead><tbody>${students.map(s=>`<tr><td>${s.name}</td><td>${s.reg_number}</td><td>${s.parent_name||'-'}</td></tr>`).join('')}</tbody></table></div>`;
+            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold">👩‍🏫 My Class - ${section}</h2><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Name</th><th>Reg No</th><th>Parent</th></tr></thead><tbody>${students.map(s=>`<tr><td>${s.name}</td><td>${s.reg_number}</td><td>${s.parent_name||'-'}</td></tr>`).join('')}</tbody></table></div></div>`;
             document.getElementById("mainContent").innerHTML = html;
         }
         async function renderGradeStudent() {
             let section = currentUser.assignedSection;
             let students = schoolData.students.filter(s => s.section === section);
-            let html = `<div class="bg-white p-6 rounded-xl"><h2 class="text-2xl font-bold">📝 Grade Student</h2><select id="gradeStudentId" class="border p-2 rounded"><option>Select Student</option>${students.map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}</select><select id="gradeTerm"><option>1</option><option>2</option><option>3</option></select><input id="gradeYear" value="2026" class="border p-2 rounded"><div id="gradeEditor" class="mt-4"></div><button id="saveGradeBtn" class="mt-3 bg-emerald-600 text-white px-4 py-2 rounded">Save Grades</button></div>`;
+            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">📝 Grade Student</h2><div class="grid md:grid-cols-3 gap-4"><select id="gradeStudentId" class="border p-2 rounded"><option>Select Student</option>${students.map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}</select><select id="gradeTerm" class="border p-2 rounded"><option>1</option><option>2</option><option>3</option></select><input id="gradeYear" value="2026" class="border p-2 rounded"></div><div id="gradeEditor" class="mt-4"></div><button id="saveGradeBtn" class="mt-3 bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700">Save Grades</button></div>`;
             document.getElementById("mainContent").innerHTML = html;
             let currentGrades = [];
             const loadGradeTable = async () => {
@@ -576,21 +610,17 @@
                 if (!studentId) return;
                 let { data: results } = await supabaseClient.from('student_results').select('*').eq('student_id', studentId).eq('term', term).eq('year', year);
                 currentGrades = results || [];
-                let tbl = `<table class="w-full border"><thead><tr><th>Subject</th><th>CA1</th><th>CA2</th><th>Exam</th><th>Total</th><th>Grade</th><th><button type="button" id="addRowBtn" class="bg-amber-500 text-white px-2 py-1 rounded">+Add</button></th></tr></thead><tbody id="gradeTbody">`;
+                let tbl = `<table class="w-full border"><thead><tr><th>Subject</th><th>CA1</th><th>CA2</th><th>Exam</th><th>Total</th><th>Grade</th><th><button type="button" id="addRowBtn" class="bg-amber-500 text-white px-2 py-1 rounded text-sm">+Add</button></th></tr></thead><tbody id="gradeTbody"></tbody></table>`;
+                document.getElementById("gradeEditor").innerHTML = tbl;
                 const addRow = (r = null) => {
                     let tr = document.createElement('tr');
                     tr.innerHTML = `<td><input class="subj w-32 border p-1" value="${r?.subject || ''}"></td><td><input class="ca1 w-20 border p-1" value="${r?.ca1 || 0}" min="0" max="20"></td><td><input class="ca2 w-20 border p-1" value="${r?.ca2 || 0}" min="0" max="20"></td><td><input class="ex w-20 border p-1" value="${r?.exam || 0}" min="0" max="60"></td><td class="totCell"></td><td class="grCell"></td><td><button class="delRow bg-red-500 text-white px-1 rounded">X</button></td>`;
-                    const update = () => {
-                        let c1 = +tr.querySelector('.ca1').value || 0, c2 = +tr.querySelector('.ca2').value || 0, ex = +tr.querySelector('.ex').value || 0, tot = c1+c2+ex;
-                        tr.querySelector('.totCell').innerText = tot;
-                        tr.querySelector('.grCell').innerText = tot>=80?'A':tot>=70?'B':tot>=60?'C':tot>=50?'D':'E';
-                    };
+                    const update = () => { let c1 = +tr.querySelector('.ca1').value || 0, c2 = +tr.querySelector('.ca2').value || 0, ex = +tr.querySelector('.ex').value || 0, tot = c1+c2+ex; tr.querySelector('.totCell').innerText = tot; tr.querySelector('.grCell').innerText = tot>=80?'A':tot>=70?'B':tot>=60?'C':tot>=50?'D':'E'; };
                     tr.querySelector('.ca1').addEventListener('input', update); tr.querySelector('.ca2').addEventListener('input', update); tr.querySelector('.ex').addEventListener('input', update);
                     tr.querySelector('.delRow').addEventListener('click', () => tr.remove());
                     update();
                     document.getElementById("gradeTbody").appendChild(tr);
                 };
-                document.getElementById("gradeEditor").innerHTML = `<table class="w-full border"><thead><tr><th>Subject</th><th>CA1</th><th>CA2</th><th>Exam</th><th>Total</th><th>Grade</th><th><button id="addRowBtn" class="bg-amber-500 text-white px-2 py-1 rounded">+Add</button></th></tr></thead><tbody id="gradeTbody"></tbody></table>`;
                 currentGrades.forEach(addRow);
                 document.getElementById("addRowBtn").onclick = () => addRow(null);
             };
@@ -615,7 +645,7 @@
         async function renderAttendanceAndAppraisal() {
             let section = currentUser.assignedSection;
             let students = schoolData.students.filter(s => s.section === section);
-            let html = `<div class="bg-white p-6 rounded-xl"><h2 class="text-2xl font-bold">🗒️ Attendance & Appraisal</h2><p>Record attendance for today: <input type="date" id="attDate" class="border p-1 rounded"></p><table class="w-full border mt-2"><thead><tr><th>Student</th><th>Present</th><th>Remarks</th></tr></thead><tbody>${students.map(s=>`<tr><td>${s.name}</td><td><input type="checkbox" class="attCheck" data-id="${s.id}"></td><td><input type="text" class="attRemarks" data-id="${s.id}" placeholder="Remarks"></td></tr>`).join('')}</tbody></table><button id="saveAttendanceBtn" class="mt-3 bg-emerald-600 text-white px-4 py-2 rounded">Save Attendance</button></div>`;
+            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">🗒️ Attendance & Appraisal</h2><p class="mb-2">Record attendance for today: <input type="date" id="attDate" class="border p-1 rounded"></p><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Student</th><th>Present</th><th>Remarks</th></tr></thead><tbody>${students.map(s=>`<tr><td>${s.name}</td><td><input type="checkbox" class="attCheck" data-id="${s.id}"></td><td><input type="text" class="attRemarks" data-id="${s.id}" placeholder="Remarks" class="border p-1"></td></tr>`).join('')}</tbody></table></div><button id="saveAttendanceBtn" class="mt-3 bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700">Save Attendance</button></div>`;
             document.getElementById("mainContent").innerHTML = html;
             document.getElementById("saveAttendanceBtn").onclick = async () => {
                 let date = document.getElementById("attDate").value;
@@ -631,49 +661,109 @@
             };
         }
         
-        // Parent: Child reports (results), Fee payment, Result, Payment history & receipt download
-        async function renderChildReports() {
+        // ==================== PARENT SECTION (FULLY FUNCTIONAL) ====================
+        async function renderParentChildReports() {
             if (!currentUser.studentId) return showToast("No child linked", true);
             let student = schoolData.students.find(s => s.id == currentUser.studentId);
-            let { data: results } = await supabaseClient.from('student_results').select('*').eq('student_id', student.id).order('year', {ascending:false});
-            let html = `<div class="bg-white p-6 rounded-xl"><h2 class="text-2xl font-bold">👨‍🎓 Child Reports: ${student.name}</h2>${results.map(r=>`<div class="border p-2 mt-2"><b>Term ${r.term} - ${r.year}</b> ${r.subject}: ${r.ca1+ r.ca2+ r.exam} (Grade ${r.grade})</div>`).join('')}</div>`;
+            let { data: results } = await supabaseClient.from('student_results').select('*').eq('student_id', student.id).order('year', {ascending:false}).order('term');
+            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">👨‍🎓 Child Reports: ${student.name}</h2>`;
+            if (results.length === 0) html += `<p class="text-gray-500">No results available yet.</p>`;
+            else {
+                html += `<div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Year</th><th>Term</th><th>Subject</th><th>CA1</th><th>CA2</th><th>Exam</th><th>Total</th><th>Grade</th></tr></thead><tbody>`;
+                results.forEach(r => {
+                    html += `<tr><td>${r.year}</td><td>${r.term}</td><td>${r.subject}</td><td>${r.ca1}</td><td>${r.ca2}</td><td>${r.exam}</td><td>${r.ca1+r.ca2+r.exam}</td><td class="font-bold">${r.grade}</td></tr>`;
+                });
+                html += `</tbody></table></div>`;
+            }
+            html += `</div>`;
             document.getElementById("mainContent").innerHTML = html;
         }
-        async function renderParentFeePayment() { // same as fee statement but with payment option (just show statement)
-            await renderParentFees();
-        }
-        async function renderParentResult() { await renderChildReports(); }
-        async function renderParentPaymentHistory() { await renderParentFees(); } // already shows history with receipts
         
-        // Original parent fee statement (used above)
-        async function renderParentFees() {
+        async function renderParentFeePayment() {
             if (!currentUser.studentId) return;
             const student = schoolData.students.find(s => s.id === currentUser.studentId);
             const { data: balances } = await supabaseClient.from('fee_balances').select('*').eq('student_id', student.id);
-            const { data: transactions } = await supabaseClient.from('fee_transactions').select('*').eq('student_id', student.id);
-            let html = `<div class="bg-white rounded-xl shadow p-6"><h2 class="text-2xl font-bold">💰 Fee Statement: ${student.name}</h2>${balances.map(b=>`<div class="border p-4 mt-4"><h3>Term ${b.term} - ${b.year}</h3><p>Total: ₦${b.total_fees} | Paid: ₦${b.paid_amount} | Balance: ₦${b.balance}</p><div class="progress-bar"><div class="progress-fill" style="width:${(b.paid_amount/b.total_fees)*100}%"></div></div><table class="w-full text-sm border mt-2"><thead><tr><th>Date</th><th>Amount</th><th>Receipt</th><th>Status</th><th>Print</th></tr></thead><tbody>${transactions.filter(t=>t.term==b.term&&t.year==b.year).map(tx=>`<tr><td>${new Date(tx.payment_date).toLocaleDateString()}</td><td>₦${tx.amount_paid}</td><td>${tx.receipt_no}</td><td>${tx.status}</td><td><button onclick="window.viewReceipt('${tx.id}','${student.id}')" class="text-blue-600">View</button></td></tr>`).join('')}</tbody></table>${b.balance<=0?`<button onclick="window.printTermReceipt(${student.id},${b.term},${b.year})" class="mt-2 bg-green-600 text-white px-3 py-1 rounded">Print Full Term Receipt</button>`:''}</div>`).join('')}</div>`;
+            const { data: transactions } = await supabaseClient.from('fee_transactions').select('*').eq('student_id', student.id).order('payment_date', {ascending:false});
+            let html = `<div class="bg-white rounded-xl shadow p-6"><h2 class="text-2xl font-bold mb-4">💰 Fee Statement: ${student.name} (${student.reg_number})</h2>`;
+            for (let b of balances) {
+                let percentPaid = (b.paid_amount / b.total_fees) * 100;
+                let termName = b.term === 1 ? "First" : b.term === 2 ? "Second" : "Third";
+                html += `<div class="border p-4 mt-4 rounded-lg"><h3 class="text-xl font-semibold">${termName} Term - ${b.year}</h3>
+                <div class="grid grid-cols-3 gap-2 mt-2"><p>Total: ₦${b.total_fees.toLocaleString()}</p><p>Paid: ₦${b.paid_amount.toLocaleString()}</p><p class="font-bold ${b.balance>0?'text-red-600':'text-green-600'}">Balance: ₦${b.balance.toLocaleString()}</p></div>
+                <div class="progress-bar mt-2"><div class="progress-fill" style="width: ${percentPaid}%;"></div></div>
+                <div class="overflow-x-auto mt-4"><table class="w-full text-sm border"><thead class="bg-gray-100"><tr><th>Date</th><th>Amount</th><th>Receipt No</th><th>Status</th><th>Receipt</th></tr></thead><tbody>`;
+                let termTx = transactions.filter(t=>t.term==b.term&&t.year==b.year);
+                if (termTx.length === 0) html += `<tr><td colspan="5" class="text-center">No payments recorded</td></tr>`;
+                else {
+                    termTx.forEach(tx => {
+                        html += `<tr><td>${new Date(tx.payment_date).toLocaleDateString()}</td><td>₦${tx.amount_paid.toLocaleString()}</td><td>${tx.receipt_no}</td><td class="${tx.status==='authorized'?'text-green-600':'text-amber-600'}">${tx.status}</td><td><button onclick="window.viewSingleReceipt('${tx.id}', '${student.id}')" class="text-blue-600 text-sm hover:underline">View/Print</button></td></tr>`;
+                    });
+                }
+                html += `</tbody></table></div>`;
+                if (b.balance <= 0) {
+                    html += `<div class="mt-3"><button onclick="window.printTermReceipt('${student.id}', ${b.term}, ${b.year})" class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"><i class="fas fa-print"></i> Print Full Term Receipt</button></div>`;
+                }
+                html += `</div>`;
+            }
+            html += `</div>`;
             document.getElementById("mainContent").innerHTML = html;
-            window.viewReceipt = async (txId,stuId) => { /* same as before, reuse generateReceiptHTML */ 
+            
+            window.viewSingleReceipt = async (txId, stuId) => {
                 let { data: tx } = await supabaseClient.from('fee_transactions').select('*').eq('id', txId).single();
                 let stu = schoolData.students.find(s=>s.id==stuId);
+                if (!tx || !stu) return;
                 let termNames = {1:"First",2:"Second",3:"Third"};
-                let modalDiv = document.createElement('div'); modalDiv.className="fixed inset-0 bg-black/70 flex items-center justify-center p-4"; modalDiv.innerHTML = `<div class="bg-white p-6 rounded max-w-lg">${generateReceiptHTML(tx, stu, termNames[tx.term])}<button class="closeModal bg-gray-500 text-white px-4 py-2 rounded mt-2">Close</button></div>`;
-                document.body.appendChild(modalDiv); modalDiv.querySelector('.closeModal').onclick = () => modalDiv.remove();
+                let modalDiv = document.createElement('div');
+                modalDiv.className = "fixed inset-0 z-[200] bg-black/70 flex items-center justify-center p-4";
+                modalDiv.innerHTML = `<div class="bg-white rounded-lg max-w-lg w-full p-6">${generateParentReceiptHTML(tx, stu, termNames[tx.term])}<div class="text-center mt-4"><button class="closeReceiptModal bg-gray-600 text-white px-4 py-2 rounded">Close</button></div></div>`;
+                document.body.appendChild(modalDiv);
+                modalDiv.querySelector('.closeReceiptModal').onclick = () => modalDiv.remove();
+                modalDiv.addEventListener('click', (e) => { if (e.target === modalDiv) modalDiv.remove(); });
             };
             window.printTermReceipt = async (stuId, term, year) => {
-                let { data: txList } = await supabaseClient.from('fee_transactions').select('*').eq('student_id', stuId).eq('term', term).eq('year', year);
+                let { data: txList } = await supabaseClient.from('fee_transactions').select('*').eq('student_id', stuId).eq('term', term).eq('year', year).eq('status', 'authorized');
                 let stu = schoolData.students.find(s=>s.id==stuId);
                 let total = txList.reduce((s,t)=>s+t.amount_paid,0);
                 let termNames = {1:"First",2:"Second",3:"Third"};
-                let dummyTx = { term, year, amount_paid: total, receipt_no: `TERM_${term}_${year}`, status: 'authorized' };
-                let modalDiv = document.createElement('div'); modalDiv.className="fixed inset-0 bg-black/70 flex items-center justify-center p-4"; modalDiv.innerHTML = `<div class="bg-white p-6 rounded max-w-lg">${generateReceiptHTML(dummyTx, stu, termNames[term], total)}<button class="closeModal bg-gray-500 text-white px-4 py-2 rounded mt-2">Close</button></div>`;
-                document.body.appendChild(modalDiv); modalDiv.querySelector('.closeModal').onclick = () => modalDiv.remove();
+                let dummyTx = { term, year, amount_paid: total, receipt_no: `TERM_${term}_${year}_${stuId}`, status: 'authorized' };
+                let modalDiv = document.createElement('div');
+                modalDiv.className = "fixed inset-0 z-[200] bg-black/70 flex items-center justify-center p-4";
+                modalDiv.innerHTML = `<div class="bg-white rounded-lg max-w-lg w-full p-6">${generateParentReceiptHTML(dummyTx, stu, termNames[term], total)}<div class="text-center mt-4"><button class="closeReceiptModal bg-gray-600 text-white px-4 py-2 rounded">Close</button></div></div>`;
+                document.body.appendChild(modalDiv);
+                modalDiv.querySelector('.closeReceiptModal').onclick = () => modalDiv.remove();
+                modalDiv.addEventListener('click', (e) => { if (e.target === modalDiv) modalDiv.remove(); });
             };
         }
-        function generateReceiptHTML(transaction, student, termName, totalPaid=null) {
+        
+        function generateParentReceiptHTML(transaction, student, termName, totalPaid=null) {
             let amount = totalPaid !== null ? totalPaid : transaction.amount_paid;
-            return `<div><div class="text-center"><h3>Al‑Istiqaamah Flying Wings Academy</h3><h4>FEE RECEIPT</h4></div><div>Receipt No: ${transaction.receipt_no}</div><div>Date: ${new Date().toLocaleDateString()}</div><div>Student: ${student.name} (${student.reg_number})</div><div>Term: ${termName} ${transaction.year}</div><div>Amount: ₦${amount.toLocaleString()}</div><div>Status: ${transaction.status.toUpperCase()}</div><div class="mt-3"><button onclick="window.print()" class="bg-blue-600 text-white px-3 py-1 rounded">Print</button></div></div>`;
+            return `<div class="receipt-card"><div class="text-center border-b pb-3"><h3 class="text-xl font-bold">Al‑Istiqaamah Flying Wings Academy</h3><h4>OFFICIAL RECEIPT</h4></div><div class="mt-3 space-y-2"><div><strong>Receipt No:</strong> ${transaction.receipt_no}</div><div><strong>Date:</strong> ${new Date().toLocaleDateString()}</div><div><strong>Student:</strong> ${student.name} (${student.reg_number})</div><div><strong>Term:</strong> ${termName} ${transaction.year}</div><div><strong>Amount:</strong> ₦${amount.toLocaleString()}</div><div><strong>Status:</strong> <span class="text-green-600 font-bold">${transaction.status.toUpperCase()}</span></div></div><div class="text-center mt-4"><button onclick="window.print()" class="bg-blue-600 text-white px-4 py-2 rounded">Print Receipt</button></div></div>`;
         }
+        
+        async function renderParentResult() { await renderParentChildReports(); }
+        async function renderParentPaymentHistory() { await renderParentFeePayment(); }
+        
+        // Staff management (reused)
+        async function renderStaffManagement() { 
+            if(!currentUser || !['dg_ceo','umc','der','do'].includes(currentUser.role)) return showToast("Access denied",true); 
+            const {data:teachers}=await supabaseClient.from('teachers').select('*'); 
+            let html=`<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">👥 Staff Management</h2><form id="staffForm" class="mt-4 grid md:grid-cols-2 gap-3"><input id="staffName" placeholder="Full Name" required class="border p-2 rounded"><input id="staffUsername" placeholder="Username" required class="border p-2 rounded"><select id="staffRole" class="border p-2 rounded"><option value="teacher">Teacher</option><option value="headteacher">Head Teacher</option></select><input id="staffLevel" placeholder="Level (teacher only)" class="border p-2 rounded"><select id="staffSection" class="border p-2 rounded">${SECTIONS.map(s=>`<option>${s}</option>`).join('')}</select><input id="staffPassword" value="password123" class="border p-2 rounded"><button type="submit" class="bg-emerald-600 text-white p-2 rounded hover:bg-emerald-700">Register Staff</button></form><div class="overflow-x-auto mt-6"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Name</th><th>Username</th><th>Role</th><th>Section</th><th>Appraisal</th><th>Actions</th></tr></thead><tbody id="staffTableBody"></tbody></table></div></div>`;
+            document.getElementById("mainContent").innerHTML = html; 
+            const renderStaff=async()=>{ 
+                const tb=document.getElementById("staffTableBody"); tb.innerHTML=""; 
+                for(let st of teachers||[]){ 
+                    const {data:cred}=await supabaseClient.from('staff_credentials').select('username').eq('staff_id',st.id).single(); 
+                    const {data:appr}=await supabaseClient.from('staff_appraisals').select('rating').eq('staff_id',st.id).order('created_at',{ascending:false}).limit(1); 
+                    const apprText=appr?.length?`⭐ ${appr[0].rating}/5`:'Not rated'; 
+                    tb.innerHTML+=`<tr><td>${st.name}</td><td>${cred?.username||'-'}</td><td>${st.role}</td><td>${st.assigned_section}</td><td>${apprText}</td><td><button class="appraiseBtn bg-amber-500 text-white px-2 py-1 rounded text-xs mr-1" data-id="${st.id}" data-name="${st.name}">Appraise</button><button class="deleteStaffBtn bg-red-600 text-white px-2 py-1 rounded text-xs" data-id="${st.id}">Delete</button></td></tr>`; 
+                } 
+                document.querySelectorAll('.appraiseBtn').forEach(btn=>btn.addEventListener('click',()=>{ let id=btn.dataset.id, name=btn.dataset.name; let r=prompt(`Rate ${name} (1-5):`); if(r) saveStaffAppraisal(id,parseInt(r),'Appraised').then(renderStaff); }));
+                document.querySelectorAll('.deleteStaffBtn').forEach(btn=>btn.addEventListener('click',async()=>{ if(confirm("Delete staff?")){ await supabaseClient.from('teachers').delete().eq('id', btn.dataset.id); await refreshSchoolData(); renderStaffManagement(); showToast("Staff deleted"); } }));
+            }; 
+            await renderStaff(); 
+            document.getElementById("staffForm")?.addEventListener("submit",async(e)=>{ e.preventDefault(); let role=document.getElementById("staffRole").value; let level=role==='teacher'?document.getElementById("staffLevel").value:null; const {data:newT}=await supabaseClient.from('teachers').insert({ name:document.getElementById("staffName").value, role, assigned_section:document.getElementById("staffSection").value, level }).select().single(); await supabaseClient.from('staff_credentials').insert({ staff_id:newT.id, username:document.getElementById("staffUsername").value, password_hash:document.getElementById("staffPassword").value, role }); await refreshSchoolData(); renderStaffManagement(); }); 
+        }
+        async function saveStaffAppraisal(staffId, rating, comments) { await supabaseClient.from('staff_appraisals').insert({ staff_id: staffId, rating, comments, appraised_by: currentUser.full_name }); showToast("Appraisal saved"); }
         
         // ============ AUTHENTICATION ============
         async function loginAdmin(email, password) { 
@@ -740,7 +830,7 @@
                 "grade-student":"📝 Grade Student", "attendance-appraisal":"🗒️ Attendance & Appraisal", "child-reports":"👨‍🎓 Child Reports", "fee-payment":"💳 Fee Payment",
                 result:"📃 Result", "payment-history":"📓 Payment History"
             };
-            const navHtml = menuItems.map(v=>`<a href="#" data-view="${v}" class="nav-link flex items-center space-x-3 px-4 py-2.5 rounded-lg text-slate-200 hover:bg-white/10"><i class="fas fa-folder w-5"></i><span>${labels[v]||v}</span></a>`).join('');
+            const navHtml = menuItems.map(v=>`<a href="#" data-view="${v}" class="nav-link flex items-center space-x-3 px-4 py-2.5 rounded-lg text-slate-200 hover:bg-white/10 transition"><i class="fas fa-folder w-5"></i><span>${labels[v]||v}</span></a>`).join('');
             document.getElementById("dynamicNav").innerHTML = navHtml;
             document.querySelectorAll('.nav-link').forEach(link=>link.addEventListener('click',(e)=>{ e.preventDefault(); renderContentView(link.dataset.view); closeMobileSidebar(); resetInactivityTimer(); }));
             renderContentView(menuItems[0]);
@@ -768,40 +858,16 @@
                 "my-class": renderMyClass,
                 "grade-student": renderGradeStudent,
                 "attendance-appraisal": renderAttendanceAndAppraisal,
-                "child-reports": renderChildReports,
+                "child-reports": renderParentChildReports,
                 "fee-payment": renderParentFeePayment,
                 result: renderParentResult,
                 "payment-history": renderParentPaymentHistory
             };
             if (views[view]) views[view]();
-            else document.getElementById("mainContent").innerHTML = "<div class='bg-white p-6 rounded-xl'>Content not available</div>";
+            else document.getElementById("mainContent").innerHTML = "<div class='bg-white p-6 rounded-xl shadow'>Content not available</div>";
         }
         
-        // Reuse existing staff management, announcement, slides etc.
-        async function renderStaffManagement() { /* same as before */ 
-            if(!currentUser || !['dg_ceo','umc','der','do'].includes(currentUser.role)) return showToast("Access denied",true); 
-            const {data:teachers}=await supabaseClient.from('teachers').select('*'); 
-            let html=`<div class="bg-white p-6 rounded-xl"><h2 class="text-2xl font-bold">👥 Staff Management</h2><form id="staffForm" class="mt-4 grid md:grid-cols-2 gap-3"><input id="staffName" placeholder="Full Name" required class="border p-2 rounded"><input id="staffUsername" placeholder="Username" required class="border p-2 rounded"><select id="staffRole"><option value="teacher">Teacher</option><option value="headteacher">Head Teacher</option></select><input id="staffLevel" placeholder="Level (teacher only)" class="border p-2 rounded"><select id="staffSection">${SECTIONS.map(s=>`<option>${s}</option>`).join('')}</select><input id="staffPassword" value="password123" class="border p-2 rounded"><button type="submit" class="bg-emerald-600 text-white p-2 rounded">Register Staff</button></form><table class="w-full border mt-6"><thead><tr><th>Name</th><th>Username</th><th>Role</th><th>Section</th><th>Appraisal</th><th>Actions</th></tr></thead><tbody id="staffTableBody"></tbody></table></div>`;
-            document.getElementById("mainContent").innerHTML = html; 
-            const renderStaff=async()=>{ 
-                const tb=document.getElementById("staffTableBody"); tb.innerHTML=""; 
-                for(let st of teachers||[]){ 
-                    const {data:cred}=await supabaseClient.from('staff_credentials').select('username').eq('staff_id',st.id).single(); 
-                    const {data:appr}=await supabaseClient.from('staff_appraisals').select('rating').eq('staff_id',st.id).order('created_at',{ascending:false}).limit(1); 
-                    const apprText=appr?.length?`⭐ ${appr[0].rating}/5`:'Not rated'; 
-                    tb.innerHTML+=`<tr><td>${st.name}</td><td>${cred?.username||'-'}</td><td>${st.role}</td><td>${st.assigned_section}</td><td>${apprText}</td><td><button class="appraiseBtn bg-amber-500 text-white px-2 py-1 rounded text-xs mr-1" data-id="${st.id}" data-name="${st.name}">Appraise</button><button class="deleteStaffBtn bg-red-600 text-white px-2 py-1 rounded text-xs" data-id="${st.id}">Delete</button></td></tr>`; 
-                } 
-                document.querySelectorAll('.appraiseBtn').forEach(btn=>btn.addEventListener('click',()=>{ let id=btn.dataset.id, name=btn.dataset.name; let r=prompt(`Rate ${name} (1-5):`); if(r) saveStaffAppraisal(id,parseInt(r),'Appraised').then(renderStaff); }));
-                document.querySelectorAll('.deleteStaffBtn').forEach(btn=>btn.addEventListener('click',async()=>{ if(confirm("Delete staff?")){ await supabaseClient.from('teachers').delete().eq('id', btn.dataset.id); await refreshSchoolData(); renderStaffManagement(); showToast("Deleted"); } }));
-            }; 
-            await renderStaff(); 
-            document.getElementById("staffForm")?.addEventListener("submit",async(e)=>{ e.preventDefault(); let role=document.getElementById("staffRole").value; let level=role==='teacher'?document.getElementById("staffLevel").value:null; const {data:newT}=await supabaseClient.from('teachers').insert({ name:document.getElementById("staffName").value, role, assigned_section:document.getElementById("staffSection").value, level }).select().single(); await supabaseClient.from('staff_credentials').insert({ staff_id:newT.id, username:document.getElementById("staffUsername").value, password_hash:document.getElementById("staffPassword").value, role }); await refreshSchoolData(); renderStaffManagement(); }); 
-        }
-        async function saveStaffAppraisal(staffId, rating, comments) { await supabaseClient.from('staff_appraisals').insert({ staff_id: staffId, rating, comments, appraised_by: currentUser.full_name }); showToast("Appraisal saved"); }
-        function renderManageAnnouncement() { /* same as before */ let html=`<div class="bg-white p-6 rounded-xl"><h2>📢 Update Announcement</h2><textarea id="announceText" rows="3" class="w-full border rounded p-2"></textarea><button id="saveAnnounce" class="mt-3 bg-amber-600 text-white px-4 py-2 rounded">Save</button></div>`; document.getElementById("mainContent").innerHTML=html; supabaseClient.from('site_announcement').select('content').eq('id',1).single().then(({data})=>{ if(data && document.getElementById("announceText")) document.getElementById("announceText").value = data.content; }); document.getElementById("saveAnnounce").onclick=async()=>{ await supabaseClient.from('site_announcement').update({ content: document.getElementById("announceText").value }).eq('id',1); showToast("Updated"); fetchAndDisplayAnnouncement(); }; }
-        async function renderManageSlides() { /* same as before */ if (!currentUser || currentUser.role !== 'dg_ceo') return showToast("Access denied", true); const { data: slides } = await supabaseClient.from('slides').select('*'); let html = `<div class="bg-white p-6 rounded-xl"><h2>📸 Manage Slides</h2><div><input type="file" id="slideUpload" accept="image/*"><input id="slideCaption" placeholder="Caption" class="border p-2 rounded ml-2"><button id="uploadSlideBtn" class="bg-emerald-600 text-white p-2 rounded">Upload</button></div><div class="grid grid-cols-3 gap-4">${slides?.map(s=>`<div><img src="${s.image_url}" class="h-24 object-cover"><p>${s.caption}</p><button data-id="${s.id}" class="delSlide bg-red-500 text-white px-2 py-1 rounded text-xs">Delete</button></div>`).join('')}</div></div>`; document.getElementById("mainContent").innerHTML = html; document.getElementById("uploadSlideBtn").onclick = async () => { const file = document.getElementById("slideUpload").files[0]; const caption = document.getElementById("slideCaption").value; if (!file || !caption) return; const url = await uploadSlideImage(file); await supabaseClient.from('slides').insert([{ image_url: url, caption }]); renderManageSlides(); loadSlidesFromSupabase(); }; document.querySelectorAll('.delSlide').forEach(btn => btn.onclick = async () => { await supabaseClient.from('slides').delete().eq('id', btn.dataset.id); renderManageSlides(); loadSlidesFromSupabase(); }); }
-        
-        // ============ INIT & EVENT LISTENERS ============
+        // ============ EVENT LISTENERS & INIT ============
         function setupEventListeners() {
             document.getElementById('prevSlide')?.addEventListener('click', () => goToSlide(currentSlideIndex - 1));
             document.getElementById('nextSlide')?.addEventListener('click', () => goToSlide(currentSlideIndex + 1));
