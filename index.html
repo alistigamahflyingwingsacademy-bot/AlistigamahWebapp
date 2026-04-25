@@ -6,8 +6,8 @@
     <link rel="icon" href="./favicon.ico">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        const SUPABASE_URL = 'https://xzrkqmwbynugbdwkhvil.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_RGluuAFyRbZs9jcBnTTM_g_xULPAUzX';
+        const SUPABASE_URL = 'https://knvbfzlwtbrzdmpqmmpt.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_a5AGI4aO3uEIBwNMKSMr0g_LxPjmHGR';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     </script>
     <title>Al‑Istiqaamah Flying Wings Academy | Unified Portal</title>
@@ -65,6 +65,9 @@
         .cookie-consent button:hover { background: #d97706; transform: scale(1.02); }
         .powered-by { margin-top: 1rem; text-align: center; font-size: 0.8rem; background: linear-gradient(135deg, #0f172a, #1e293b); padding: 8px; border-radius: 40px; display: inline-block; width: auto; margin-left: auto; margin-right: auto; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
         .powered-by i { color: #f59e0b; margin-right: 6px; }
+        .term-card { border-left: 4px solid; transition: all 0.2s; }
+        .term-card:hover { transform: translateX(4px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .payment-method-badge { display: inline-flex; align-items: center; gap: 0.25rem; background: #e2e8f0; border-radius: 999px; padding: 0.2rem 0.6rem; font-size: 0.7rem; font-weight: 500; }
         @media print {
             body * { visibility: hidden; }
             #reportSheetContainer, #parentReportContainer { visibility: visible; position: absolute; top: 0; left: 0; width: 100%; }
@@ -80,7 +83,7 @@
         <button id="acceptCookiesBtn">Accept All Cookies</button>
     </div>
 
-    <!-- LANDING PAGE (with weather & location) -->
+    <!-- LANDING PAGE -->
     <div id="landingPage" class="min-h-screen relative">
         <div class="hero-pattern text-white relative">
             <div class="relative container mx-auto px-6 py-20 md:py-28">
@@ -101,9 +104,10 @@
                             <span><i class="fas fa-envelope text-amber-300 mr-1"></i> alistiqaamah.gi@outlook.com</span>
                         </div>
                         <div class="flex flex-wrap gap-4 mt-6">
-                            <button id="loginBtnHero" class="bg-amber-500 hover:bg-amber-600 text-gray-900 font-bold px-6 py-2.5 rounded-full shadow-lg transition inline-flex items-center gap-2"><i class="fas fa-chalkboard-user"></i> Staff / Admin Login</button>
-                            <button id="parentLoginBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2.5 rounded-full shadow-lg transition inline-flex items-center gap-2"><i class="fas fa-user-friends"></i> Parent Login</button>
-                            <button id="adminSignupBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-2.5 rounded-full shadow-lg transition inline-flex items-center gap-2"><i class="fas fa-user-shield"></i> Admin Sign Up</button>
+                            <button id="adminLoginBtnHero" class="bg-amber-500 hover:bg-amber-600 text-gray-900 font-bold px-6 py-2.5 rounded-full shadow-lg transition inline-flex items-center gap-2"><i class="fas fa-user-shield"></i> Admin Login</button>
+                            <button id="staffLoginBtnHero" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2.5 rounded-full transition inline-flex items-center gap-2"><i class="fas fa-chalkboard-user"></i> Staff Login</button>
+                            <button id="parentLoginBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-2.5 rounded-full transition inline-flex items-center gap-2"><i class="fas fa-user-friends"></i> Parent Login</button>
+                            <button id="adminSignupBtn" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-6 py-2.5 rounded-full transition inline-flex items-center gap-2"><i class="fas fa-user-plus"></i> Admin Sign Up</button>
                         </div>
                     </div>
                     <div class="bg-white/10 backdrop-blur-md rounded-2xl p-5 shadow-xl border border-white/20 w-80">
@@ -142,22 +146,27 @@
         </footer>
     </div>
 
-    <!-- STAFF/ADMIN LOGIN MODAL (no tabs, simpler) -->
-    <div id="loginScreen" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none; background: rgba(0,0,0,0.7);">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative"><div class="text-center mb-4"><i class="fas fa-dove text-5xl text-amber-600"></i><h2 class="text-2xl font-bold">Staff / Admin Login</h2><p class="text-sm text-gray-500">Use email & password</p></div><form id="authForm"><input type="email" id="authEmail" placeholder="Email" class="w-full border p-2 rounded mb-3" required><input type="password" id="authPassword" placeholder="Password" class="w-full border p-2 rounded mb-1" required><div class="mb-5 text-right"><button type="button" id="forgotPasswordBtn" class="text-xs text-amber-600">Forgot Password?</button></div><button type="submit" class="w-full bg-amber-600 text-white py-2 rounded-lg font-bold">Login</button></form><button id="closeLoginBtn" class="absolute top-3 right-4 text-gray-400 text-2xl">&times;</button></div>
+    <!-- ADMIN LOGIN MODAL (email/password via Supabase Auth) -->
+    <div id="adminLoginModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none; background: rgba(0,0,0,0.7);">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative"><div class="text-center mb-4"><i class="fas fa-user-shield text-5xl text-amber-600"></i><h2 class="text-2xl font-bold">Admin Login</h2><p class="text-sm text-gray-500">Use email & password</p></div><form id="adminAuthForm"><input type="email" id="adminEmail" placeholder="Email" class="w-full border p-2 rounded mb-3" required><input type="password" id="adminPassword" placeholder="Password" class="w-full border p-2 rounded mb-1" required><div class="mb-5 text-right"><button type="button" id="adminForgotPasswordBtn" class="text-xs text-amber-600">Forgot Password?</button></div><button type="submit" class="w-full bg-amber-600 text-white py-2 rounded-lg font-bold">Login as Admin</button></form><button id="closeAdminLoginBtn" class="absolute top-3 right-4 text-gray-400 text-2xl">&times;</button></div>
+    </div>
+
+    <!-- STAFF LOGIN MODAL (username/password via staff_credentials) -->
+    <div id="staffLoginModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none; background: rgba(0,0,0,0.7);">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative"><div class="text-center mb-4"><i class="fas fa-chalkboard-user text-5xl text-emerald-600"></i><h2 class="text-2xl font-bold">Staff Login</h2><p class="text-sm text-gray-500">Enter your username & password</p></div><form id="staffAuthForm"><input type="text" id="staffUsername" placeholder="Username" class="w-full border p-2 rounded mb-3" required><input type="password" id="staffPassword" placeholder="Password" class="w-full border p-2 rounded mb-4" required><button type="submit" class="w-full bg-emerald-600 text-white py-2 rounded-lg font-bold">Login as Staff</button></form><button id="closeStaffLoginBtn" class="absolute top-3 right-4 text-gray-400 text-2xl">&times;</button></div>
     </div>
 
     <!-- PARENT LOGIN MODAL -->
     <div id="parentLoginModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none; background: rgba(0,0,0,0.7);">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative"><div class="text-center mb-4"><i class="fas fa-user-graduate text-5xl text-emerald-600"></i><h2 class="text-2xl font-bold">Parent Portal</h2><p class="text-sm text-gray-500">Login with student registration number</p></div><form id="parentAuthForm"><input type="text" id="parentRegNo" placeholder="Student Registration Number" class="w-full border p-2 rounded mb-3" required><input type="password" id="parentPassword" value="al123" placeholder="Password" class="w-full border p-2 rounded mb-1" required><div class="text-xs text-gray-400 mb-4">Default password: al123</div><button type="submit" class="w-full bg-emerald-600 text-white py-2 rounded-lg font-bold">Access Dashboard</button></form><button id="closeParentLoginBtn" class="absolute top-3 right-4 text-gray-400 text-2xl">&times;</button></div>
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative"><div class="text-center mb-4"><i class="fas fa-user-graduate text-5xl text-indigo-600"></i><h2 class="text-2xl font-bold">Parent Portal</h2><p class="text-sm text-gray-500">Login with student registration number</p></div><form id="parentAuthForm"><input type="text" id="parentRegNo" placeholder="Student Registration Number" class="w-full border p-2 rounded mb-3" required><input type="password" id="parentPassword" value="al123" placeholder="Password" class="w-full border p-2 rounded mb-1" required><div class="text-xs text-gray-400 mb-4">Default password: al123</div><button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-lg font-bold">Access Dashboard</button></form><button id="closeParentLoginBtn" class="absolute top-3 right-4 text-gray-400 text-2xl">&times;</button></div>
     </div>
 
-    <!-- ADMIN SIGNUP MODAL (only DG/CEO or UMC) -->
+    <!-- ADMIN SIGNUP MODAL (DG/CEO or UMC only) -->
     <div id="adminSignupModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none; background: rgba(0,0,0,0.7);">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative"><div class="text-center mb-4"><i class="fas fa-user-shield text-5xl text-indigo-600"></i><h2 class="text-2xl font-bold">Admin Registration</h2><p class="text-sm text-gray-500">Create DG/CEO or UMC Account</p></div><form id="adminSignupForm"><input type="text" id="adminFullName" placeholder="Full Name" class="w-full border p-2 rounded mb-3" required><input type="email" id="adminEmail" placeholder="Email Address" class="w-full border p-2 rounded mb-3" required><input type="password" id="adminPassword" placeholder="Password" class="w-full border p-2 rounded mb-3" required><select id="adminRole" class="w-full border p-2 rounded mb-3"><option value="dg_ceo">Director General (DG/CEO)</option><option value="umc">UMC (Management)</option></select><input type="text" id="adminRegCode" placeholder="Admin Registration Code" class="w-full border p-2 rounded mb-3" required><div class="text-xs text-gray-500 mb-2">* Registration code required: <span class="font-mono font-bold">ALIFLY2026</span></div><button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-lg font-bold">Create Admin Account</button></form><button id="closeAdminSignupBtn" class="absolute top-3 right-4 text-gray-400 text-2xl">&times;</button></div>
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative"><div class="text-center mb-4"><i class="fas fa-user-shield text-5xl text-purple-600"></i><h2 class="text-2xl font-bold">Admin Registration</h2><p class="text-sm text-gray-500">Create DG/CEO or UMC Account</p></div><form id="adminSignupForm"><input type="text" id="adminFullName" placeholder="Full Name" class="w-full border p-2 rounded mb-3" required><input type="email" id="adminEmail" placeholder="Email Address" class="w-full border p-2 rounded mb-3" required><input type="password" id="adminPassword" placeholder="Password" class="w-full border p-2 rounded mb-3" required><select id="adminRole" class="w-full border p-2 rounded mb-3"><option value="dg_ceo">Director General (DG/CEO)</option><option value="umc">UMC (Management)</option></select><input type="text" id="adminRegCode" placeholder="Admin Registration Code" class="w-full border p-2 rounded mb-3" required><div class="text-xs text-gray-500 mb-2">* Registration code required: <span class="font-mono font-bold">ALIFLY2026</span></div><button type="submit" class="w-full bg-purple-600 text-white py-2 rounded-lg font-bold">Create Admin Account</button></form><button id="closeAdminSignupBtn" class="absolute top-3 right-4 text-gray-400 text-2xl">&times;</button></div>
     </div>
 
-    <!-- DASHBOARD APP (same structure, full functionality) -->
+    <!-- DASHBOARD APP -->
     <div id="appContainer" class="hidden flex h-screen w-full fixed inset-0 z-40 bg-white overflow-hidden flex-col">
         <div class="top-bar"><div class="flex items-center gap-3"><button id="mobileMenuToggle" class="text-gray-700 text-2xl focus:outline-none md:hidden"><i class="fas fa-bars"></i></button><img src="logo.jpg" class="h-10 w-auto" onerror="this.src='https://placehold.co/100x40';"><span class="font-semibold hidden sm:inline">Al‑Istiqaamah Flying Wings</span></div><div class="flex items-center gap-4"><div class="user-info"><i class="fas fa-user-circle text-xl"></i><div class="text-right"><p class="text-xs text-gray-500">Logged in as</p><p class="text-sm font-bold"><span id="topUserName"></span> (<span id="topUserRole"></span>)</p></div></div><button id="topLogoutBtn" class="logout-top-btn"><i class="fas fa-sign-out-alt mr-1"></i> Logout</button></div></div>
         <div class="flex flex-1 overflow-hidden relative"><div id="sidebarOverlay" class="sidebar-overlay"></div><aside id="dynamicSidebar" class="sidebar text-white w-80 flex flex-col overflow-y-auto"><div class="p-4 border-b text-center flex justify-between items-center"><p class="text-sm"><i class="fas fa-school"></i> Navigation</p><button id="closeMobileSidebar" class="text-white md:hidden"><i class="fas fa-times"></i></button></div><nav id="dynamicNav" class="flex-1 px-3 mt-4 space-y-1"></nav></aside><main class="flex-1 overflow-auto bg-gray-100 p-6" id="mainContent"></main></div>
@@ -165,7 +174,7 @@
     <div id="toastMsg" class="toast-notify"></div>
 
     <script>
-        // ======================= GLOBALS & FULL FUNCTIONALITY (merged) =======================
+        // ======================= GLOBALS & HELPER FUNCTIONS =======================
         const SECTIONS = ['regular islamiyyah', 'regular memorization', 'intensive memorization', 'integrated islamic basic section', 'advance section', 'woman section'];
         let schoolData = { students: [], teachers: [] };
         let currentUser = null;
@@ -242,7 +251,7 @@
             }
         }
         
-        // ============ SLIDES ============
+        // ============ SLIDESHOW ============
         async function loadSlidesFromSupabase() { 
             try {
                 const { data } = await supabaseClient.from('slides').select('*').order('created_at', { ascending: true }); 
@@ -348,7 +357,7 @@
             modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
         }
         
-        // ============ DOWNLOAD RECORDS (CSV) ============
+        // ============ CSV DOWNLOADS ============
         function downloadCSV(data, filename) {
             if (!data || data.length === 0) { showToast("No data to export", true); return; }
             const headers = Object.keys(data[0]);
@@ -378,7 +387,7 @@
             document.getElementById("downloadStaffBtn").onclick = downloadStaff;
         }
         
-        // ============ SAVE STUDENT RESULT HELPER ============
+        // ============ STUDENT RESULTS ============
         async function saveStudentResult(studentId, term, year, subject, ca1, ca2, exam) {
             const total = ca1 + ca2 + exam;
             const grade = total >= 80 ? 'A' : total >= 70 ? 'B' : total >= 60 ? 'C' : total >= 50 ? 'D' : 'E';
@@ -387,7 +396,6 @@
             }, { onConflict: 'student_id,term,year,subject' });
         }
         
-        // ============ RESULTS MANAGEMENT (DG/CEO) ============
         async function renderUnifiedResults() {
             if (!currentUser || currentUser.role !== 'dg_ceo') { showToast("Access denied", true); renderContentView("dashboard"); return; }
             let html = `
@@ -461,7 +469,7 @@
             };
         }
         
-        // ============ FEE MANAGEMENT (full version) ============
+        // ============ FEE MANAGEMENT (ADMIN / STAFF WITH ROLES) ============
         async function getOrCreateFeeBalance(studentId, term, year) { 
             const { data: existing } = await supabaseClient.from('fee_balances').select('*').eq('student_id', studentId).eq('term', term).eq('year', year).maybeSingle(); 
             if (existing) return existing; 
@@ -486,30 +494,148 @@
         }
         async function authorizeReceipt(transactionId) { 
             await supabaseClient.from('fee_transactions').update({ status: 'authorized', authorized_by: currentUser.full_name, authorized_at: new Date() }).eq('id', transactionId); 
-            showToast("Receipt authorized"); if(document.getElementById("loadFeeDetailsBtn")) document.getElementById("loadFeeDetailsBtn").click(); 
+            showToast("Receipt authorized"); 
+            if(document.getElementById("loadFeeDetailsBtn")) document.getElementById("loadFeeDetailsBtn").click(); 
         }
+        
+        // Admin fee management (full control)
         async function renderFeeManagement() { 
             if (!['dg_ceo','daf','do'].includes(currentUser.role)) { showToast("Access denied", true); return; }
-            let html = `<div class="bg-white rounded-xl shadow p-6"><h2 class="text-2xl font-bold mb-4"><i class="fas fa-coins"></i> Fee Management</h2><div class="grid md:grid-cols-4 gap-4 mb-4"><select id="feeStudentId" class="border p-2 rounded"><option value="">-- Student --</option>${schoolData.students.map(s => `<option value="${s.id}">${s.reg_number} - ${s.name}</option>`).join('')}</select><select id="feeTerm" class="border p-2 rounded"><option value="1">First Term</option><option value="2">Second Term</option><option value="3">Third Term</option></select><input id="feeYear" value="2026" class="border p-2 rounded"><button id="loadFeeDetailsBtn" class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700">Load Details</button></div><div id="feeDetailsContainer" class="mt-6"></div><div id="recordPaymentPanel" class="hidden mt-4 border-t pt-4"><h3 class="text-xl font-bold">Record Payment</h3><div class="grid md:grid-cols-4 gap-3 mt-2"><input id="paymentAmount" type="number" placeholder="Amount (₦)" class="border p-2 rounded"><select id="paymentMethod" class="border p-2 rounded"><option value="cash">💵 Cash</option><option value="bank_transfer">🏦 Bank Transfer</option><option value="card">💳 Card Payment</option><option value="online">🌐 Online Transfer</option><option value="cheque">📝 Cheque</option></select><input id="transactionRef" placeholder="Reference (optional)" class="border p-2 rounded"><button id="recordPaymentBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Record Payment</button></div></div></div>`;
+            let html = `
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div class="bg-gradient-to-r from-emerald-700 to-emerald-800 px-6 py-4">
+                        <h2 class="text-2xl font-bold text-white"><i class="fas fa-coins mr-2"></i> Financial Management</h2>
+                        <p class="text-emerald-100 text-sm">Track payments, generate receipts, and manage fee balances</p>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid md:grid-cols-3 gap-4 mb-8">
+                            <div><label class="block text-sm font-medium text-gray-700 mb-1">Select Student</label><select id="feeStudentId" class="w-full border-gray-300 rounded-lg shadow-sm"><option value="">-- Choose a student --</option>${schoolData.students.map(s => `<option value="${s.id}">${s.reg_number} - ${s.name}</option>`).join('')}</select></div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-1">Academic Year</label><input id="feeYear" value="2026" class="w-full border-gray-300 rounded-lg shadow-sm"></div>
+                            <div class="flex items-end"><button id="loadFeeDetailsBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg transition shadow-md flex items-center justify-center gap-2"><i class="fas fa-search"></i> Load Fee Details</button></div>
+                        </div>
+                        <div id="feeDashboard" class="space-y-6"><div class="text-center text-gray-500 py-8">Select a student and click "Load Fee Details"</div></div>
+                    </div>
+                </div>
+            `;
             document.getElementById("mainContent").innerHTML = html;
-            document.getElementById("loadFeeDetailsBtn").onclick = async () => {
-                const studentId = document.getElementById("feeStudentId").value, term = document.getElementById("feeTerm").value, year = document.getElementById("feeYear").value;
-                if (!studentId) return showToast("Select student", true);
-                const balance = await getOrCreateFeeBalance(studentId, term, year);
-                let { data: transactions } = await supabaseClient.from('fee_transactions').select('*').eq('student_id', studentId).eq('term', term).eq('year', year);
+            
+            const loadFeeDashboard = async () => {
+                const studentId = document.getElementById("feeStudentId").value;
+                const year = document.getElementById("feeYear").value;
+                if (!studentId) { showToast("Please select a student", true); return; }
                 const student = schoolData.students.find(s => s.id == studentId);
-                const percentPaid = (balance.paid_amount / balance.total_fees) * 100;
-                document.getElementById("feeDetailsContainer").innerHTML = `<div class="bg-gray-50 p-4 rounded"><p><strong>${student.name}</strong> | Total: ₦${balance.total_fees.toLocaleString()} | Paid: ₦${balance.paid_amount.toLocaleString()} | Balance: <span class="font-bold ${balance.balance>0?'text-red-600':'text-green-600'}">₦${balance.balance.toLocaleString()}</span></p><div class="progress-bar mt-2"><div class="progress-fill" style="width: ${percentPaid}%;"></div></div><table class="w-full text-sm border mt-4"><thead class="bg-gray-200"><tr><th>Date</th><th>Amount</th><th>Method</th><th>Receipt</th><th>Status</th><th>Action</th></tr></thead><tbody>${transactions.map(tx => `<tr><td>${new Date(tx.payment_date).toLocaleDateString()}</td><td>₦${tx.amount_paid.toLocaleString()}</td><td>${tx.payment_method || '-'}</td><td>${tx.receipt_no}</td><td class="${tx.status==='authorized'?'text-green-600':'text-amber-600'}">${tx.status}</td><td>${tx.status!=='authorized' && (['dg_ceo','daf','do'].includes(currentUser.role)) ? `<button class="authTxBtn text-blue-600" data-id="${tx.id}">Authorize</button>` : '-'}</td></tr>`).join('')}</tbody></table><button id="showPaymentPanelBtn" class="mt-2 bg-amber-500 text-white px-3 py-1 rounded text-sm hover:bg-amber-600">+ New Payment</button></div>`;
-                document.getElementById("recordPaymentPanel").classList.remove("hidden");
-                document.getElementById("showPaymentPanelBtn").onclick = () => document.getElementById("recordPaymentPanel").scrollIntoView();
-                document.getElementById("recordPaymentBtn").onclick = async () => { const amount = parseFloat(document.getElementById("paymentAmount").value); if (isNaN(amount) || amount <= 0) return showToast("Valid amount required", true); const method = document.getElementById("paymentMethod").value; const ref = document.getElementById("transactionRef").value; const isAuth = ['dg_ceo','daf','do'].includes(currentUser.role); await recordPayment(studentId, term, year, amount, method, isAuth, ref); showToast(`Payment recorded. ${isAuth ? 'Authorized' : 'Pending'}`); await refreshSchoolData(); document.getElementById("loadFeeDetailsBtn").click(); };
-                document.querySelectorAll('.authTxBtn').forEach(btn => btn.onclick = async () => { await authorizeReceipt(btn.dataset.id); });
+                if (!student) return;
+                const { data: balances, error } = await supabaseClient.from('fee_balances').select('*').eq('student_id', studentId).eq('year', year);
+                if (error) throw error;
+                if (!balances || balances.length === 0) { for (let t of [1,2,3]) await getOrCreateFeeBalance(studentId, t, year); return loadFeeDashboard(); }
+                const { data: allTx } = await supabaseClient.from('fee_transactions').select('*').eq('student_id', studentId).eq('year', year).order('payment_date', { ascending: false });
+                const transactions = allTx || [];
+                const totalFees = balances.reduce((sum, b) => sum + b.total_fees, 0);
+                const totalPaid = balances.reduce((sum, b) => sum + (b.paid_amount || 0), 0);
+                const totalBalance = totalFees - totalPaid;
+                const percentOverall = totalFees > 0 ? (totalPaid / totalFees) * 100 : 0;
+                const pendingAuth = transactions.filter(tx => tx.status === 'pending' && ['dg_ceo','daf','do'].includes(currentUser.role));
+                let dashboardHtml = `<div class="grid md:grid-cols-3 gap-4 mb-6"><div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 shadow-sm"><div class="flex items-center justify-between"><div><p class="text-blue-800 text-sm font-medium">Total Fees</p><p class="text-2xl font-bold text-blue-900">₦${totalFees.toLocaleString()}</p></div><i class="fas fa-receipt text-3xl text-blue-400"></i></div></div><div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4 shadow-sm"><div class="flex items-center justify-between"><div><p class="text-green-800 text-sm font-medium">Total Paid</p><p class="text-2xl font-bold text-green-900">₦${totalPaid.toLocaleString()}</p></div><i class="fas fa-check-circle text-3xl text-green-400"></i></div></div><div class="bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl p-4 shadow-sm"><div class="flex items-center justify-between"><div><p class="text-amber-800 text-sm font-medium">Total Balance</p><p class="text-2xl font-bold ${totalBalance > 0 ? 'text-red-600' : 'text-green-600'}">₦${totalBalance.toLocaleString()}</p></div><i class="fas fa-chart-line text-3xl text-amber-400"></i></div></div></div><div class="progress-bar mb-6"><div class="progress-fill" style="width: ${percentOverall}%; background-color: ${percentOverall === 100 ? '#10b981' : '#f59e0b'}"></div></div><div class="grid md:grid-cols-3 gap-5">`;
+                for (let balance of balances) {
+                    const termName = balance.term == 1 ? "First Term" : balance.term == 2 ? "Second Term" : "Third Term";
+                    const percent = (balance.paid_amount / balance.total_fees) * 100;
+                    const termTx = transactions.filter(tx => tx.term == balance.term);
+                    dashboardHtml += `<div class="term-card border-l-4 ${percent === 100 ? 'border-green-500' : percent > 0 ? 'border-amber-500' : 'border-red-500'} bg-white rounded-xl shadow-sm hover:shadow-md transition p-4"><div class="flex justify-between items-start mb-3"><h3 class="font-bold text-lg">${termName}</h3><span class="text-xs px-2 py-1 rounded-full ${percent === 100 ? 'bg-green-100 text-green-700' : percent > 0 ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'}">${percent === 100 ? 'Paid' : percent > 0 ? 'Partial' : 'Unpaid'}</span></div><div class="space-y-2 text-sm"><div class="flex justify-between"><span>Total:</span><span class="font-semibold">₦${balance.total_fees.toLocaleString()}</span></div><div class="flex justify-between"><span>Paid:</span><span class="font-semibold text-green-600">₦${balance.paid_amount.toLocaleString()}</span></div><div class="flex justify-between"><span>Balance:</span><span class="font-semibold ${balance.balance > 0 ? 'text-red-500' : 'text-green-500'}">₦${balance.balance.toLocaleString()}</span></div><div class="progress-bar mt-1"><div class="progress-fill" style="width: ${percent}%"></div></div></div><div class="mt-3 text-xs text-gray-500 border-t pt-2"><button class="toggleTxBtn text-emerald-600 hover:text-emerald-800" data-term="${balance.term}"><i class="fas fa-chevron-down mr-1"></i> View Transactions (${termTx.length})</button><div id="txList-${balance.term}" class="hidden mt-2 space-y-1 max-h-40 overflow-y-auto">${termTx.length === 0 ? '<p class="text-gray-400">No payments recorded yet.</p>' : termTx.map(tx => `<div class="flex justify-between items-center text-xs bg-gray-50 p-2 rounded"><span>${new Date(tx.payment_date).toLocaleDateString()}</span><span>₦${tx.amount_paid.toLocaleString()}</span><span class="payment-method-badge"><i class="fas ${tx.payment_method?.includes('cash') ? 'fa-money-bill' : 'fa-university'}"></i> ${tx.payment_method || 'cash'}</span><span class="${tx.status === 'authorized' ? 'text-green-600' : 'text-amber-600'}">${tx.status}</span>${tx.status !== 'authorized' && ['dg_ceo','daf','do'].includes(currentUser.role) ? `<button class="authTxBtn text-blue-600 hover:underline" data-id="${tx.id}">Auth</button>` : ''}</div>`).join('')}</div></div><button class="recordPaymentBtn mt-3 w-full bg-emerald-500 hover:bg-emerald-600 text-white text-sm py-1.5 rounded-lg flex items-center justify-center gap-1 transition" data-term="${balance.term}" data-year="${balance.year}"><i class="fas fa-plus-circle"></i> Record Payment</button></div>`;
+                }
+                dashboardHtml += `</div>`;
+                if (pendingAuth.length > 0) dashboardHtml += `<div class="mt-8 bg-amber-50 rounded-xl p-4 border border-amber-200"><h3 class="font-bold text-amber-800 mb-3"><i class="fas fa-clock mr-2"></i> Pending Authorizations (${pendingAuth.length})</h3><div class="space-y-2">${pendingAuth.map(tx => `<div class="flex justify-between items-center bg-white p-3 rounded-lg shadow-sm"><div><span class="font-medium">₦${tx.amount_paid.toLocaleString()}</span> on ${new Date(tx.payment_date).toLocaleDateString()} (${tx.payment_method})</div><button class="authTxBtn bg-amber-600 hover:bg-amber-700 text-white px-3 py-1 rounded text-sm transition" data-id="${tx.id}">Authorize Now</button></div>`).join('')}</div></div>`;
+                dashboardHtml += `<div id="paymentModal" class="fixed inset-0 z-[300] hidden items-center justify-center bg-black/50 p-4"><div class="bg-white rounded-2xl max-w-md w-full p-6 relative"><button id="closePaymentModal" class="absolute top-3 right-4 text-gray-400 hover:text-gray-600">&times;</button><h3 class="text-xl font-bold mb-4">Record Payment</h3><form id="paymentForm"><input type="hidden" id="payTerm"><input type="hidden" id="payYear"><div class="mb-3"><label class="block text-sm font-medium">Amount (₦)</label><input type="number" id="payAmount" required min="1" class="w-full border rounded-lg p-2"></div><div class="mb-3"><label class="block text-sm font-medium">Payment Method</label><select id="payMethod" class="w-full border rounded-lg p-2"><option value="cash">💵 Cash</option><option value="bank_transfer">🏦 Bank Transfer</option><option value="card">💳 Card Payment</option><option value="online">🌐 Online Transfer</option><option value="cheque">📝 Cheque</option></select></div><div class="mb-4"><label class="block text-sm font-medium">Reference (optional)</label><input type="text" id="payRef" placeholder="Transaction ID / Cheque No" class="w-full border rounded-lg p-2"></div><button type="submit" class="w-full bg-emerald-600 text-white py-2 rounded-lg font-semibold hover:bg-emerald-700 transition">Submit Payment</button></form></div></div>`;
+                document.getElementById("feeDashboard").innerHTML = dashboardHtml;
+                document.querySelectorAll('.toggleTxBtn').forEach(btn => btn.addEventListener('click', () => { const term = btn.dataset.term; const list = document.getElementById(`txList-${term}`); if (list) list.classList.toggle('hidden'); btn.querySelector('i').classList.toggle('fa-chevron-down'); btn.querySelector('i').classList.toggle('fa-chevron-up'); }));
+                document.querySelectorAll('.recordPaymentBtn').forEach(btn => btn.addEventListener('click', () => { document.getElementById('payTerm').value = btn.dataset.term; document.getElementById('payYear').value = btn.dataset.year; document.getElementById('paymentModal').classList.remove('hidden'); document.getElementById('paymentModal').classList.add('flex'); }));
+                const closeModal = () => { document.getElementById('paymentModal').classList.add('hidden'); document.getElementById('paymentModal').classList.remove('flex'); };
+                document.getElementById('closePaymentModal')?.addEventListener('click', closeModal);
+                document.getElementById('paymentModal')?.addEventListener('click', (e) => { if(e.target === document.getElementById('paymentModal')) closeModal(); });
+                document.getElementById('paymentForm')?.addEventListener('submit', async (e) => { e.preventDefault(); const term = document.getElementById('payTerm').value; const year = document.getElementById('payYear').value; const amount = parseFloat(document.getElementById('payAmount').value); const method = document.getElementById('payMethod').value; const ref = document.getElementById('payRef').value; if (isNaN(amount) || amount <= 0) { showToast("Valid amount required", true); return; } const isAuth = ['dg_ceo','daf','do'].includes(currentUser.role); try { await recordPayment(studentId, term, year, amount, method, isAuth, ref); showToast(`Payment recorded. ${isAuth ? 'Authorized' : 'Pending approval'}`); closeModal(); await loadFeeDashboard(); } catch(err) { showToast(err.message, true); } });
+                document.querySelectorAll('.authTxBtn').forEach(btn => btn.addEventListener('click', async () => { await authorizeReceipt(btn.dataset.id); await loadFeeDashboard(); }));
+            };
+            document.getElementById("loadFeeDetailsBtn").onclick = loadFeeDashboard;
+        }
+        
+        // ============ IMPROVED PARENT FEE PAYMENT VIEW (detailed, card-based) ============
+        async function renderParentFeePayment() {
+            if (!currentUser.studentId) return;
+            const student = schoolData.students.find(s => s.id == currentUser.studentId);
+            if (!student) { showToast("Student not found", true); return; }
+            const { data: balances, error } = await supabaseClient.from('fee_balances').select('*').eq('student_id', student.id).order('term', { ascending: true });
+            if (error) throw error;
+            const { data: transactions } = await supabaseClient.from('fee_transactions').select('*').eq('student_id', student.id).order('payment_date', { ascending: false });
+            
+            let html = `<div class="bg-white rounded-2xl shadow-lg overflow-hidden"><div class="bg-gradient-to-r from-indigo-700 to-indigo-800 px-6 py-4"><h2 class="text-2xl font-bold text-white"><i class="fas fa-receipt mr-2"></i> Fee Statement</h2><p class="text-indigo-100 text-sm">${student.name} (${student.reg_number})</p></div><div class="p-6">`;
+            
+            if (!balances || balances.length === 0) {
+                html += `<div class="text-center text-gray-500 py-8">No fee records found for this student.</div>`;
+            } else {
+                // Overall summary
+                const totalFees = balances.reduce((s,b)=>s+b.total_fees,0);
+                const totalPaid = balances.reduce((s,b)=>s+(b.paid_amount||0),0);
+                const totalBalance = totalFees - totalPaid;
+                const percentOverall = totalFees ? (totalPaid/totalFees)*100 : 0;
+                html += `<div class="grid md:grid-cols-3 gap-4 mb-6"><div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4"><div class="flex items-center justify-between"><div><p class="text-blue-800 text-sm">Total Fees</p><p class="text-2xl font-bold text-blue-900">₦${totalFees.toLocaleString()}</p></div><i class="fas fa-receipt text-3xl text-blue-400"></i></div></div><div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4"><div class="flex items-center justify-between"><div><p class="text-green-800 text-sm">Total Paid</p><p class="text-2xl font-bold text-green-900">₦${totalPaid.toLocaleString()}</p></div><i class="fas fa-check-circle text-3xl text-green-400"></i></div></div><div class="bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl p-4"><div class="flex items-center justify-between"><div><p class="text-amber-800 text-sm">Outstanding Balance</p><p class="text-2xl font-bold ${totalBalance>0?'text-red-600':'text-green-600'}">₦${totalBalance.toLocaleString()}</p></div><i class="fas fa-chart-line text-3xl text-amber-400"></i></div></div></div><div class="progress-bar mb-6"><div class="progress-fill" style="width: ${percentOverall}%"></div></div>`;
+                
+                // Term cards
+                html += `<div class="grid md:grid-cols-3 gap-5">`;
+                for (let b of balances) {
+                    const termName = b.term == 1 ? "First Term" : b.term == 2 ? "Second Term" : "Third Term";
+                    const percent = b.total_fees ? (b.paid_amount/b.total_fees)*100 : 0;
+                    const termTx = transactions.filter(tx => tx.term == b.term && tx.year == b.year);
+                    html += `<div class="term-card border-l-4 ${percent===100?'border-green-500':percent>0?'border-amber-500':'border-red-500'} bg-white rounded-xl shadow-sm p-4"><div class="flex justify-between items-start mb-3"><h3 class="font-bold text-lg">${termName} ${b.year}</h3><span class="text-xs px-2 py-1 rounded-full ${percent===100?'bg-green-100 text-green-700':percent>0?'bg-amber-100 text-amber-700':'bg-red-100 text-red-700'}">${percent===100?'Paid':percent>0?'Partial':'Unpaid'}</span></div><div class="space-y-2 text-sm"><div class="flex justify-between"><span>Total:</span><span class="font-semibold">₦${b.total_fees.toLocaleString()}</span></div><div class="flex justify-between"><span>Paid:</span><span class="font-semibold text-green-600">₦${b.paid_amount.toLocaleString()}</span></div><div class="flex justify-between"><span>Balance:</span><span class="font-semibold ${b.balance>0?'text-red-500':'text-green-500'}">₦${b.balance.toLocaleString()}</span></div><div class="progress-bar mt-1"><div class="progress-fill" style="width: ${percent}%"></div></div></div><div class="mt-3 text-xs text-gray-500 border-t pt-2"><button class="toggleTxBtn text-indigo-600 hover:text-indigo-800" data-term="${b.term}"><i class="fas fa-chevron-down mr-1"></i> View Transactions (${termTx.length})</button><div id="parentTxList-${b.term}" class="hidden mt-2 space-y-1 max-h-40 overflow-y-auto">${termTx.length===0?'<p class="text-gray-400">No payments recorded.</p>':termTx.map(tx=>`<div class="flex justify-between items-center text-xs bg-gray-50 p-2 rounded"><span>${new Date(tx.payment_date).toLocaleDateString()}</span><span>₦${tx.amount_paid.toLocaleString()}</span><span class="payment-method-badge"><i class="fas ${tx.payment_method?.includes('cash')?'fa-money-bill':'fa-university'}"></i> ${tx.payment_method || 'cash'}</span><span class="${tx.status==='authorized'?'text-green-600':'text-amber-600'}">${tx.status}</span><button onclick="window.viewSingleReceipt('${tx.id}', '${student.id}')" class="text-blue-600 text-xs underline">Receipt</button></div>`).join('')}</div></div>`;
+                    if (b.balance <= 0) {
+                        html += `<button onclick="window.printTermReceipt('${student.id}', ${b.term}, ${b.year})" class="mt-3 w-full bg-green-600 hover:bg-green-700 text-white text-sm py-1.5 rounded-lg flex items-center justify-center gap-1 transition"><i class="fas fa-print"></i> Print Full Term Receipt</button>`;
+                    }
+                    html += `</div>`;
+                }
+                html += `</div>`;
+            }
+            html += `</div></div>`;
+            document.getElementById("mainContent").innerHTML = html;
+            
+            // Attach toggle handlers
+            document.querySelectorAll('.toggleTxBtn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const term = btn.dataset.term;
+                    const list = document.getElementById(`parentTxList-${term}`);
+                    if (list) list.classList.toggle('hidden');
+                    btn.querySelector('i').classList.toggle('fa-chevron-down');
+                    btn.querySelector('i').classList.toggle('fa-chevron-up');
+                });
+            });
+            
+            window.viewSingleReceipt = async (txId, stuId) => {
+                const { data: tx } = await supabaseClient.from('fee_transactions').select('*').eq('id', txId).single();
+                const stu = schoolData.students.find(s=>s.id==stuId);
+                if (!tx || !stu) return;
+                const termNames = {1:"First",2:"Second",3:"Third"};
+                const modalDiv = document.createElement('div');
+                modalDiv.className = "fixed inset-0 z-[200] bg-black/70 flex items-center justify-center p-4";
+                modalDiv.innerHTML = `<div class="bg-white rounded-lg max-w-lg w-full p-6"><div class="receipt-card"><div class="text-center border-b pb-3"><h3 class="text-xl font-bold">Al‑Istiqaamah Flying Wings Academy</h3><h4>OFFICIAL RECEIPT</h4></div><div class="mt-3 space-y-2"><div><strong>Receipt No:</strong> ${tx.receipt_no}</div><div><strong>Date:</strong> ${new Date(tx.payment_date).toLocaleDateString()}</div><div><strong>Student:</strong> ${stu.name} (${stu.reg_number})</div><div><strong>Term:</strong> ${termNames[tx.term]} ${tx.year}</div><div><strong>Amount:</strong> ₦${tx.amount_paid.toLocaleString()}</div><div><strong>Payment Method:</strong> ${tx.payment_method || 'Cash'}</div><div><strong>Status:</strong> <span class="text-green-600 font-bold">${tx.status.toUpperCase()}</span></div></div><div class="text-center mt-4"><button onclick="window.print()" class="bg-blue-600 text-white px-4 py-2 rounded">Print Receipt</button></div></div><div class="text-center mt-4"><button class="closeReceiptModal bg-gray-600 text-white px-4 py-2 rounded">Close</button></div></div>`;
+                document.body.appendChild(modalDiv);
+                modalDiv.querySelector('.closeReceiptModal').onclick = () => modalDiv.remove();
+                modalDiv.addEventListener('click', (e) => { if (e.target === modalDiv) modalDiv.remove(); });
+            };
+            window.printTermReceipt = async (stuId, term, year) => {
+                const { data: txList } = await supabaseClient.from('fee_transactions').select('*').eq('student_id', stuId).eq('term', term).eq('year', year).eq('status', 'authorized');
+                const stu = schoolData.students.find(s=>s.id==stuId);
+                const total = txList.reduce((s,t)=>s+t.amount_paid,0);
+                const termNames = {1:"First",2:"Second",3:"Third"};
+                const dummyTx = { term, year, amount_paid: total, receipt_no: `TERM_${term}_${year}_${stuId}`, status: 'authorized' };
+                const modalDiv = document.createElement('div');
+                modalDiv.className = "fixed inset-0 z-[200] bg-black/70 flex items-center justify-center p-4";
+                modalDiv.innerHTML = `<div class="bg-white rounded-lg max-w-lg w-full p-6"><div class="receipt-card"><div class="text-center border-b pb-3"><h3 class="text-xl font-bold">Al‑Istiqaamah Flying Wings Academy</h3><h4>FULL TERM RECEIPT</h4></div><div class="mt-3 space-y-2"><div><strong>Receipt No:</strong> ${dummyTx.receipt_no}</div><div><strong>Date:</strong> ${new Date().toLocaleDateString()}</div><div><strong>Student:</strong> ${stu.name} (${stu.reg_number})</div><div><strong>Term:</strong> ${termNames[term]} ${year}</div><div><strong>Total Paid:</strong> ₦${total.toLocaleString()}</div><div><strong>Status:</strong> <span class="text-green-600 font-bold">FULLY PAID</span></div></div><div class="text-center mt-4"><button onclick="window.print()" class="bg-blue-600 text-white px-4 py-2 rounded">Print Receipt</button></div></div><div class="text-center mt-4"><button class="closeReceiptModal bg-gray-600 text-white px-4 py-2 rounded">Close</button></div></div>`;
+                document.body.appendChild(modalDiv);
+                modalDiv.querySelector('.closeReceiptModal').onclick = () => modalDiv.remove();
+                modalDiv.addEventListener('click', (e) => { if (e.target === modalDiv) modalDiv.remove(); });
             };
         }
         
-        // ============ STUDENTS LIST ============
+        // ============ CORE DATA VIEWS (students, enroll, staff, etc.) ============
         function renderStudentsList() { 
-            let html=`<div class="bg-white p-5 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">📋 Students</h2><div class="filter-bar flex gap-4"><select id="sectionFilter" class="border rounded p-2"><option>All Sections</option>${SECTIONS.map(s=>`<option>${s}</option>`).join('')}</select><input id="searchStudent" placeholder="Search by name or reg no" class="border rounded p-2 flex-1"></div><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Reg No</th><th>Name</th><th>Parent</th><th>Section</th><th>Status</th>${(currentUser.role==='dg_ceo'||currentUser.role==='umc'||currentUser.role==='daf'||currentUser.role==='dprpa'||currentUser.role==='der'||currentUser.role==='do')?'<th>Actions</th>':''} </thead><tbody id="stuTbody"></tbody></table></div></div>`; 
+            let html=`<div class="bg-white p-5 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">📋 Students</h2><div class="filter-bar flex gap-4"><select id="sectionFilter" class="border rounded p-2"><option>All Sections</option>${SECTIONS.map(s=>`<option>${s}</option>`).join('')}</select><input id="searchStudent" placeholder="Search by name or reg no" class="border rounded p-2 flex-1"></div><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Reg No</th><th>Name</th><th>Parent</th><th>Section</th><th>Status</th>${(currentUser.role==='dg_ceo'||currentUser.role==='umc'||currentUser.role==='daf'||currentUser.role==='dprpa'||currentUser.role==='der'||currentUser.role==='do')?'<th>Actions</th>':''}</tr></thead><tbody id="stuTbody"></tbody></table></div></div>`; 
             document.getElementById("mainContent").innerHTML=html; 
             const update=()=>{ 
                 let filtered=schoolData.students.filter(s=>document.getElementById("sectionFilter").value==='All Sections'||s.section===document.getElementById("sectionFilter").value); 
@@ -559,7 +685,7 @@
             } catch(e) { showToast("Error managing slides", true); }
         }
         
-        // ============ STAFF MANAGEMENT ============
+        // ============ STAFF MANAGEMENT (for admin roles) ============
         async function renderStaffManagement() { 
             if(!currentUser || !['dg_ceo','umc','der','do'].includes(currentUser.role)) return showToast("Access denied",true); 
             const {data:teachers}=await supabaseClient.from('teachers').select('*'); 
@@ -581,7 +707,7 @@
         }
         async function saveStaffAppraisal(staffId, rating, comments) { await supabaseClient.from('staff_appraisals').insert({ staff_id: staffId, rating, comments, appraised_by: currentUser.full_name }); showToast("Appraisal saved"); }
         
-        // DAF specific
+        // DAF views
         async function renderReceiptGenerator() {
             let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">🖨️ Receipt Generator</h2><div class="grid md:grid-cols-2 gap-4"><select id="receiptStudent" class="border p-2 rounded"><option>Select Student</option>${schoolData.students.map(s=>`<option value="${s.id}">${s.reg_number} - ${s.name}</option>`).join('')}</select><select id="receiptTerm" class="border p-2 rounded"><option value="1">Term 1</option><option value="2">Term 2</option><option value="3">Term 3</option></select><input id="receiptYear" value="2026" class="border p-2 rounded"><button id="generateReceiptBtn" class="bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700">Generate Receipt</button></div><div id="receiptOutput" class="mt-6"></div></div>`;
             document.getElementById("mainContent").innerHTML = html;
@@ -629,7 +755,7 @@
             window.downloadCSV = downloadCSV;
         }
         
-        // DPRPA specific
+        // DPRPA views
         async function renderAcademicPerformance() {
             let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">📉 Academic Performance Overview</h2><select id="perfYear" class="border p-2 rounded"><option>2025</option><option selected>2026</option></select><button id="loadPerfBtn" class="bg-emerald-600 text-white px-4 py-2 rounded ml-2 hover:bg-emerald-700">Load</button><div id="perfChart" class="mt-4"></div></div>`;
             document.getElementById("mainContent").innerHTML = html;
@@ -638,7 +764,7 @@
                 let { data: results } = await supabaseClient.from('student_results').select('*, students(section)').eq('year', year);
                 let sectionGrades = {};
                 results.forEach(r => { let sec = r.students?.section || 'Unknown'; if (!sectionGrades[sec]) sectionGrades[sec] = { total:0, count:0 }; sectionGrades[sec].total += (r.ca1+r.ca2+r.exam); sectionGrades[sec].count++; });
-                let table = `<table class="w-full border"><thead class="bg-gray-100"><tr><th>Section</th><th>Average Score (%)</th> </thead><tbody>${Object.entries(sectionGrades).map(([sec,data]) => `<tr><td>${sec}</td><td>${(data.total/data.count).toFixed(2)}%</td></tr>`).join('')}</tbody></table>`;
+                let table = `<table class="w-full border"><thead class="bg-gray-100"><tr><th>Section</th><th>Average Score (%)</th></tr></thead><tbody>${Object.entries(sectionGrades).map(([sec,data]) => `<tr><td>${sec}</td><td>${(data.total/data.count).toFixed(2)}%</td></tr>`).join('')}</tbody></table>`;
                 document.getElementById("perfChart").innerHTML = table;
             };
         }
@@ -661,12 +787,12 @@
             document.getElementById("mainContent").innerHTML = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold">Welcome ${currentUser.full_name}</h2><div class="grid grid-cols-2 gap-4 mt-6"><div class="p-5 bg-emerald-50 rounded-xl"><i class="fas fa-users text-3xl text-emerald-600"></i><p class="text-2xl font-bold mt-2">${schoolData.students.length}</p><p>Total Students</p></div><div class="p-5 bg-amber-50 rounded-xl"><i class="fas fa-chalkboard-user text-3xl text-amber-600"></i><p class="text-2xl font-bold mt-2">${schoolData.teachers.length}</p><p>Staff Members</p></div></div></div>`; 
         }
         
-        // Headteacher
+        // Headteacher views
         async function renderSectionStudents() {
             let section = currentUser.assignedSection;
             if (!section) { showToast("No section assigned", true); return; }
             let students = schoolData.students.filter(s => s.section === section);
-            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold">👨‍🎓 Students in ${section}</h2><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Reg No</th><th>Name</th><th>Parent</th><th>Status</th> </thead><tbody>${students.map(s=>`<tr><td>${s.reg_number}</td><td>${s.name}</td><td>${s.parent_name||'-'}</td><td><span class="${s.status==='active'?'active-badge':'suspended-badge'}">${s.status}</span></td></tr>`).join('')}</tbody></table></div></div>`;
+            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold">👨‍🎓 Students in ${section}</h2><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Reg No</th><th>Name</th><th>Parent</th><th>Status</th></tr></thead><tbody>${students.map(s=>`<tr><td>${s.reg_number}</td><td>${s.name}</td><td>${s.parent_name||'-'}</td><td><span class="${s.status==='active'?'active-badge':'suspended-badge'}">${s.status}</span></td></tr>`).join('')}</tbody></table></div></div>`;
             document.getElementById("mainContent").innerHTML = html;
         }
         async function renderSectionFees() {
@@ -681,11 +807,11 @@
             document.getElementById("mainContent").innerHTML = html;
         }
         
-        // Teacher
+        // Teacher views
         async function renderMyClass() {
             let section = currentUser.assignedSection;
             let students = schoolData.students.filter(s => s.section === section);
-            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold">👩‍🏫 My Class - ${section}</h2><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Name</th><th>Reg No</th><th>Parent</th> </thead><tbody>${students.map(s=>`<tr><td>${s.name}</td><td>${s.reg_number}</td><td>${s.parent_name||'-'}</td></tr>`).join('')}</tbody></table></div></div>`;
+            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold">👩‍🏫 My Class - ${section}</h2><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Name</th><th>Reg No</th><th>Parent</th></tr></thead><tbody>${students.map(s=>`<tr><td>${s.name}</td><td>${s.reg_number}</td><td>${s.parent_name||'-'}</td></tr>`).join('')}</tbody></table></div></div>`;
             document.getElementById("mainContent").innerHTML = html;
         }
         async function renderGradeStudent() {
@@ -734,7 +860,7 @@
         async function renderAttendanceAndAppraisal() {
             let section = currentUser.assignedSection;
             let students = schoolData.students.filter(s => s.section === section);
-            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">🗒️ Attendance & Appraisal</h2><p class="mb-2">Record attendance for today: <input type="date" id="attDate" class="border p-1 rounded"></p><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Student</th><th>Present</th><th>Remarks</th> </thead><tbody>${students.map(s=>`<tr><td>${s.name}</td><td><input type="checkbox" class="attCheck" data-id="${s.id}"></td><td><input type="text" class="attRemarks" data-id="${s.id}" placeholder="Remarks" class="border p-1"></td></tr>`).join('')}</tbody></table></div><button id="saveAttendanceBtn" class="mt-3 bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700">Save Attendance</button></div>`;
+            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">🗒️ Attendance & Appraisal</h2><p class="mb-2">Record attendance for today: <input type="date" id="attDate" class="border p-1 rounded"></p><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Student</th><th>Present</th><th>Remarks</th></tr></thead><tbody>${students.map(s=>`<tr><td>${s.name}</td><td><input type="checkbox" class="attCheck" data-id="${s.id}"></td><td><input type="text" class="attRemarks" data-id="${s.id}" placeholder="Remarks" class="border p-1"></td></tr>`).join('')}</tbody></table></div><button id="saveAttendanceBtn" class="mt-3 bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700">Save Attendance</button></div>`;
             document.getElementById("mainContent").innerHTML = html;
             document.getElementById("saveAttendanceBtn").onclick = async () => {
                 let date = document.getElementById("attDate").value;
@@ -750,80 +876,35 @@
             };
         }
         
-        // Parent fee payment
-        async function renderParentFeePayment() {
-            if (!currentUser.studentId) return;
-            const student = schoolData.students.find(s => s.id === currentUser.studentId);
-            const { data: balances } = await supabaseClient.from('fee_balances').select('*').eq('student_id', student.id);
-            const { data: transactions } = await supabaseClient.from('fee_transactions').select('*').eq('student_id', student.id).order('payment_date', {ascending:false});
-            let html = `<div class="bg-white rounded-xl shadow p-6"><h2 class="text-2xl font-bold mb-4">💰 Fee Statement: ${student.name} (${student.reg_number})</h2>`;
-            for (let b of balances) {
-                let percentPaid = (b.paid_amount / b.total_fees) * 100;
-                let termName = b.term === 1 ? "First" : b.term === 2 ? "Second" : "Third";
-                html += `<div class="border p-4 mt-4 rounded-lg"><h3 class="text-xl font-semibold">${termName} Term - ${b.year}</h3>
-                <div class="grid grid-cols-3 gap-2 mt-2"><p>Total: ₦${b.total_fees.toLocaleString()}</p><p>Paid: ₦${b.paid_amount.toLocaleString()}</p><p class="font-bold ${b.balance>0?'text-red-600':'text-green-600'}">Balance: ₦${b.balance.toLocaleString()}</p></div>
-                <div class="progress-bar mt-2"><div class="progress-fill" style="width: ${percentPaid}%;"></div></div>
-                <div class="overflow-x-auto mt-4"><table class="w-full text-sm border"><thead class="bg-gray-100"><tr><th>Date</th><th>Amount</th><th>Method</th><th>Receipt No</th><th>Status</th><th>Receipt</th> </thead><tbody>`;
-                let termTx = transactions.filter(t=>t.term==b.term&&t.year==b.year);
-                if (termTx.length === 0) html += `<tr><td colspan="6" class="text-center">No payments recorded</td></tr>`;
-                else {
-                    termTx.forEach(tx => {
-                        html += `<tr><td>${new Date(tx.payment_date).toLocaleDateString()}</td><td>₦${tx.amount_paid.toLocaleString()}</td><td>${tx.payment_method || '-'}</td><td>${tx.receipt_no}</td><td class="${tx.status==='authorized'?'text-green-600':'text-amber-600'}">${tx.status}</td><td><button onclick="window.viewSingleReceipt('${tx.id}', '${student.id}')" class="text-blue-600 text-sm hover:underline">View/Print</button></td></tr>`;
-                    });
-                }
-                html += `</tbody></table></div>`;
-                if (b.balance <= 0) {
-                    html += `<div class="mt-3"><button onclick="window.printTermReceipt('${student.id}', ${b.term}, ${b.year})" class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"><i class="fas fa-print"></i> Print Full Term Receipt</button></div>`;
-                }
-                html += `</div>`;
-            }
-            html += `</div>`;
-            document.getElementById("mainContent").innerHTML = html;
-            
-            window.viewSingleReceipt = async (txId, stuId) => {
-                let { data: tx } = await supabaseClient.from('fee_transactions').select('*').eq('id', txId).single();
-                let stu = schoolData.students.find(s=>s.id==stuId);
-                if (!tx || !stu) return;
-                let termNames = {1:"First",2:"Second",3:"Third"};
-                let modalDiv = document.createElement('div');
-                modalDiv.className = "fixed inset-0 z-[200] bg-black/70 flex items-center justify-center p-4";
-                modalDiv.innerHTML = `<div class="bg-white rounded-lg max-w-lg w-full p-6">${generateParentReceiptHTML(tx, stu, termNames[tx.term])}<div class="text-center mt-4"><button class="closeReceiptModal bg-gray-600 text-white px-4 py-2 rounded">Close</button></div></div>`;
-                document.body.appendChild(modalDiv);
-                modalDiv.querySelector('.closeReceiptModal').onclick = () => modalDiv.remove();
-                modalDiv.addEventListener('click', (e) => { if (e.target === modalDiv) modalDiv.remove(); });
-            };
-            window.printTermReceipt = async (stuId, term, year) => {
-                let { data: txList } = await supabaseClient.from('fee_transactions').select('*').eq('student_id', stuId).eq('term', term).eq('year', year).eq('status', 'authorized');
-                let stu = schoolData.students.find(s=>s.id==stuId);
-                let total = txList.reduce((s,t)=>s+t.amount_paid,0);
-                let termNames = {1:"First",2:"Second",3:"Third"};
-                let dummyTx = { term, year, amount_paid: total, receipt_no: `TERM_${term}_${year}_${stuId}`, status: 'authorized' };
-                let modalDiv = document.createElement('div');
-                modalDiv.className = "fixed inset-0 z-[200] bg-black/70 flex items-center justify-center p-4";
-                modalDiv.innerHTML = `<div class="bg-white rounded-lg max-w-lg w-full p-6">${generateParentReceiptHTML(dummyTx, stu, termNames[term], total)}<div class="text-center mt-4"><button class="closeReceiptModal bg-gray-600 text-white px-4 py-2 rounded">Close</button></div></div>`;
-                document.body.appendChild(modalDiv);
-                modalDiv.querySelector('.closeReceiptModal').onclick = () => modalDiv.remove();
-                modalDiv.addEventListener('click', (e) => { if (e.target === modalDiv) modalDiv.remove(); });
-            };
-        }
-        function generateParentReceiptHTML(transaction, student, termName, totalPaid=null) {
-            let amount = totalPaid !== null ? totalPaid : transaction.amount_paid;
-            return `<div class="receipt-card"><div class="text-center border-b pb-3"><h3 class="text-xl font-bold">Al‑Istiqaamah Flying Wings Academy</h3><h4>OFFICIAL RECEIPT</h4></div><div class="mt-3 space-y-2"><div><strong>Receipt No:</strong> ${transaction.receipt_no}</div><div><strong>Date:</strong> ${new Date().toLocaleDateString()}</div><div><strong>Student:</strong> ${student.name} (${student.reg_number})</div><div><strong>Term:</strong> ${termName} ${transaction.year}</div><div><strong>Amount:</strong> ₦${amount.toLocaleString()}</div><div><strong>Payment Method:</strong> ${transaction.payment_method || 'Cash'}</div><div><strong>Status:</strong> <span class="text-green-600 font-bold">${transaction.status.toUpperCase()}</span></div></div><div class="text-center mt-4"><button onclick="window.print()" class="bg-blue-600 text-white px-4 py-2 rounded">Print Receipt</button></div></div>`;
-        }
-        
         // ============ AUTHENTICATION ============
-        async function loginUser(email, password) { 
+        async function loginAdmin(email, password) { 
             try { 
                 const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password }); 
                 if (error) throw error; 
                 const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', data.user.id).single(); 
-                if (!profile?.role) throw new Error("No role assigned"); 
+                if (!profile?.role) throw new Error("No role assigned - not an admin"); 
+                if (!['dg_ceo','umc','daf','dprpa','der','do','headteacher'].includes(profile.role)) throw new Error("Invalid admin role");
                 currentUser = { ...profile, full_name: profile.full_name, role: profile.role, assignedSection: profile.section }; 
                 await refreshSchoolData(); 
                 showDashboard(); 
                 resetInactivityTimer(); attachActivityListeners(); 
-            } catch(e) { showToast("Login failed: "+e.message, true); } 
+            } catch(e) { showToast("Admin login failed: "+e.message, true); } 
         }
+        
+        async function loginStaff(username, password) { 
+            try {
+                const { data: cred, error } = await supabaseClient.from('staff_credentials').select('*, teachers(*)').eq('username', username).single(); 
+                if (error || !cred) throw new Error("Invalid username"); 
+                if (cred.password_hash !== password) throw new Error("Wrong password");
+                const staff = cred.teachers;
+                if (!staff) throw new Error("Staff record missing");
+                currentUser = { id: staff.id, full_name: staff.name, role: staff.role, assignedSection: staff.assigned_section, isStaff: true }; 
+                await refreshSchoolData(); 
+                showDashboard(); 
+                resetInactivityTimer(); attachActivityListeners(); 
+            } catch(e) { showToast("Staff login failed: "+e.message, true); } 
+        }
+        
         async function parentLogin(regNo, pwd) { 
             if(pwd!=="al123") throw new Error("Wrong password"); 
             const student=schoolData.students.find(s=>s.reg_number===regNo); 
@@ -831,21 +912,23 @@
             currentUser={ role:"parent", full_name:`Parent of ${student.name}`, studentId:student.id }; 
             showDashboard(); resetInactivityTimer(); attachActivityListeners(); 
         }
+        
         async function adminSignup(fullName, email, password, role, regCode) { 
             if(regCode !== "ALIFLY2026") { showToast("Invalid admin registration code", true); return false; } 
-            const { error: signUpError } = await supabaseClient.auth.signUp({ email, password }); 
+            const { error: signUpError, data: authData } = await supabaseClient.auth.signUp({ email, password }); 
             if (signUpError) { showToast("Signup error: "+signUpError.message, true); return false; } 
             const section = "Oversight (UMC/Directors - all sections)"; 
-            const { error: profileError } = await supabaseClient.from('profiles').insert([{ id: (await supabaseClient.auth.getUser()).data.user.id, full_name: fullName, email, role, section }]); 
+            const { error: profileError } = await supabaseClient.from('profiles').insert([{ id: authData.user.id, full_name: fullName, email, role, section }]); 
             if (profileError) { showToast("Profile creation error", true); return false; } 
             showToast(`Admin ${fullName} created! You can now log in.`); 
             document.getElementById('adminSignupModal').style.display = 'none'; 
             return true; 
         }
         
-        // ============ NAVIGATION ============
+        // ============ NAVIGATION & ROUTING ============
         function showDashboard() { 
-            document.getElementById('loginScreen').style.display='none'; 
+            document.getElementById('adminLoginModal').style.display='none'; 
+            document.getElementById('staffLoginModal').style.display='none'; 
             document.getElementById('parentLoginModal').style.display='none'; 
             document.getElementById('landingPage').style.display='none'; 
             document.getElementById('appContainer').classList.remove('hidden'); 
@@ -924,18 +1007,30 @@
             document.getElementById('topLogoutBtn')?.addEventListener('click',logoutUser);
             document.getElementById('closeMobileSidebar')?.addEventListener('click',closeMobileSidebar);
             document.getElementById('sidebarOverlay')?.addEventListener('click',closeMobileSidebar);
-            document.getElementById('authForm')?.addEventListener('submit', async(e)=>{ e.preventDefault(); await loginUser(authEmail.value, authPassword.value); });
+            
+            // Admin login
+            document.getElementById('adminAuthForm')?.addEventListener('submit', async(e)=>{ e.preventDefault(); await loginAdmin(adminEmail.value, adminPassword.value); });
+            document.getElementById('adminLoginBtnHero')?.addEventListener('click',()=>{ document.getElementById('landingPage').style.display='none'; document.getElementById('adminLoginModal').style.display='flex'; });
+            document.getElementById('closeAdminLoginBtn')?.addEventListener('click',()=>location.reload());
+            document.getElementById('adminForgotPasswordBtn')?.addEventListener('click', async()=>{ const email=document.getElementById('adminEmail').value; if(!email) return showToast("Enter email",true); await supabaseClient.auth.resetPasswordForEmail(email); showToast("Reset link sent!"); });
+            
+            // Staff login
+            document.getElementById('staffAuthForm')?.addEventListener('submit', async(e)=>{ e.preventDefault(); await loginStaff(staffUsername.value, staffPassword.value); });
+            document.getElementById('staffLoginBtnHero')?.addEventListener('click',()=>{ document.getElementById('landingPage').style.display='none'; document.getElementById('staffLoginModal').style.display='flex'; });
+            document.getElementById('closeStaffLoginBtn')?.addEventListener('click',()=>location.reload());
+            
+            // Parent login
             document.getElementById('parentAuthForm')?.addEventListener('submit', async(e)=>{ e.preventDefault(); await parentLogin(parentRegNo.value, parentPassword.value); });
-            document.getElementById('adminSignupForm')?.addEventListener('submit', async(e)=>{ e.preventDefault(); await adminSignup(adminFullName.value, adminEmail.value, adminPassword.value, adminRole.value, adminRegCode.value); });
-            document.getElementById('loginBtnHero')?.addEventListener('click',()=>{ document.getElementById('landingPage').style.display='none'; document.getElementById('loginScreen').style.display='flex'; });
             document.getElementById('parentLoginBtn')?.addEventListener('click',()=>{ document.getElementById('landingPage').style.display='none'; document.getElementById('parentLoginModal').style.display='flex'; });
+            document.getElementById('closeParentLoginBtn')?.addEventListener('click',()=>location.reload());
+            
+            // Admin signup
             document.getElementById('adminSignupBtn')?.addEventListener('click',()=>{ document.getElementById('landingPage').style.display='none'; document.getElementById('adminSignupModal').style.display='flex'; });
-            document.getElementById('closeLoginBtn')?.addEventListener('click',()=>location.reload()); 
-            document.getElementById('closeParentLoginBtn')?.addEventListener('click',()=>location.reload()); 
             document.getElementById('closeAdminSignupBtn')?.addEventListener('click',()=>location.reload());
-            document.getElementById('forgotPasswordBtn')?.addEventListener('click', async()=>{ const email=document.getElementById('authEmail').value; if(!email) return showToast("Enter email",true); await supabaseClient.auth.resetPasswordForEmail(email); showToast("Reset link sent!"); });
+            document.getElementById('adminSignupForm')?.addEventListener('submit', async(e)=>{ e.preventDefault(); await adminSignup(adminFullName.value, adminEmail.value, adminPassword.value, adminRole.value, adminRegCode.value); });
+            
             document.getElementById('applyNowBtn')?.addEventListener('click',()=>{ window.showApplicationFormModal(); });
-            document.getElementById('loginBtnFooter')?.addEventListener('click',()=>{ document.getElementById('landingPage').style.display='none'; document.getElementById('loginScreen').style.display='flex'; });
+            document.getElementById('loginBtnFooter')?.addEventListener('click',()=>{ document.getElementById('landingPage').style.display='none'; document.getElementById('adminLoginModal').style.display='flex'; });
         }
         
         function initCookieConsent() { 
