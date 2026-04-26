@@ -143,18 +143,62 @@
         </footer>
     </div>
 
-    <!-- MODALS (unchanged) -->
+    <!-- ADMIN LOGIN MODAL -->
     <div id="adminLoginModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none; background: rgba(0,0,0,0.7);">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative"><div class="text-center mb-4"><i class="fas fa-user-shield text-5xl text-amber-600"></i><h2 class="text-2xl font-bold">Admin Login</h2><p class="text-sm text-gray-500">Use email & password</p></div><form id="adminAuthForm"><input type="email" id="adminEmail" placeholder="Email" class="w-full border p-2 rounded mb-3" required><input type="password" id="adminPassword" placeholder="Password" class="w-full border p-2 rounded mb-1" required><div class="mb-5 text-right"><button type="button" id="adminForgotPasswordBtn" class="text-xs text-amber-600">Forgot Password?</button></div><button type="submit" class="w-full bg-amber-600 text-white py-2 rounded-lg font-bold">Login as Admin</button></form><button id="closeAdminLoginBtn" class="absolute top-3 right-4 text-gray-400 text-2xl">&times;</button></div>
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative">
+            <div class="text-center mb-4"><i class="fas fa-user-shield text-5xl text-amber-600"></i><h2 class="text-2xl font-bold">Admin Login</h2><p class="text-sm text-gray-500">Use email & password</p></div>
+            <form id="adminAuthForm">
+                <input type="email" id="adminEmail" placeholder="Email" class="w-full border p-2 rounded mb-3" required>
+                <input type="password" id="adminPassword" placeholder="Password" class="w-full border p-2 rounded mb-1" required>
+                <div class="mb-5 text-right"><button type="button" id="adminForgotPasswordBtn" class="text-xs text-amber-600">Forgot Password?</button></div>
+                <button type="submit" class="w-full bg-amber-600 text-white py-2 rounded-lg font-bold">Login as Admin</button>
+            </form>
+            <button id="closeAdminLoginBtn" class="absolute top-3 right-4 text-gray-400 text-2xl">&times;</button>
+        </div>
     </div>
+
+    <!-- STAFF LOGIN MODAL -->
     <div id="staffLoginModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none; background: rgba(0,0,0,0.7);">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative"><div class="text-center mb-4"><i class="fas fa-chalkboard-user text-5xl text-emerald-600"></i><h2 class="text-2xl font-bold">Staff Login</h2><p class="text-sm text-gray-500">Enter your username & password</p></div><form id="staffAuthForm"><input type="text" id="staffUsername" placeholder="Username" class="w-full border p-2 rounded mb-3" required><input type="password" id="staffPassword" placeholder="Password" class="w-full border p-2 rounded mb-4" required><button type="submit" class="w-full bg-emerald-600 text-white py-2 rounded-lg font-bold">Login as Staff</button></form><button id="closeStaffLoginBtn" class="absolute top-3 right-4 text-gray-400 text-2xl">&times;</button></div>
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative">
+            <div class="text-center mb-4"><i class="fas fa-chalkboard-user text-5xl text-emerald-600"></i><h2 class="text-2xl font-bold">Staff Login</h2><p class="text-sm text-gray-500">Enter your username & password</p></div>
+            <form id="staffAuthForm">
+                <input type="text" id="staffUsername" placeholder="Username" class="w-full border p-2 rounded mb-3" required>
+                <input type="password" id="staffPassword" placeholder="Password" class="w-full border p-2 rounded mb-4" required>
+                <button type="submit" class="w-full bg-emerald-600 text-white py-2 rounded-lg font-bold">Login as Staff</button>
+            </form>
+            <button id="closeStaffLoginBtn" class="absolute top-3 right-4 text-gray-400 text-2xl">&times;</button>
+        </div>
     </div>
+
+    <!-- PARENT LOGIN MODAL -->
     <div id="parentLoginModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none; background: rgba(0,0,0,0.7);">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative"><div class="text-center mb-4"><i class="fas fa-user-graduate text-5xl text-indigo-600"></i><h2 class="text-2xl font-bold">Parent Portal</h2><p class="text-sm text-gray-500">Login with student registration number</p></div><form id="parentAuthForm"><input type="text" id="parentRegNo" placeholder="Student Registration Number" class="w-full border p-2 rounded mb-3" required><input type="password" id="parentPassword" value="al123" placeholder="Password" class="w-full border p-2 rounded mb-1" required><div class="text-xs text-gray-400 mb-4">Default password: al123</div><button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-lg font-bold">Access Dashboard</button></form><button id="closeParentLoginBtn" class="absolute top-3 right-4 text-gray-400 text-2xl">&times;</button></div>
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative">
+            <div class="text-center mb-4"><i class="fas fa-user-graduate text-5xl text-indigo-600"></i><h2 class="text-2xl font-bold">Parent Portal</h2><p class="text-sm text-gray-500">Login with student registration number</p></div>
+            <form id="parentAuthForm">
+                <input type="text" id="parentRegNo" placeholder="Student Registration Number" class="w-full border p-2 rounded mb-3" required>
+                <input type="password" id="parentPassword" value="al123" placeholder="Password" class="w-full border p-2 rounded mb-1" required>
+                <div class="text-xs text-gray-400 mb-4">Default password: al123</div>
+                <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-lg font-bold">Access Dashboard</button>
+            </form>
+            <button id="closeParentLoginBtn" class="absolute top-3 right-4 text-gray-400 text-2xl">&times;</button>
+        </div>
     </div>
+
+    <!-- ADMIN SIGNUP MODAL -->
     <div id="adminSignupModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none; background: rgba(0,0,0,0.7);">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative"><div class="text-center mb-4"><i class="fas fa-user-shield text-5xl text-purple-600"></i><h2 class="text-2xl font-bold">Admin Registration</h2><p class="text-sm text-gray-500">Create DG/CEO or UMC Account</p></div><form id="adminSignupForm"><input type="text" id="adminFullName" placeholder="Full Name" class="w-full border p-2 rounded mb-3" required><input type="email" id="adminEmail" placeholder="Email Address" class="w-full border p-2 rounded mb-3" required><input type="password" id="adminPassword" placeholder="Password" class="w-full border p-2 rounded mb-3" required><select id="adminRole" class="w-full border p-2 rounded mb-3"><option value="dg_ceo">Director General (DG/CEO)</option><option value="umc">UMC (Management)</option></select><input type="text" id="adminRegCode" placeholder="Admin Registration Code" class="w-full border p-2 rounded mb-3" required><div class="text-xs text-gray-500 mb-2">* Registration code required: <span class="font-mono font-bold">ALIFLY2026</span></div><button type="submit" class="w-full bg-purple-600 text-white py-2 rounded-lg font-bold">Create Admin Account</button></form><button id="closeAdminSignupBtn" class="absolute top-3 right-4 text-gray-400 text-2xl">&times;</button></div>
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative">
+            <div class="text-center mb-4"><i class="fas fa-user-shield text-5xl text-purple-600"></i><h2 class="text-2xl font-bold">Admin Registration</h2><p class="text-sm text-gray-500">Create DG/CEO or UMC Account</p></div>
+            <form id="adminSignupForm">
+                <input type="text" id="adminFullName" placeholder="Full Name" class="w-full border p-2 rounded mb-3" required>
+                <input type="email" id="adminEmail" placeholder="Email Address" class="w-full border p-2 rounded mb-3" required>
+                <input type="password" id="adminPassword" placeholder="Password" class="w-full border p-2 rounded mb-3" required>
+                <select id="adminRole" class="w-full border p-2 rounded mb-3"><option value="dg_ceo">Director General (DG/CEO)</option><option value="umc">UMC (Management)</option></select>
+                <input type="text" id="adminRegCode" placeholder="Admin Registration Code" class="w-full border p-2 rounded mb-3" required>
+                <div class="text-xs text-gray-500 mb-2">* Registration code required: <span class="font-mono font-bold">ALIFLY2026</span></div>
+                <button type="submit" class="w-full bg-purple-600 text-white py-2 rounded-lg font-bold">Create Admin Account</button>
+            </form>
+            <button id="closeAdminSignupBtn" class="absolute top-3 right-4 text-gray-400 text-2xl">&times;</button>
+        </div>
     </div>
 
     <!-- DASHBOARD APP -->
@@ -235,7 +279,9 @@
                 const missing = required.filter(b => !buckets.find(db => db.name === b));
                 if (missing.length) {
                     console.warn("Missing storage buckets:", missing);
-                    showToast(`Warning: Storage buckets missing: ${missing.join(', ')}. Uploads may fail.`, true);
+                    showToast(`⚠️ Storage buckets missing: ${missing.join(', ')}. Uploads may fail.`, true);
+                } else {
+                    console.log("All storage buckets present.");
                 }
             } catch(e) { 
                 console.warn("Storage check failed", e);
@@ -408,7 +454,10 @@
                     <div id="reportSheetContainer" class="mt-5"></div>
                     <div id="resultEditor" class="mt-5 hidden">
                         <h3 class="text-xl font-bold mb-2">Edit/Add Subjects</h3>
-                        <table class="w-full border"><thead class="bg-gray-100"><tr><th>Subject</th><th>CA1 (20)</th><th>CA2 (20)</th><th>Exam (60)</th><th>Total</th><th>Grade</th><th></th></tr></thead><tbody id="resBody"></tbody></table>
+                        <table class="w-full border">
+                            <thead class="bg-gray-100"><tr><th>Subject</th><th>CA1 (20)</th><th>CA2 (20)</th><th>Exam (60)</th><th>Total</th><th>Grade</th><th></th></tr></thead>
+                            <tbody id="resBody"></tbody>
+                        </table>
                         <button id="addSubjRow" class="mt-2 bg-amber-500 text-white px-3 py-1 rounded text-sm">+ Add Subject</button>
                         <button id="saveResultsBtn" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded-lg">Save All Changes</button>
                     </div>
@@ -514,7 +563,6 @@
                 if (!studentId) { showToast("Please select a student", true); return; }
                 const student = schoolData.students.find(s => s.id == studentId);
                 if (!student) return;
-                // Ensure all three terms exist
                 for (let t of [1,2,3]) await getOrCreateFeeBalance(studentId, t, year);
                 
                 const { data: balances, error } = await supabaseClient.from('fee_balances').select('*').eq('student_id', studentId).eq('year', year);
@@ -799,7 +847,7 @@
         async function renderMyClass() {
             let section = currentUser.assignedSection;
             let students = schoolData.students.filter(s => s.section === section);
-            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold">👩‍🏫 My Class - ${escapeHtml(section)}</h2><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Name</th><th>Reg No</th><th>Parent</th></tr></thead><tbody>${students.map(s=>`<tr><td>${escapeHtml(s.name)}</td><td>${escapeHtml(s.reg_number)}</td><td>${escapeHtml(s.parent_name||'-')}</td>`).join('')}</tbody></table></div></div>`;
+            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold">👩‍🏫 My Class - ${escapeHtml(section)}</h2><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Name</th><th>Reg No</th><th>Parent</th></tr></thead><tbody>${students.map(s=>`<tr><td>${escapeHtml(s.name)}</td><td>${escapeHtml(s.reg_number)}</td><td>${escapeHtml(s.parent_name||'-')}</td></tr>`).join('')}</tbody></table></div></div>`;
             document.getElementById("mainContent").innerHTML = html;
         }
         async function renderGradeStudent() {
@@ -848,7 +896,7 @@
         async function renderAttendanceAndAppraisal() {
             let section = currentUser.assignedSection;
             let students = schoolData.students.filter(s => s.section === section);
-            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">🗒️ Attendance & Appraisal</h2><p class="mb-2">Record attendance for today: <input type="date" id="attDate" class="border p-1 rounded"></p><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Student</th><th>Present</th><th>Remarks</th></tr></thead><tbody>${students.map(s=>`<tr><td>${escapeHtml(s.name)}</td><td><input type="checkbox" class="attCheck" data-id="${s.id}"></td><td><input type="text" class="attRemarks" data-id="${s.id}" placeholder="Remarks" class="border p-1"></td>`).join('')}</tbody></table></div><button id="saveAttendanceBtn" class="mt-3 bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700">Save Attendance</button></div>`;
+            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">🗒️ Attendance & Appraisal</h2><p class="mb-2">Record attendance for today: <input type="date" id="attDate" class="border p-1 rounded"></p><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Student</th><th>Present</th><th>Remarks</th></tr></thead><tbody>${students.map(s=>`<tr><td>${escapeHtml(s.name)}</td><td><input type="checkbox" class="attCheck" data-id="${s.id}"></td><td><input type="text" class="attRemarks" data-id="${s.id}" placeholder="Remarks" class="border p-1"></td></tr>`).join('')}</tbody></table></div><button id="saveAttendanceBtn" class="mt-3 bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700">Save Attendance</button></div>`;
             document.getElementById("mainContent").innerHTML = html;
             document.getElementById("saveAttendanceBtn").onclick = async () => {
                 let date = document.getElementById("attDate").value;
@@ -869,8 +917,8 @@
             try { 
                 const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password }); 
                 if (error) throw error; 
-                const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', data.user.id).single(); 
-                if (!profile?.role) throw new Error("No role assigned - not an admin"); 
+                const { data: profile, error: profileError } = await supabaseClient.from('profiles').select('*').eq('id', data.user.id).single(); 
+                if (profileError || !profile) throw new Error("No role assigned – not an admin. Please ensure a profile row exists for this user.");
                 if (!['dg_ceo','umc','daf','dprpa','der','do','headteacher'].includes(profile.role)) throw new Error("Invalid admin role");
                 currentUser = { ...profile, full_name: profile.full_name, role: profile.role, assignedSection: profile.section }; 
                 await refreshSchoolData(); 
@@ -907,7 +955,7 @@
             if (signUpError) { showToast("Signup error: "+signUpError.message, true); return false; } 
             const section = "Oversight (UMC/Directors - all sections)"; 
             const { error: profileError } = await supabaseClient.from('profiles').insert([{ id: authData.user.id, full_name: fullName, email, role, section }]); 
-            if (profileError) { showToast("Profile creation error", true); return false; } 
+            if (profileError) { showToast("Profile creation error: "+profileError.message, true); return false; } 
             showToast(`Admin ${fullName} created! You can now log in.`); 
             document.getElementById('adminSignupModal').style.display = 'none'; 
             return true; 
@@ -997,7 +1045,15 @@
             document.getElementById('closeMobileSidebar')?.addEventListener('click',closeMobileSidebar);
             document.getElementById('sidebarOverlay')?.addEventListener('click',closeMobileSidebar);
             
-            document.getElementById('adminAuthForm')?.addEventListener('submit', async(e)=>{ e.preventDefault(); await loginAdmin(adminEmail.value, adminPassword.value); });
+            // ADMIN LOGIN FIX: explicit value reading and validation
+            document.getElementById('adminAuthForm')?.addEventListener('submit', async(e) => { 
+                e.preventDefault(); 
+                const email = document.getElementById('adminEmail')?.value.trim(); 
+                const password = document.getElementById('adminPassword')?.value; 
+                if (!email) { showToast("Email is required", true); return; }
+                if (!password) { showToast("Password is required", true); return; }
+                await loginAdmin(email, password); 
+            });
             document.getElementById('adminLoginBtnHero')?.addEventListener('click',()=>{ document.getElementById('landingPage').style.display='none'; document.getElementById('adminLoginModal').style.display='flex'; });
             document.getElementById('closeAdminLoginBtn')?.addEventListener('click',()=>location.reload());
             document.getElementById('adminForgotPasswordBtn')?.addEventListener('click', async()=>{ const email=document.getElementById('adminEmail').value; if(!email) return showToast("Enter email",true); await supabaseClient.auth.resetPasswordForEmail(email); showToast("Reset link sent!"); });
