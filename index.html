@@ -6,8 +6,8 @@
     <link rel="icon" href="./favicon.ico">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        const SUPABASE_URL = 'https://knvbfzlwtbrzdmpqmmpt.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_a5AGI4aO3uEIBwNMKSMr0g_LxPjmHGR';
+        const SUPABASE_URL = 'https://dvcwycczyjiecsdsobln.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_tDgRBcqct6qor5jxfiKi5Q_94St8ERO';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     </script>
     <title>Al‑Istiqaamah Flying Wings Academy | Unified Portal</title>
@@ -57,9 +57,6 @@
         .delete-btn:hover { background-color: #dc2626; }
         .active-badge { background: #10b981; color: white; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; }
         .suspended-badge { background: #f97316; color: white; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; }
-        .grade-subject-row { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
-        .remove-subject-btn { background: #ef4444; color: white; border-radius: 999px; padding: 4px 12px; font-size: 0.7rem; cursor: pointer; }
-        .result-card { background: #fef9e6; border-left: 6px solid #f59e0b; }
         .cookie-consent { position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: #f1f5f9; padding: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; z-index: 200; box-shadow: 0 -4px 10px rgba(0,0,0,0.2); }
         .cookie-consent button { background: #f59e0b; border: none; padding: 8px 20px; border-radius: 40px; font-weight: bold; color: #0f172a; cursor: pointer; transition: 0.2s; }
         .cookie-consent button:hover { background: #d97706; transform: scale(1.02); }
@@ -146,22 +143,16 @@
         </footer>
     </div>
 
-    <!-- ADMIN LOGIN MODAL (email/password via Supabase Auth) -->
+    <!-- MODALS (unchanged) -->
     <div id="adminLoginModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none; background: rgba(0,0,0,0.7);">
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative"><div class="text-center mb-4"><i class="fas fa-user-shield text-5xl text-amber-600"></i><h2 class="text-2xl font-bold">Admin Login</h2><p class="text-sm text-gray-500">Use email & password</p></div><form id="adminAuthForm"><input type="email" id="adminEmail" placeholder="Email" class="w-full border p-2 rounded mb-3" required><input type="password" id="adminPassword" placeholder="Password" class="w-full border p-2 rounded mb-1" required><div class="mb-5 text-right"><button type="button" id="adminForgotPasswordBtn" class="text-xs text-amber-600">Forgot Password?</button></div><button type="submit" class="w-full bg-amber-600 text-white py-2 rounded-lg font-bold">Login as Admin</button></form><button id="closeAdminLoginBtn" class="absolute top-3 right-4 text-gray-400 text-2xl">&times;</button></div>
     </div>
-
-    <!-- STAFF LOGIN MODAL (username/password via staff_credentials) -->
     <div id="staffLoginModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none; background: rgba(0,0,0,0.7);">
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative"><div class="text-center mb-4"><i class="fas fa-chalkboard-user text-5xl text-emerald-600"></i><h2 class="text-2xl font-bold">Staff Login</h2><p class="text-sm text-gray-500">Enter your username & password</p></div><form id="staffAuthForm"><input type="text" id="staffUsername" placeholder="Username" class="w-full border p-2 rounded mb-3" required><input type="password" id="staffPassword" placeholder="Password" class="w-full border p-2 rounded mb-4" required><button type="submit" class="w-full bg-emerald-600 text-white py-2 rounded-lg font-bold">Login as Staff</button></form><button id="closeStaffLoginBtn" class="absolute top-3 right-4 text-gray-400 text-2xl">&times;</button></div>
     </div>
-
-    <!-- PARENT LOGIN MODAL -->
     <div id="parentLoginModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none; background: rgba(0,0,0,0.7);">
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative"><div class="text-center mb-4"><i class="fas fa-user-graduate text-5xl text-indigo-600"></i><h2 class="text-2xl font-bold">Parent Portal</h2><p class="text-sm text-gray-500">Login with student registration number</p></div><form id="parentAuthForm"><input type="text" id="parentRegNo" placeholder="Student Registration Number" class="w-full border p-2 rounded mb-3" required><input type="password" id="parentPassword" value="al123" placeholder="Password" class="w-full border p-2 rounded mb-1" required><div class="text-xs text-gray-400 mb-4">Default password: al123</div><button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-lg font-bold">Access Dashboard</button></form><button id="closeParentLoginBtn" class="absolute top-3 right-4 text-gray-400 text-2xl">&times;</button></div>
     </div>
-
-    <!-- ADMIN SIGNUP MODAL (DG/CEO or UMC only) -->
     <div id="adminSignupModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none; background: rgba(0,0,0,0.7);">
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative"><div class="text-center mb-4"><i class="fas fa-user-shield text-5xl text-purple-600"></i><h2 class="text-2xl font-bold">Admin Registration</h2><p class="text-sm text-gray-500">Create DG/CEO or UMC Account</p></div><form id="adminSignupForm"><input type="text" id="adminFullName" placeholder="Full Name" class="w-full border p-2 rounded mb-3" required><input type="email" id="adminEmail" placeholder="Email Address" class="w-full border p-2 rounded mb-3" required><input type="password" id="adminPassword" placeholder="Password" class="w-full border p-2 rounded mb-3" required><select id="adminRole" class="w-full border p-2 rounded mb-3"><option value="dg_ceo">Director General (DG/CEO)</option><option value="umc">UMC (Management)</option></select><input type="text" id="adminRegCode" placeholder="Admin Registration Code" class="w-full border p-2 rounded mb-3" required><div class="text-xs text-gray-500 mb-2">* Registration code required: <span class="font-mono font-bold">ALIFLY2026</span></div><button type="submit" class="w-full bg-purple-600 text-white py-2 rounded-lg font-bold">Create Admin Account</button></form><button id="closeAdminSignupBtn" class="absolute top-3 right-4 text-gray-400 text-2xl">&times;</button></div>
     </div>
@@ -174,7 +165,7 @@
     <div id="toastMsg" class="toast-notify"></div>
 
     <script>
-        // ======================= GLOBALS & HELPER FUNCTIONS =======================
+        // ======================= GLOBALS =======================
         const SECTIONS = ['regular islamiyyah', 'regular memorization', 'intensive memorization', 'integrated islamic basic section', 'advance section', 'woman section'];
         let schoolData = { students: [], teachers: [] };
         let currentUser = null;
@@ -182,6 +173,7 @@
         let inactivityTimer = null;
         const INACTIVITY_TIMEOUT_MS = 30 * 60 * 1000;
         let activityListenersAttached = false;
+        let currentViewName = 'dashboard';
 
         function showToast(msg, isError=false) { 
             let t = document.getElementById('toastMsg'); 
@@ -250,7 +242,7 @@
                 showToast("Storage not properly configured. Please contact administrator.", true);
             }
         }
-        
+
         // ============ SLIDESHOW ============
         async function loadSlidesFromSupabase() { 
             try {
@@ -261,6 +253,7 @@
             } catch(e) { slidesData = [{ url: "https://picsum.photos/id/20/1200/600", caption: "Our Campus" }]; rebuildSlideshow(); }
         }
         function rebuildSlideshow() { 
+            if (slideInterval) clearInterval(slideInterval);
             const container = document.getElementById('slidesContainer'); 
             if(!container) return; container.innerHTML=''; const dots=document.getElementById('dotsContainer'); if(dots) dots.innerHTML=''; 
             slidesData.forEach((slide,idx)=>{ let div=document.createElement('div'); div.className=`carousel-slide absolute inset-0 w-full h-full transition-opacity duration-500 ${idx===currentSlideIndex?'opacity-100 z-10':'opacity-0 z-0'}`; div.style.backgroundImage=`linear-gradient(0deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2)), url('${slide.url}')`; div.style.backgroundSize='cover'; let cap=document.createElement('div'); cap.className='absolute bottom-0 bg-black/60 text-white p-2 w-full text-center'; cap.innerText=slide.caption; div.appendChild(cap); container.appendChild(div); if(dots){ let dot=document.createElement('button'); dot.className=`dot w-3 h-3 rounded-full mx-1 ${idx===currentSlideIndex?'bg-amber-400 w-4':'bg-white/60'}`; dot.addEventListener('click',()=>goToSlide(idx)); dots.appendChild(dot); } }); resetAutoSlide(); 
@@ -281,7 +274,7 @@
             const modalDiv = document.createElement('div');
             modalDiv.className = 'fixed inset-0 z-[100] flex items-center justify-center bg-black/80 overflow-y-auto p-4';
             modalDiv.style.backdropFilter = 'blur(4px)';
-            modalDiv.innerHTML = `<div class="bg-white rounded-2xl w-full max-w-6xl max-h-[90vh] overflow-y-auto relative shadow-2xl"><div class="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center z-10"><h2 class="text-2xl font-bold text-emerald-800"><i class="fas fa-file-alt mr-2"></i> Admission Application Form</h2><button id="closeAppModalNew" class="text-gray-500 text-3xl hover:text-gray-700">&times;</button></div><div class="p-6"><form id="admissionFormNew" class="space-y-8"><div class="bg-white rounded-2xl border p-6"><h3 class="font-bold text-xl border-b pb-2 mb-3">A. Applicant Information</h3><div class="grid md:grid-cols-3 gap-4"><input type="text" name="surname" placeholder="Surname *" required class="border rounded p-2"><input type="text" name="firstname" placeholder="First Name *" required class="border rounded p-2"><input type="text" name="othernames" placeholder="Other Names" class="border rounded p-2"><select name="gender" class="border rounded p-2"><option>Male</option><option>Female</option></select><input type="date" name="dob" id="dobModal" class="border rounded p-2"><input type="number" name="age" id="ageModal" readonly placeholder="Age" class="bg-gray-100 border rounded p-2"><input type="text" name="nationality" placeholder="Nationality" value="Nigerian" class="border rounded p-2"><input type="text" name="stateOfOrigin" placeholder="State of Origin" class="border rounded p-2"><input type="text" name="homeAddress" placeholder="Home Address" class="border rounded p-2 md:col-span-2"></div></div><div class="bg-white rounded-2xl border p-6"><h3 class="font-bold text-xl border-b pb-2">B. Academic & Parent Info</h3><div class="grid md:grid-cols-2 gap-4 mt-2"><select name="classLevel" class="border rounded p-2">${SECTIONS.map(s=>`<option>${s}</option>`).join('')}</select><input type="text" name="prevSchool" placeholder="Previous School" class="border rounded p-2"><input type="text" name="fatherName" placeholder="Father's Name" class="border rounded p-2"><input type="text" name="motherName" placeholder="Mother's Name" class="border rounded p-2"><input type="text" name="parentPhone" placeholder="Parent Phone" class="border rounded p-2"><input type="email" name="parentEmail" placeholder="Parent Email" class="border rounded p-2"></div></div><div class="bg-white rounded-2xl border p-6"><h3 class="font-bold text-xl border-b pb-2">C. Health & Religious Info</h3><div class="grid md:grid-cols-2 gap-4 mt-2"><input type="text" name="bloodGroup" placeholder="Blood Group"><input type="text" name="allergies" placeholder="Allergies"><input type="text" name="quranMemorization" placeholder="Quran Memorization (Juz)"><select name="quranReading"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select></div></div><div class="bg-white rounded-2xl border p-6"><h3 class="font-bold text-xl border-b pb-2">D. Parent Declaration</h3><div class="grid md:grid-cols-2 gap-4"><input type="text" name="declarantName" placeholder="Parent/Guardian Name *" required class="border rounded p-2"><input type="date" name="declarationDate" class="border rounded p-2"></div></div><div class="bg-white rounded-2xl border p-6"><h3 class="font-bold text-xl border-b pb-2">E. Attachments (docs/images)</h3><div class="grid md:grid-cols-2 gap-3"><div><label>Birth Certificate</label><input type="file" name="birthCert" accept="image/*,application/pdf"></div><div><label>Previous Report</label><input type="file" name="prevReport" accept="image/*,application/pdf"></div><div><label>Medical Report</label><input type="file" name="medicalReport"></div></div></div><button type="submit" class="w-full bg-emerald-700 text-white py-3 rounded-xl font-bold hover:bg-emerald-800 transition">Submit Application</button></form></div></div>`;
+            modalDiv.innerHTML = `<div class="bg-white rounded-2xl w-full max-w-6xl max-h-[90vh] overflow-y-auto relative shadow-2xl"><div class="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center z-10"><h2 class="text-2xl font-bold text-emerald-800"><i class="fas fa-file-alt mr-2"></i> Admission Application Form</h2><button id="closeAppModalNew" class="text-gray-500 text-3xl hover:text-gray-700">&times;</button></div><div class="p-6"><form id="admissionFormNew" class="space-y-8"><div class="bg-white rounded-2xl border p-6"><h3 class="font-bold text-xl border-b pb-2 mb-3">A. Applicant Information</h3><div class="grid md:grid-cols-3 gap-4"><input type="text" name="surname" placeholder="Surname *" required class="border rounded p-2"><input type="text" name="firstname" placeholder="First Name *" required class="border rounded p-2"><input type="text" name="othernames" placeholder="Other Names" class="border rounded p-2"><select name="gender" class="border rounded p-2"><option>Male</option><option>Female</option></select><input type="date" name="dob" id="dobModal" class="border rounded p-2"><input type="number" name="age" id="ageModal" readonly placeholder="Age" class="bg-gray-100 border rounded p-2"><input type="text" name="nationality" placeholder="Nationality" value="Nigerian" class="border rounded p-2"><input type="text" name="stateOfOrigin" placeholder="State of Origin" class="border rounded p-2"><input type="text" name="homeAddress" placeholder="Home Address" class="border rounded p-2 md:col-span-2"></div></div><div class="bg-white rounded-2xl border p-6"><h3 class="font-bold text-xl border-b pb-2">B. Academic & Parent Info</h3><div class="grid md:grid-cols-2 gap-4 mt-2"><select name="classLevel" class="border rounded p-2">${SECTIONS.map(s=>`<option>${escapeHtml(s)}</option>`).join('')}</select><input type="text" name="prevSchool" placeholder="Previous School" class="border rounded p-2"><input type="text" name="fatherName" placeholder="Father's Name" class="border rounded p-2"><input type="text" name="motherName" placeholder="Mother's Name" class="border rounded p-2"><input type="text" name="parentPhone" placeholder="Parent Phone" class="border rounded p-2"><input type="email" name="parentEmail" placeholder="Parent Email" class="border rounded p-2"></div></div><div class="bg-white rounded-2xl border p-6"><h3 class="font-bold text-xl border-b pb-2">C. Health & Religious Info</h3><div class="grid md:grid-cols-2 gap-4 mt-2"><input type="text" name="bloodGroup" placeholder="Blood Group"><input type="text" name="allergies" placeholder="Allergies"><input type="text" name="quranMemorization" placeholder="Quran Memorization (Juz)"><select name="quranReading"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select></div></div><div class="bg-white rounded-2xl border p-6"><h3 class="font-bold text-xl border-b pb-2">D. Parent Declaration</h3><div class="grid md:grid-cols-2 gap-4"><input type="text" name="declarantName" placeholder="Parent/Guardian Name *" required class="border rounded p-2"><input type="date" name="declarationDate" class="border rounded p-2"></div></div><div class="bg-white rounded-2xl border p-6"><h3 class="font-bold text-xl border-b pb-2">E. Attachments (docs/images)</h3><div class="grid md:grid-cols-2 gap-3"><div><label>Birth Certificate</label><input type="file" name="birthCert" accept="image/*,application/pdf"></div><div><label>Previous Report</label><input type="file" name="prevReport" accept="image/*,application/pdf"></div><div><label>Medical Report</label><input type="file" name="medicalReport"></div></div></div><button type="submit" class="w-full bg-emerald-700 text-white py-3 rounded-xl font-bold hover:bg-emerald-800 transition">Submit Application</button></form></div></div>`;
             document.body.appendChild(modalDiv);
             const closeBtn = modalDiv.querySelector('#closeAppModalNew'); 
             const closeModal = () => modalDiv.remove(); 
@@ -351,14 +344,14 @@
             const attachments = formData.attachments || {};
             const modal = document.createElement('div');
             modal.className = 'fixed inset-0 z-[200] bg-black/70 flex items-center justify-center p-4 overflow-y-auto';
-            modal.innerHTML = `<div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative"><div class="sticky top-0 bg-white border-b px-6 py-4 flex justify-between"><h3 class="text-2xl font-bold text-emerald-800">📋 Application Details</h3><button class="closeModalBtn text-3xl">&times;</button></div><div class="p-6"><div><strong>Full Name:</strong> ${escapeHtml(app.full_name)}</div><div><strong>Submitted:</strong> ${new Date(app.submitted_at).toLocaleString()}</div><div><strong>Status:</strong> <span class="status-badge status-${app.status}">${app.status}</span></div><hr class="my-2"><h4 class="font-bold">Form Data</h4><div class="grid grid-cols-2 gap-2 text-sm">${Object.entries(formData).filter(([k]) => !k.startsWith('attachments')).map(([k,v]) => `<div><strong>${k}:</strong> ${escapeHtml(String(v))}</div>`).join('')}</div><hr class="my-2"><h4 class="font-bold">Attachments</h4><div class="flex gap-4">${attachments.birthCert_url ? `<a href="${attachments.birthCert_url}" target="_blank" class="bg-amber-100 p-2 rounded">Birth Certificate</a>` : ''}${attachments.prevReport_url ? `<a href="${attachments.prevReport_url}" target="_blank" class="bg-amber-100 p-2 rounded">Previous Report</a>` : ''}${attachments.medicalReport_url ? `<a href="${attachments.medicalReport_url}" target="_blank" class="bg-amber-100 p-2 rounded">Medical Report</a>` : ''}</div></div><div class="sticky bottom-0 bg-gray-50 p-4 text-right border-t"><button class="closeModalBtn bg-gray-500 text-white px-4 py-2 rounded">Close</button></div></div>`;
+            modal.innerHTML = `<div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative"><div class="sticky top-0 bg-white border-b px-6 py-4 flex justify-between"><h3 class="text-2xl font-bold text-emerald-800">📋 Application Details</h3><button class="closeModalBtn text-3xl">&times;</button></div><div class="p-6"><div><strong>Full Name:</strong> ${escapeHtml(app.full_name)}</div><div><strong>Submitted:</strong> ${new Date(app.submitted_at).toLocaleString()}</div><div><strong>Status:</strong> <span class="status-badge status-${app.status}">${app.status}</span></div><hr class="my-2"><h4 class="font-bold">Form Data</h4><div class="grid grid-cols-2 gap-2 text-sm">${Object.entries(formData).filter(([k]) => !k.startsWith('attachments')).map(([k,v]) => `<div><strong>${escapeHtml(k)}:</strong> ${escapeHtml(String(v))}</div>`).join('')}</div><hr class="my-2"><h4 class="font-bold">Attachments</h4><div class="flex gap-4">${attachments.birthCert_url ? `<a href="${attachments.birthCert_url}" target="_blank" class="bg-amber-100 p-2 rounded">Birth Certificate</a>` : ''}${attachments.prevReport_url ? `<a href="${attachments.prevReport_url}" target="_blank" class="bg-amber-100 p-2 rounded">Previous Report</a>` : ''}${attachments.medicalReport_url ? `<a href="${attachments.medicalReport_url}" target="_blank" class="bg-amber-100 p-2 rounded">Medical Report</a>` : ''}</div></div><div class="sticky bottom-0 bg-gray-50 p-4 text-right border-t"><button class="closeModalBtn bg-gray-500 text-white px-4 py-2 rounded">Close</button></div></div>`;
             document.body.appendChild(modal);
             modal.querySelectorAll('.closeModalBtn').forEach(btn => btn.addEventListener('click', () => modal.remove()));
             modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
         }
         
         // ============ CSV DOWNLOADS ============
-        function downloadCSV(data, filename) {
+        window.downloadCSV = function downloadCSV(data, filename) {
             if (!data || data.length === 0) { showToast("No data to export", true); return; }
             const headers = Object.keys(data[0]);
             const csvRows = [headers.join(',')];
@@ -373,11 +366,11 @@
             document.body.appendChild(link); link.click(); document.body.removeChild(link);
             URL.revokeObjectURL(url);
             showToast(`Downloaded ${filename}`);
-        }
-        async function downloadStudents() { const { data } = await supabaseClient.from('students').select('*'); if(data) downloadCSV(data, 'students.csv'); else showToast("No data",true); }
-        async function downloadResults() { const { data } = await supabaseClient.from('student_results').select('*'); if(data) downloadCSV(data, 'results.csv'); else showToast("No data",true); }
-        async function downloadFeeTransactions() { const { data } = await supabaseClient.from('fee_transactions').select('*'); if(data) downloadCSV(data, 'fee_transactions.csv'); else showToast("No data",true); }
-        async function downloadStaff() { const { data } = await supabaseClient.from('teachers').select('*'); if(data) downloadCSV(data, 'staff.csv'); else showToast("No data",true); }
+        };
+        async function downloadStudents() { const { data } = await supabaseClient.from('students').select('*'); if(data) window.downloadCSV(data, 'students.csv'); else showToast("No data",true); }
+        async function downloadResults() { const { data } = await supabaseClient.from('student_results').select('*'); if(data) window.downloadCSV(data, 'results.csv'); else showToast("No data",true); }
+        async function downloadFeeTransactions() { const { data } = await supabaseClient.from('fee_transactions').select('*'); if(data) window.downloadCSV(data, 'fee_transactions.csv'); else showToast("No data",true); }
+        async function downloadStaff() { const { data } = await supabaseClient.from('teachers').select('*'); if(data) window.downloadCSV(data, 'staff.csv'); else showToast("No data",true); }
         function renderDownloadRecords() { 
             const html = `<div class="bg-white rounded-xl p-6 shadow"><h2 class="text-2xl font-bold mb-4">📥 Download Records</h2><div class="flex flex-wrap gap-4"><button id="downloadStudentsBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Students CSV</button><button id="downloadResultsBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Results CSV</button><button id="downloadFeeBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Fee Transactions CSV</button><button id="downloadStaffBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Staff CSV</button></div></div>`;
             document.getElementById("mainContent").innerHTML = html;
@@ -397,14 +390,14 @@
         }
         
         async function renderUnifiedResults() {
-            if (!currentUser || currentUser.role !== 'dg_ceo') { showToast("Access denied", true); renderContentView("dashboard"); return; }
+            if (!currentUser || currentUser.role !== 'dg_ceo') { showToast("Access denied", true); return; }
             let html = `
                 <div class="bg-white rounded-xl shadow p-6">
                     <h2 class="text-2xl font-bold mb-4">📊 Termly Report Sheet Management</h2>
                     <div class="grid md:grid-cols-4 gap-4 mb-4">
                         <select id="resStudent" class="border p-2 rounded">
                             <option value="">Select Student</option>
-                            ${schoolData.students.map(s => `<option value="${s.id}">${s.name} (${s.reg_number})</option>`).join('')}
+                            ${schoolData.students.map(s => `<option value="${s.id}">${escapeHtml(s.name)} (${escapeHtml(s.reg_number)})</option>`).join('')}
                         </select>
                         <select id="resTerm" class="border p-2 rounded">
                             <option value="1">First Term</option><option value="2">Second Term</option><option value="3">Third Term</option>
@@ -415,10 +408,7 @@
                     <div id="reportSheetContainer" class="mt-5"></div>
                     <div id="resultEditor" class="mt-5 hidden">
                         <h3 class="text-xl font-bold mb-2">Edit/Add Subjects</h3>
-                        <table class="w-full border">
-                            <thead class="bg-gray-100"><tr><th>Subject</th><th>CA1 (20)</th><th>CA2 (20)</th><th>Exam (60)</th><th>Total</th><th>Grade</th><th></th></tr></thead>
-                            <tbody id="resBody"></tbody>
-                        </table>
+                        <table class="w-full border"><thead class="bg-gray-100"><tr><th>Subject</th><th>CA1 (20)</th><th>CA2 (20)</th><th>Exam (60)</th><th>Total</th><th>Grade</th><th></th></tr></thead><tbody id="resBody"></tbody></table>
                         <button id="addSubjRow" class="mt-2 bg-amber-500 text-white px-3 py-1 rounded text-sm">+ Add Subject</button>
                         <button id="saveResultsBtn" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded-lg">Save All Changes</button>
                     </div>
@@ -436,7 +426,7 @@
                 let totalScore = 0, subjectCount = results.length;
                 results.forEach(r => { totalScore += (r.ca1 + r.ca2 + r.exam); });
                 const average = subjectCount ? (totalScore / subjectCount).toFixed(2) : 0;
-                let reportHtml = `<div class="border rounded-lg p-4 bg-gray-50" id="reportSheetContent"><div class="text-center border-b pb-2 mb-3"><h3 class="text-xl font-bold">Al‑Istiqaamah Flying Wings Academy</h3><h4 class="text-lg">TERMLY REPORT SHEET</h4><p><strong>Student:</strong> ${student.name} (${student.reg_number}) | <strong>Section:</strong> ${student.section} | <strong>Term:</strong> ${term} | <strong>Year:</strong> ${year}</p></div><table class="w-full border"><thead class="bg-gray-200"><tr><th>Subject</th><th>CA1 (20)</th><th>CA2 (20)</th><th>Exam (60)</th><th>Total (100)</th><th>Grade</th></tr></thead><tbody>${results.map(r => `<tr><td>${r.subject}</td><td class="text-center">${r.ca1}</td><td class="text-center">${r.ca2}</td><td class="text-center">${r.exam}</td><td class="text-center font-bold">${r.ca1+r.ca2+r.exam}</td><td class="text-center">${r.grade}</td></tr>`).join('')}${results.length === 0 ? '<tr><td colspan="6" class="text-center text-gray-500">No results recorded yet.</td></tr>' : ''}</tbody>${results.length ? `<tfoot class="bg-gray-100 font-bold"><tr><td colspan="3">Total Score: ${totalScore}</td><td colspan="3">Average: ${average}%</td></tr><tr><td colspan="6" class="text-sm text-gray-600">Remarks: ${average >= 75 ? 'Excellent' : average >= 60 ? 'Good' : average >= 50 ? 'Satisfactory' : 'Needs Improvement'}</td></tr></tfoot>` : ''}</table><div class="mt-3 flex gap-2"><button id="printReportBtn" class="bg-blue-600 text-white px-3 py-1 rounded">Print Report Sheet</button><button id="editResultsBtn" class="bg-amber-600 text-white px-3 py-1 rounded">Edit Subjects/Grades</button></div></div>`;
+                let reportHtml = `<div class="border rounded-lg p-4 bg-gray-50" id="reportSheetContent"><div class="text-center border-b pb-2 mb-3"><h3 class="text-xl font-bold">Al‑Istiqaamah Flying Wings Academy</h3><h4 class="text-lg">TERMLY REPORT SHEET</h4><p><strong>Student:</strong> ${escapeHtml(student.name)} (${escapeHtml(student.reg_number)}) | <strong>Section:</strong> ${escapeHtml(student.section)} | <strong>Term:</strong> ${term} | <strong>Year:</strong> ${year}</p></div><table class="w-full border"><thead class="bg-gray-200"><tr><th>Subject</th><th>CA1 (20)</th><th>CA2 (20)</th><th>Exam (60)</th><th>Total (100)</th><th>Grade</th></tr></thead><tbody>${results.map(r => `<tr><td>${escapeHtml(r.subject)}</td><td class="text-center">${r.ca1}</td><td class="text-center">${r.ca2}</td><td class="text-center">${r.exam}</td><td class="text-center font-bold">${r.ca1+r.ca2+r.exam}</td><td class="text-center">${r.grade}</td></tr>`).join('')}${results.length === 0 ? '<tr><td colspan="6" class="text-center text-gray-500">No results recorded yet.</td></tr>' : ''}</tbody>${results.length ? `<tfoot class="bg-gray-100 font-bold"><tr><td colspan="3">Total Score: ${totalScore}</td><td colspan="3">Average: ${average}%</td></tr><tr><td colspan="6" class="text-sm text-gray-600">Remarks: ${average >= 75 ? 'Excellent' : average >= 60 ? 'Good' : average >= 50 ? 'Satisfactory' : 'Needs Improvement'}</td></tr></tfoot>` : ''}</table><div class="mt-3 flex gap-2"><button id="printReportBtn" class="bg-blue-600 text-white px-3 py-1 rounded">Print Report Sheet</button><button id="editResultsBtn" class="bg-amber-600 text-white px-3 py-1 rounded">Edit Subjects/Grades</button></div></div>`;
                 document.getElementById("reportSheetContainer").innerHTML = reportHtml;
                 document.getElementById("printReportBtn").onclick = () => { const printContent = document.getElementById("reportSheetContent").innerHTML; const printWindow = window.open('', '_blank'); printWindow.document.write(`<html><head><title>Report Sheet</title><link href="https://cdn.tailwindcss.com" rel="stylesheet"><style>body { padding: 20px; }</style></head><body>${printContent}</body></html>`); printWindow.document.close(); printWindow.print(); };
                 document.getElementById("editResultsBtn").onclick = () => { document.getElementById("resultEditor").classList.remove("hidden"); loadEditorTable(studentId, term, year); };
@@ -444,7 +434,7 @@
             const loadEditorTable = async (studentId, term, year) => {
                 const { data: results } = await supabaseClient.from('student_results').select('*').eq('student_id', studentId).eq('term', term).eq('year', year);
                 const tbody = document.getElementById("resBody"); tbody.innerHTML = '';
-                const addRow = (r = null) => { const tr = document.createElement('tr'); tr.innerHTML = `<td><input class="subj w-32 border p-1" value="${r?.subject || ''}"></td><td><input class="ca1 w-20 border p-1" value="${r?.ca1 || 0}" min="0" max="20" type="number"></td><td><input class="ca2 w-20 border p-1" value="${r?.ca2 || 0}" min="0" max="20" type="number"></td><td><input class="ex w-20 border p-1" value="${r?.exam || 0}" min="0" max="60" type="number"></td><td class="totalCell font-bold">${(r?.ca1||0)+(r?.ca2||0)+(r?.exam||0)}</td><td class="gradeCell"></td><td><button class="delRow bg-red-500 text-white px-2 rounded">X</button></td>`; const update = () => { let c1=+tr.querySelector('.ca1').value||0,c2=+tr.querySelector('.ca2').value||0,ex=+tr.querySelector('.ex').value||0,tot=c1+c2+ex; tr.querySelector('.totalCell').innerText=tot; tr.querySelector('.gradeCell').innerText=tot>=80?'A':tot>=70?'B':tot>=60?'C':tot>=50?'D':'E'; }; tr.querySelector('.ca1').addEventListener('input',update); tr.querySelector('.ca2').addEventListener('input',update); tr.querySelector('.ex').addEventListener('input',update); tr.querySelector('.delRow').addEventListener('click',()=>tr.remove()); update(); tbody.appendChild(tr); };
+                const addRow = (r = null) => { const tr = document.createElement('tr'); tr.innerHTML = `<td><input class="subj w-32 border p-1" value="${escapeHtml(r?.subject || '')}"></td><td><input class="ca1 w-20 border p-1" value="${r?.ca1 || 0}" min="0" max="20" type="number"></td><td><input class="ca2 w-20 border p-1" value="${r?.ca2 || 0}" min="0" max="20" type="number"></td><td><input class="ex w-20 border p-1" value="${r?.exam || 0}" min="0" max="60" type="number"></td><td class="totalCell font-bold">${(r?.ca1||0)+(r?.ca2||0)+(r?.exam||0)}</td><td class="gradeCell"></td><td><button class="delRow bg-red-500 text-white px-2 rounded">X</button></td>`; const update = () => { let c1=+tr.querySelector('.ca1').value||0,c2=+tr.querySelector('.ca2').value||0,ex=+tr.querySelector('.ex').value||0,tot=c1+c2+ex; tr.querySelector('.totalCell').innerText=tot; tr.querySelector('.gradeCell').innerText=tot>=80?'A':tot>=70?'B':tot>=60?'C':tot>=50?'D':'E'; }; tr.querySelector('.ca1').addEventListener('input',update); tr.querySelector('.ca2').addEventListener('input',update); tr.querySelector('.ex').addEventListener('input',update); tr.querySelector('.delRow').addEventListener('click',()=>tr.remove()); update(); tbody.appendChild(tr); };
                 if(results?.length) results.forEach(addRow); else addRow(null);
                 document.getElementById("addSubjRow").onclick = () => addRow(null);
                 document.getElementById("saveResultsBtn").onclick = async () => { await supabaseClient.from('student_results').delete().eq('student_id', studentId).eq('term', term).eq('year', year); for(let row of tbody.querySelectorAll('tr')){ let subj=row.querySelector('.subj').value.trim(); if(!subj) continue; let ca1=+row.querySelector('.ca1').value||0, ca2=+row.querySelector('.ca2').value||0, ex=+row.querySelector('.ex').value||0; await saveStudentResult(studentId, term, year, subj, ca1, ca2, ex); } showToast("Results saved"); document.getElementById("resultEditor").classList.add("hidden"); loadReportSheet(); };
@@ -463,13 +453,13 @@
                 const { data: results } = await supabaseClient.from('student_results').select('*').eq('student_id', student.id).eq('term', term).eq('year', year);
                 if (!results.length) { document.getElementById("parentReportContainer").innerHTML = '<p class="text-gray-500">No results found for this term.</p>'; return; }
                 let total = results.reduce((s,r)=>s+r.ca1+r.ca2+r.exam,0), average = (total / results.length).toFixed(2);
-                let htmlReport = `<div class="border rounded-lg p-4 bg-gray-50" id="parentReportContent"><div class="text-center border-b pb-2 mb-3"><h3 class="text-xl font-bold">Al‑Istiqaamah Flying Wings Academy</h3><h4 class="text-lg">TERMLY REPORT CARD</h4><p><strong>Student:</strong> ${student.name} (${student.reg_number}) | <strong>Section:</strong> ${student.section} | <strong>Term:</strong> ${term} | <strong>Year:</strong> ${year}</p></div><table class="w-full border"><thead class="bg-gray-200"><tr><th>Subject</th><th>CA1</th><th>CA2</th><th>Exam</th><th>Total</th><th>Grade</th></tr></thead><tbody>${results.map(r=>`<tr><td>${r.subject}</td><td class="text-center">${r.ca1}</td><td class="text-center">${r.ca2}</td><td class="text-center">${r.exam}</td><td class="text-center">${r.ca1+r.ca2+r.exam}</td><td class="text-center">${r.grade}</td></tr>`).join('')}</tbody><tfoot class="bg-gray-100 font-bold"><tr><td colspan="3">Total: ${total}</td><td colspan="3">Average: ${average}%</td></tr><tr><td colspan="6" class="text-sm">Remarks: ${average>=75?'Excellent':average>=60?'Good':average>=50?'Satisfactory':'Needs Improvement'}</td></tr></tfoot></table><div class="mt-3"><button id="printParentReport" class="bg-blue-600 text-white px-3 py-1 rounded">Print Report</button></div></div>`;
+                let htmlReport = `<div class="border rounded-lg p-4 bg-gray-50" id="parentReportContent"><div class="text-center border-b pb-2 mb-3"><h3 class="text-xl font-bold">Al‑Istiqaamah Flying Wings Academy</h3><h4 class="text-lg">TERMLY REPORT CARD</h4><p><strong>Student:</strong> ${escapeHtml(student.name)} (${escapeHtml(student.reg_number)}) | <strong>Section:</strong> ${escapeHtml(student.section)} | <strong>Term:</strong> ${term} | <strong>Year:</strong> ${year}</p></div><table class="w-full border"><thead class="bg-gray-200"><tr><th>Subject</th><th>CA1</th><th>CA2</th><th>Exam</th><th>Total</th><th>Grade</th></tr></thead><tbody>${results.map(r=>`<tr><td>${escapeHtml(r.subject)}</td><td class="text-center">${r.ca1}</td><td class="text-center">${r.ca2}</td><td class="text-center">${r.exam}</td><td class="text-center">${r.ca1+r.ca2+r.exam}</td><td class="text-center">${r.grade}</td></tr>`).join('')}</tbody><tfoot class="bg-gray-100 font-bold"><tr><td colspan="3">Total: ${total}</td><td colspan="3">Average: ${average}%</td></tr><tr><td colspan="6" class="text-sm">Remarks: ${average>=75?'Excellent':average>=60?'Good':average>=50?'Satisfactory':'Needs Improvement'}</td></tr></tfoot></table><div class="mt-3"><button id="printParentReport" class="bg-blue-600 text-white px-3 py-1 rounded">Print Report</button></div></div>`;
                 document.getElementById("parentReportContainer").innerHTML = htmlReport;
                 document.getElementById("printParentReport").onclick = () => { const printContent = document.getElementById("parentReportContent").innerHTML; const printWindow = window.open('', '_blank'); printWindow.document.write(`<html><head><title>Report Card</title><link href="https://cdn.tailwindcss.com" rel="stylesheet"><style>body { padding: 20px; }</style></head><body>${printContent}</body></html>`); printWindow.document.close(); printWindow.print(); };
             };
         }
         
-        // ============ FEE MANAGEMENT (ADMIN / STAFF WITH ROLES) ============
+        // ============ FEE MANAGEMENT ============
         async function getOrCreateFeeBalance(studentId, term, year) { 
             const { data: existing } = await supabaseClient.from('fee_balances').select('*').eq('student_id', studentId).eq('term', term).eq('year', year).maybeSingle(); 
             if (existing) return existing; 
@@ -498,7 +488,6 @@
             if(document.getElementById("loadFeeDetailsBtn")) document.getElementById("loadFeeDetailsBtn").click(); 
         }
         
-        // Admin fee management (full control)
         async function renderFeeManagement() { 
             if (!['dg_ceo','daf','do'].includes(currentUser.role)) { showToast("Access denied", true); return; }
             let html = `
@@ -509,7 +498,7 @@
                     </div>
                     <div class="p-6">
                         <div class="grid md:grid-cols-3 gap-4 mb-8">
-                            <div><label class="block text-sm font-medium text-gray-700 mb-1">Select Student</label><select id="feeStudentId" class="w-full border-gray-300 rounded-lg shadow-sm"><option value="">-- Choose a student --</option>${schoolData.students.map(s => `<option value="${s.id}">${s.reg_number} - ${s.name}</option>`).join('')}</select></div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-1">Select Student</label><select id="feeStudentId" class="w-full border-gray-300 rounded-lg shadow-sm"><option value="">-- Choose a student --</option>${schoolData.students.map(s => `<option value="${s.id}">${escapeHtml(s.reg_number)} - ${escapeHtml(s.name)}</option>`).join('')}</select></div>
                             <div><label class="block text-sm font-medium text-gray-700 mb-1">Academic Year</label><input id="feeYear" value="2026" class="w-full border-gray-300 rounded-lg shadow-sm"></div>
                             <div class="flex items-end"><button id="loadFeeDetailsBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg transition shadow-md flex items-center justify-center gap-2"><i class="fas fa-search"></i> Load Fee Details</button></div>
                         </div>
@@ -525,9 +514,11 @@
                 if (!studentId) { showToast("Please select a student", true); return; }
                 const student = schoolData.students.find(s => s.id == studentId);
                 if (!student) return;
+                // Ensure all three terms exist
+                for (let t of [1,2,3]) await getOrCreateFeeBalance(studentId, t, year);
+                
                 const { data: balances, error } = await supabaseClient.from('fee_balances').select('*').eq('student_id', studentId).eq('year', year);
                 if (error) throw error;
-                if (!balances || balances.length === 0) { for (let t of [1,2,3]) await getOrCreateFeeBalance(studentId, t, year); return loadFeeDashboard(); }
                 const { data: allTx } = await supabaseClient.from('fee_transactions').select('*').eq('student_id', studentId).eq('year', year).order('payment_date', { ascending: false });
                 const transactions = allTx || [];
                 const totalFees = balances.reduce((sum, b) => sum + b.total_fees, 0);
@@ -557,7 +548,7 @@
             document.getElementById("loadFeeDetailsBtn").onclick = loadFeeDashboard;
         }
         
-        // ============ IMPROVED PARENT FEE PAYMENT VIEW (detailed, card-based) ============
+        // ============ PARENT FEE PAYMENT VIEW ============
         async function renderParentFeePayment() {
             if (!currentUser.studentId) return;
             const student = schoolData.students.find(s => s.id == currentUser.studentId);
@@ -566,19 +557,17 @@
             if (error) throw error;
             const { data: transactions } = await supabaseClient.from('fee_transactions').select('*').eq('student_id', student.id).order('payment_date', { ascending: false });
             
-            let html = `<div class="bg-white rounded-2xl shadow-lg overflow-hidden"><div class="bg-gradient-to-r from-indigo-700 to-indigo-800 px-6 py-4"><h2 class="text-2xl font-bold text-white"><i class="fas fa-receipt mr-2"></i> Fee Statement</h2><p class="text-indigo-100 text-sm">${student.name} (${student.reg_number})</p></div><div class="p-6">`;
+            let html = `<div class="bg-white rounded-2xl shadow-lg overflow-hidden"><div class="bg-gradient-to-r from-indigo-700 to-indigo-800 px-6 py-4"><h2 class="text-2xl font-bold text-white"><i class="fas fa-receipt mr-2"></i> Fee Statement</h2><p class="text-indigo-100 text-sm">${escapeHtml(student.name)} (${escapeHtml(student.reg_number)})</p></div><div class="p-6">`;
             
             if (!balances || balances.length === 0) {
                 html += `<div class="text-center text-gray-500 py-8">No fee records found for this student.</div>`;
             } else {
-                // Overall summary
                 const totalFees = balances.reduce((s,b)=>s+b.total_fees,0);
                 const totalPaid = balances.reduce((s,b)=>s+(b.paid_amount||0),0);
                 const totalBalance = totalFees - totalPaid;
                 const percentOverall = totalFees ? (totalPaid/totalFees)*100 : 0;
                 html += `<div class="grid md:grid-cols-3 gap-4 mb-6"><div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4"><div class="flex items-center justify-between"><div><p class="text-blue-800 text-sm">Total Fees</p><p class="text-2xl font-bold text-blue-900">₦${totalFees.toLocaleString()}</p></div><i class="fas fa-receipt text-3xl text-blue-400"></i></div></div><div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4"><div class="flex items-center justify-between"><div><p class="text-green-800 text-sm">Total Paid</p><p class="text-2xl font-bold text-green-900">₦${totalPaid.toLocaleString()}</p></div><i class="fas fa-check-circle text-3xl text-green-400"></i></div></div><div class="bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl p-4"><div class="flex items-center justify-between"><div><p class="text-amber-800 text-sm">Outstanding Balance</p><p class="text-2xl font-bold ${totalBalance>0?'text-red-600':'text-green-600'}">₦${totalBalance.toLocaleString()}</p></div><i class="fas fa-chart-line text-3xl text-amber-400"></i></div></div></div><div class="progress-bar mb-6"><div class="progress-fill" style="width: ${percentOverall}%"></div></div>`;
                 
-                // Term cards
                 html += `<div class="grid md:grid-cols-3 gap-5">`;
                 for (let b of balances) {
                     const termName = b.term == 1 ? "First Term" : b.term == 2 ? "Second Term" : "Third Term";
@@ -595,7 +584,6 @@
             html += `</div></div>`;
             document.getElementById("mainContent").innerHTML = html;
             
-            // Attach toggle handlers
             document.querySelectorAll('.toggleTxBtn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const term = btn.dataset.term;
@@ -613,8 +601,9 @@
                 const termNames = {1:"First",2:"Second",3:"Third"};
                 const modalDiv = document.createElement('div');
                 modalDiv.className = "fixed inset-0 z-[200] bg-black/70 flex items-center justify-center p-4";
-                modalDiv.innerHTML = `<div class="bg-white rounded-lg max-w-lg w-full p-6"><div class="receipt-card"><div class="text-center border-b pb-3"><h3 class="text-xl font-bold">Al‑Istiqaamah Flying Wings Academy</h3><h4>OFFICIAL RECEIPT</h4></div><div class="mt-3 space-y-2"><div><strong>Receipt No:</strong> ${tx.receipt_no}</div><div><strong>Date:</strong> ${new Date(tx.payment_date).toLocaleDateString()}</div><div><strong>Student:</strong> ${stu.name} (${stu.reg_number})</div><div><strong>Term:</strong> ${termNames[tx.term]} ${tx.year}</div><div><strong>Amount:</strong> ₦${tx.amount_paid.toLocaleString()}</div><div><strong>Payment Method:</strong> ${tx.payment_method || 'Cash'}</div><div><strong>Status:</strong> <span class="text-green-600 font-bold">${tx.status.toUpperCase()}</span></div></div><div class="text-center mt-4"><button onclick="window.print()" class="bg-blue-600 text-white px-4 py-2 rounded">Print Receipt</button></div></div><div class="text-center mt-4"><button class="closeReceiptModal bg-gray-600 text-white px-4 py-2 rounded">Close</button></div></div>`;
+                modalDiv.innerHTML = `<div class="bg-white rounded-lg max-w-lg w-full p-6"><div class="receipt-card"><div class="text-center border-b pb-3"><h3 class="text-xl font-bold">Al‑Istiqaamah Flying Wings Academy</h3><h4>OFFICIAL RECEIPT</h4></div><div class="mt-3 space-y-2"><div><strong>Receipt No:</strong> ${tx.receipt_no}</div><div><strong>Date:</strong> ${new Date(tx.payment_date).toLocaleDateString()}</div><div><strong>Student:</strong> ${escapeHtml(stu.name)} (${escapeHtml(stu.reg_number)})</div><div><strong>Term:</strong> ${termNames[tx.term]} ${tx.year}</div><div><strong>Amount:</strong> ₦${tx.amount_paid.toLocaleString()}</div><div><strong>Payment Method:</strong> ${tx.payment_method || 'Cash'}</div><div><strong>Status:</strong> <span class="text-green-600 font-bold">${tx.status.toUpperCase()}</span></div></div><div class="text-center mt-4"><button id="printReceiptBtn" class="bg-blue-600 text-white px-4 py-2 rounded">Print Receipt</button></div></div><div class="text-center mt-4"><button class="closeReceiptModal bg-gray-600 text-white px-4 py-2 rounded">Close</button></div></div>`;
                 document.body.appendChild(modalDiv);
+                modalDiv.querySelector('#printReceiptBtn').onclick = () => { const printWindow = window.open('', '_blank'); printWindow.document.write(`<html><head><title>Receipt</title><link href="https://cdn.tailwindcss.com" rel="stylesheet"></head><body>${modalDiv.querySelector('.receipt-card').outerHTML}</body></html>`); printWindow.document.close(); printWindow.print(); };
                 modalDiv.querySelector('.closeReceiptModal').onclick = () => modalDiv.remove();
                 modalDiv.addEventListener('click', (e) => { if (e.target === modalDiv) modalDiv.remove(); });
             };
@@ -623,36 +612,36 @@
                 const stu = schoolData.students.find(s=>s.id==stuId);
                 const total = txList.reduce((s,t)=>s+t.amount_paid,0);
                 const termNames = {1:"First",2:"Second",3:"Third"};
-                const dummyTx = { term, year, amount_paid: total, receipt_no: `TERM_${term}_${year}_${stuId}`, status: 'authorized' };
                 const modalDiv = document.createElement('div');
                 modalDiv.className = "fixed inset-0 z-[200] bg-black/70 flex items-center justify-center p-4";
-                modalDiv.innerHTML = `<div class="bg-white rounded-lg max-w-lg w-full p-6"><div class="receipt-card"><div class="text-center border-b pb-3"><h3 class="text-xl font-bold">Al‑Istiqaamah Flying Wings Academy</h3><h4>FULL TERM RECEIPT</h4></div><div class="mt-3 space-y-2"><div><strong>Receipt No:</strong> ${dummyTx.receipt_no}</div><div><strong>Date:</strong> ${new Date().toLocaleDateString()}</div><div><strong>Student:</strong> ${stu.name} (${stu.reg_number})</div><div><strong>Term:</strong> ${termNames[term]} ${year}</div><div><strong>Total Paid:</strong> ₦${total.toLocaleString()}</div><div><strong>Status:</strong> <span class="text-green-600 font-bold">FULLY PAID</span></div></div><div class="text-center mt-4"><button onclick="window.print()" class="bg-blue-600 text-white px-4 py-2 rounded">Print Receipt</button></div></div><div class="text-center mt-4"><button class="closeReceiptModal bg-gray-600 text-white px-4 py-2 rounded">Close</button></div></div>`;
+                modalDiv.innerHTML = `<div class="bg-white rounded-lg max-w-lg w-full p-6"><div class="receipt-card"><div class="text-center border-b pb-3"><h3 class="text-xl font-bold">Al‑Istiqaamah Flying Wings Academy</h3><h4>FULL TERM RECEIPT</h4></div><div class="mt-3 space-y-2"><div><strong>Receipt No:</strong> TERM_${term}_${year}_${stuId}</div><div><strong>Date:</strong> ${new Date().toLocaleDateString()}</div><div><strong>Student:</strong> ${escapeHtml(stu.name)} (${escapeHtml(stu.reg_number)})</div><div><strong>Term:</strong> ${termNames[term]} ${year}</div><div><strong>Total Paid:</strong> ₦${total.toLocaleString()}</div><div><strong>Status:</strong> <span class="text-green-600 font-bold">FULLY PAID</span></div></div><div class="text-center mt-4"><button id="printReceiptBtn" class="bg-blue-600 text-white px-4 py-2 rounded">Print Receipt</button></div></div><div class="text-center mt-4"><button class="closeReceiptModal bg-gray-600 text-white px-4 py-2 rounded">Close</button></div></div>`;
                 document.body.appendChild(modalDiv);
+                modalDiv.querySelector('#printReceiptBtn').onclick = () => { const printWindow = window.open('', '_blank'); printWindow.document.write(`<html><head><title>Term Receipt</title><link href="https://cdn.tailwindcss.com" rel="stylesheet"></head><body>${modalDiv.querySelector('.receipt-card').outerHTML}</body></html>`); printWindow.document.close(); printWindow.print(); };
                 modalDiv.querySelector('.closeReceiptModal').onclick = () => modalDiv.remove();
                 modalDiv.addEventListener('click', (e) => { if (e.target === modalDiv) modalDiv.remove(); });
             };
         }
         
-        // ============ CORE DATA VIEWS (students, enroll, staff, etc.) ============
+        // ============ CORE DATA VIEWS ============
         function renderStudentsList() { 
-            let html=`<div class="bg-white p-5 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">📋 Students</h2><div class="filter-bar flex gap-4"><select id="sectionFilter" class="border rounded p-2"><option>All Sections</option>${SECTIONS.map(s=>`<option>${s}</option>`).join('')}</select><input id="searchStudent" placeholder="Search by name or reg no" class="border rounded p-2 flex-1"></div><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Reg No</th><th>Name</th><th>Parent</th><th>Section</th><th>Status</th>${(currentUser.role==='dg_ceo'||currentUser.role==='umc'||currentUser.role==='daf'||currentUser.role==='dprpa'||currentUser.role==='der'||currentUser.role==='do')?'<th>Actions</th>':''}</tr></thead><tbody id="stuTbody"></tbody></table></div></div>`; 
+            let html=`<div class="bg-white p-5 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">📋 Students</h2><div class="filter-bar flex gap-4"><select id="sectionFilter" class="border rounded p-2"><option>All Sections</option>${SECTIONS.map(s=>`<option>${escapeHtml(s)}</option>`).join('')}</select><input id="searchStudent" placeholder="Search by name or reg no" class="border rounded p-2 flex-1"></div><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Reg No</th><th>Name</th><th>Parent</th><th>Section</th><th>Status</th>${(currentUser.role==='dg_ceo'||currentUser.role==='umc'||currentUser.role==='daf'||currentUser.role==='dprpa'||currentUser.role==='der'||currentUser.role==='do')?'<th>Actions</th>':''}</tr></thead><tbody id="stuTbody"></tbody></table></div></div>`; 
             document.getElementById("mainContent").innerHTML=html; 
             const update=()=>{ 
                 let filtered=schoolData.students.filter(s=>document.getElementById("sectionFilter").value==='All Sections'||s.section===document.getElementById("sectionFilter").value); 
                 let term=document.getElementById("searchStudent").value.toLowerCase(); 
                 if(term) filtered=filtered.filter(s=>s.name.toLowerCase().includes(term)||s.reg_number.toLowerCase().includes(term)); 
                 let canEdit = ['dg_ceo','umc','daf','dprpa','der','do'].includes(currentUser.role);
-                let rows = filtered.map(s=>`<tr><td class="p-2">${s.reg_number}</td><td class="p-2">${s.name}</td><td class="p-2">${s.parent_name||'-'}</td><td class="p-2">${s.section}</td><td class="p-2"><span class="${s.status==='active'?'active-badge':'suspended-badge'}">${s.status}</span></td>${canEdit?`<td class="p-2"><button onclick="window.toggleStudentStatus('${s.id}','${s.status}')" class="suspend-btn">${s.status==='active'?'Suspend':'Activate'}</button> <button onclick="window.deleteStudent('${s.id}')" class="delete-btn">Delete</button></td>`:''}</tr>`).join('');
+                let rows = filtered.map(s=>`<tr><td class="p-2">${escapeHtml(s.reg_number)}</td><td class="p-2">${escapeHtml(s.name)}</td><td class="p-2">${escapeHtml(s.parent_name||'-')}</td><td class="p-2">${escapeHtml(s.section)}</td><td class="p-2"><span class="${s.status==='active'?'active-badge':'suspended-badge'}">${s.status}</span></td>${canEdit?`<td class="p-2"><button onclick="window.toggleStudentStatus('${s.id}','${s.status}')" class="suspend-btn">${s.status==='active'?'Suspend':'Activate'}</button> <button onclick="window.deleteStudent('${s.id}')" class="delete-btn">Delete</button></td>`:''}</tr>`).join('');
                 document.getElementById("stuTbody").innerHTML=rows; 
             }; 
             document.getElementById("sectionFilter").addEventListener("change",update); document.getElementById("searchStudent").addEventListener("input",update); update(); 
-            window.toggleStudentStatus=async(id,cur)=>{ let newStat=cur==='active'?'suspended':'active'; await supabaseClient.from('students').update({status:newStat}).eq('id',id); await refreshSchoolData(); renderStudentsList(); }; 
-            window.deleteStudent = async (id) => { if (confirm("Delete this student permanently?")) { await supabaseClient.from('students').delete().eq('id', id); await refreshSchoolData(); renderStudentsList(); showToast("Student deleted"); } };
+            window.toggleStudentStatus=async(id,cur)=>{ let newStat=cur==='active'?'suspended':'active'; await supabaseClient.from('students').update({status:newStat}).eq('id',id); await refreshSchoolData(); if (currentViewName === 'students') renderStudentsList(); else showToast("Status updated"); }; 
+            window.deleteStudent = async (id) => { if (confirm("Delete this student permanently?")) { await supabaseClient.from('students').delete().eq('id', id); await refreshSchoolData(); if (currentViewName === 'students') renderStudentsList(); else showToast("Student deleted"); } };
         }
         
         function renderEnrollStudent() { 
             if (!['dg_ceo','umc','headteacher'].includes(currentUser.role)) { showToast("Access denied", true); return; }
-            let ops=SECTIONS.map(s=>`<option>${s}</option>`).join(''); 
+            let ops=SECTIONS.map(s=>`<option>${escapeHtml(s)}</option>`).join(''); 
             let html=`<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">🎓 Enroll Student</h2><form id="enrollForm" class="space-y-3"><input id="regNum" placeholder="Reg Number" required class="border p-2 rounded w-full"><input id="stuName" placeholder="Student Name" required class="border p-2 rounded w-full"><input id="parentName" placeholder="Parent Name" class="border p-2 rounded w-full"><input id="level" type="number" placeholder="Level" class="border p-2 rounded w-full"><select id="secSelect" class="border p-2 rounded w-full">${ops}</select><button type="submit" class="bg-emerald-600 text-white p-2 rounded w-full hover:bg-emerald-700 transition">Register</button></form></div>`; 
             document.getElementById("mainContent").innerHTML=html; 
             document.getElementById("enrollForm").addEventListener("submit", async(e)=>{ e.preventDefault(); const regNum = document.getElementById('regNum').value, stuName = document.getElementById('stuName').value, parentName = document.getElementById('parentName').value, level = parseInt(document.getElementById('level').value), secSelect = document.getElementById('secSelect').value; if (!regNum || !stuName) return showToast("Reg Number and Name required", true); await supabaseClient.from('students').insert([{ reg_number: regNum, name: stuName, parent_name: parentName, level: level || 1, section: secSelect, fee_status:'Pending', status:'active' }]); await refreshSchoolData(); renderStudentsList(); showToast("Student enrolled"); }); 
@@ -669,7 +658,7 @@
             if (!currentUser || !['dg_ceo','umc','daf','dprpa','der','do'].includes(currentUser.role)) { showToast("Admin only", true); return; } 
             try {
                 const { data: slides } = await supabaseClient.from('slides').select('*'); 
-                let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">📸 Manage Slides</h2><div class="mb-4 flex gap-2"><input type="file" id="slideUpload" accept="image/*" class="border p-2 rounded"><input id="slideCaption" placeholder="Caption" class="border p-2 rounded flex-1"><button id="uploadSlideBtn" class="bg-emerald-600 text-white p-2 rounded hover:bg-emerald-700">Upload</button></div><div class="grid grid-cols-3 gap-4">${slides?.map(s=>`<div class="border rounded p-2"><img src="${s.image_url}" class="h-24 object-cover w-full"><p class="text-sm mt-1">${s.caption}</p><button data-id="${s.id}" class="delSlide bg-red-500 text-white px-2 py-1 rounded text-xs mt-1 w-full">Delete</button></div>`).join('')}</div></div>`; 
+                let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">📸 Manage Slides</h2><div class="mb-4 flex gap-2"><input type="file" id="slideUpload" accept="image/*" class="border p-2 rounded"><input id="slideCaption" placeholder="Caption" class="border p-2 rounded flex-1"><button id="uploadSlideBtn" class="bg-emerald-600 text-white p-2 rounded hover:bg-emerald-700">Upload</button></div><div class="grid grid-cols-3 gap-4">${slides?.map(s=>`<div class="border rounded p-2"><img src="${s.image_url}" class="h-24 object-cover w-full"><p class="text-sm mt-1">${escapeHtml(s.caption)}</p><button data-id="${s.id}" class="delSlide bg-red-500 text-white px-2 py-1 rounded text-xs mt-1 w-full">Delete</button></div>`).join('')}</div></div>`; 
                 document.getElementById("mainContent").innerHTML = html; 
                 document.getElementById("uploadSlideBtn").onclick = async () => { 
                     try {
@@ -685,11 +674,11 @@
             } catch(e) { showToast("Error managing slides", true); }
         }
         
-        // ============ STAFF MANAGEMENT (for admin roles) ============
+        // ============ STAFF MANAGEMENT ============
         async function renderStaffManagement() { 
             if(!currentUser || !['dg_ceo','umc','der','do'].includes(currentUser.role)) return showToast("Access denied",true); 
             const {data:teachers}=await supabaseClient.from('teachers').select('*'); 
-            let html=`<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">👥 Staff Management</h2><form id="staffForm" class="mt-4 grid md:grid-cols-2 gap-3"><input id="staffName" placeholder="Full Name" required class="border p-2 rounded"><input id="staffUsername" placeholder="Username" required class="border p-2 rounded"><select id="staffRole" class="border p-2 rounded"><option value="teacher">Teacher</option><option value="headteacher">Head Teacher</option></select><input id="staffLevel" placeholder="Level (teacher only)" class="border p-2 rounded"><select id="staffSection" class="border p-2 rounded">${SECTIONS.map(s=>`<option>${s}</option>`).join('')}</select><input id="staffPassword" value="password123" class="border p-2 rounded"><button type="submit" class="bg-emerald-600 text-white p-2 rounded hover:bg-emerald-700">Register Staff</button></form><div class="overflow-x-auto mt-6"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Name</th><th>Username</th><th>Role</th><th>Section</th><th>Appraisal</th><th>Actions</th></tr></thead><tbody id="staffTableBody"></tbody></table></div></div>`;
+            let html=`<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">👥 Staff Management</h2><form id="staffForm" class="mt-4 grid md:grid-cols-2 gap-3"><input id="staffName" placeholder="Full Name" required class="border p-2 rounded"><input id="staffUsername" placeholder="Username" required class="border p-2 rounded"><select id="staffRole" class="border p-2 rounded"><option value="teacher">Teacher</option><option value="headteacher">Head Teacher</option></select><input id="staffLevel" placeholder="Level (teacher only)" class="border p-2 rounded"><select id="staffSection" class="border p-2 rounded">${SECTIONS.map(s=>`<option>${escapeHtml(s)}</option>`).join('')}</select><input id="staffPassword" value="password123" class="border p-2 rounded"><button type="submit" class="bg-emerald-600 text-white p-2 rounded hover:bg-emerald-700">Register Staff</button></form><div class="overflow-x-auto mt-6"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Name</th><th>Username</th><th>Role</th><th>Section</th><th>Appraisal</th><th>Actions</th></tr></thead><tbody id="staffTableBody"></tbody></table></div></div>`;
             document.getElementById("mainContent").innerHTML = html; 
             const renderStaff=async()=>{ 
                 const tb=document.getElementById("staffTableBody"); tb.innerHTML=""; 
@@ -697,7 +686,7 @@
                     const {data:cred}=await supabaseClient.from('staff_credentials').select('username').eq('staff_id',st.id).single(); 
                     const {data:appr}=await supabaseClient.from('staff_appraisals').select('rating').eq('staff_id',st.id).order('created_at',{ascending:false}).limit(1); 
                     const apprText=appr?.length?`⭐ ${appr[0].rating}/5`:'Not rated'; 
-                    tb.innerHTML+=`<tr><td>${st.name}</td><td>${cred?.username||'-'}</td><td>${st.role}</td><td>${st.assigned_section}</td><td>${apprText}</td><td><button class="appraiseBtn bg-amber-500 text-white px-2 py-1 rounded text-xs mr-1" data-id="${st.id}" data-name="${st.name}">Appraise</button><button class="deleteStaffBtn bg-red-600 text-white px-2 py-1 rounded text-xs" data-id="${st.id}">Delete</button></td></tr>`; 
+                    tb.innerHTML+=`<tr><td>${escapeHtml(st.name)}</td><td>${escapeHtml(cred?.username||'-')}</td><td>${escapeHtml(st.role)}</td><td>${escapeHtml(st.assigned_section)}</td><td>${apprText}</td><td><button class="appraiseBtn bg-amber-500 text-white px-2 py-1 rounded text-xs mr-1" data-id="${st.id}" data-name="${escapeHtml(st.name)}">Appraise</button><button class="deleteStaffBtn bg-red-600 text-white px-2 py-1 rounded text-xs" data-id="${st.id}">Delete</button></td></tr>`; 
                 } 
                 document.querySelectorAll('.appraiseBtn').forEach(btn=>btn.addEventListener('click',()=>{ let id=btn.dataset.id, name=btn.dataset.name; let r=prompt(`Rate ${name} (1-5):`); if(r) saveStaffAppraisal(id,parseInt(r),'Appraised').then(renderStaff); }));
                 document.querySelectorAll('.deleteStaffBtn').forEach(btn=>btn.addEventListener('click',async()=>{ if(confirm("Delete staff?")){ await supabaseClient.from('teachers').delete().eq('id', btn.dataset.id); await refreshSchoolData(); renderStaffManagement(); showToast("Staff deleted"); } }));
@@ -709,7 +698,7 @@
         
         // DAF views
         async function renderReceiptGenerator() {
-            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">🖨️ Receipt Generator</h2><div class="grid md:grid-cols-2 gap-4"><select id="receiptStudent" class="border p-2 rounded"><option>Select Student</option>${schoolData.students.map(s=>`<option value="${s.id}">${s.reg_number} - ${s.name}</option>`).join('')}</select><select id="receiptTerm" class="border p-2 rounded"><option value="1">Term 1</option><option value="2">Term 2</option><option value="3">Term 3</option></select><input id="receiptYear" value="2026" class="border p-2 rounded"><button id="generateReceiptBtn" class="bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700">Generate Receipt</button></div><div id="receiptOutput" class="mt-6"></div></div>`;
+            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">🖨️ Receipt Generator</h2><div class="grid md:grid-cols-2 gap-4"><select id="receiptStudent" class="border p-2 rounded"><option>Select Student</option>${schoolData.students.map(s=>`<option value="${s.id}">${escapeHtml(s.reg_number)} - ${escapeHtml(s.name)}</option>`).join('')}</select><select id="receiptTerm" class="border p-2 rounded"><option value="1">Term 1</option><option value="2">Term 2</option><option value="3">Term 3</option></select><input id="receiptYear" value="2026" class="border p-2 rounded"><button id="generateReceiptBtn" class="bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700">Generate Receipt</button></div><div id="receiptOutput" class="mt-6"></div></div>`;
             document.getElementById("mainContent").innerHTML = html;
             document.getElementById("generateReceiptBtn").onclick = async () => {
                 let studentId = document.getElementById("receiptStudent").value, term = document.getElementById("receiptTerm").value, year = document.getElementById("receiptYear").value;
@@ -719,7 +708,7 @@
                 if (!txList.length) { showToast("No authorized payments for this term", true); return; }
                 let totalPaid = txList.reduce((s,t)=>s+t.amount_paid,0);
                 let termNames = {1:"First",2:"Second",3:"Third"};
-                let receiptHtml = `<div class="receipt-card"><div class="text-center border-b pb-4"><h3 class="text-xl font-bold">Al‑Istiqaamah Flying Wings Academy</h3><h4>FEE RECEIPT</h4></div><div class="mt-4 space-y-2"><div><strong>Receipt No:</strong> GEN_${Date.now()}</div><div><strong>Date:</strong> ${new Date().toLocaleDateString()}</div><div><strong>Student:</strong> ${student.name} (${student.reg_number})</div><div><strong>Term:</strong> ${termNames[term]} ${year}</div><div><strong>Amount Paid:</strong> ₦${totalPaid.toLocaleString()}</div><div><strong>Status:</strong> <span class="text-green-600 font-bold">FULLY PAID</span></div></div><div class="text-center mt-4"><button onclick="window.print()" class="bg-blue-600 text-white px-4 py-2 rounded">Print Receipt</button></div></div>`;
+                let receiptHtml = `<div class="receipt-card"><div class="text-center border-b pb-4"><h3 class="text-xl font-bold">Al‑Istiqaamah Flying Wings Academy</h3><h4>FEE RECEIPT</h4></div><div class="mt-4 space-y-2"><div><strong>Receipt No:</strong> GEN_${Date.now()}</div><div><strong>Date:</strong> ${new Date().toLocaleDateString()}</div><div><strong>Student:</strong> ${escapeHtml(student.name)} (${escapeHtml(student.reg_number)})</div><div><strong>Term:</strong> ${termNames[term]} ${year}</div><div><strong>Amount Paid:</strong> ₦${totalPaid.toLocaleString()}</div><div><strong>Status:</strong> <span class="text-green-600 font-bold">FULLY PAID</span></div></div><div class="text-center mt-4"><button onclick="(()=>{ const printWindow = window.open('', '_blank'); printWindow.document.write('<html><head><title>Receipt</title><link href=\"https://cdn.tailwindcss.com\" rel=\"stylesheet\"></head><body>' + document.querySelector('.receipt-card').outerHTML + '</body></html>'); printWindow.document.close(); printWindow.print(); })()" class="bg-blue-600 text-white px-4 py-2 rounded">Print Receipt</button></div></div>`;
                 document.getElementById("receiptOutput").innerHTML = receiptHtml;
             };
         }
@@ -730,7 +719,7 @@
             let payrollData = staff.map(s => ({ ...s, salary: 100000, allowances: 20000 }));
             const tbody = document.getElementById("payrollBody");
             const renderTable = () => {
-                tbody.innerHTML = payrollData.map(s => `<tr><td>${s.name}</td><td>${s.role}</td><td><input class="salary w-32 border p-1" data-id="${s.id}" value="${s.salary}"></td><td><input class="allow w-32 border p-1" data-id="${s.id}" value="${s.allowances}"></td><td class="totalCell">${s.salary + s.allowances}</td></tr>`).join('');
+                tbody.innerHTML = payrollData.map(s => `<tr><td>${escapeHtml(s.name)}</td><td>${escapeHtml(s.role)}</td><td><input class="salary w-32 border p-1" data-id="${s.id}" value="${s.salary}"></td><td><input class="allow w-32 border p-1" data-id="${s.id}" value="${s.allowances}"></td><td class="totalCell">${s.salary + s.allowances}</td></tr>`).join('');
                 document.querySelectorAll('.salary, .allow').forEach(inp => inp.addEventListener('input', function() {
                     let id = this.dataset.id, row = this.closest('tr');
                     let salary = +row.querySelector('.salary').value, allow = +row.querySelector('.allow').value;
@@ -752,7 +741,6 @@
                 let htmlReport = `<div><h3 class="text-xl font-bold">Payment Summary for ${year}</h3><p>Total Collected: ₦${total.toLocaleString()}</p><ul class="list-disc pl-5"><li>Term 1: ₦${byTerm[1].toLocaleString()}</li><li>Term 2: ₦${byTerm[2].toLocaleString()}</li><li>Term 3: ₦${byTerm[3].toLocaleString()}</li></ul><button onclick="window.downloadCSV(${JSON.stringify(transactions)}, 'payment_report_${year}.csv')" class="bg-blue-600 text-white px-3 py-1 rounded mt-2">Export CSV</button></div>`;
                 document.getElementById("reportOutput").innerHTML = htmlReport;
             };
-            window.downloadCSV = downloadCSV;
         }
         
         // DPRPA views
@@ -764,12 +752,12 @@
                 let { data: results } = await supabaseClient.from('student_results').select('*, students(section)').eq('year', year);
                 let sectionGrades = {};
                 results.forEach(r => { let sec = r.students?.section || 'Unknown'; if (!sectionGrades[sec]) sectionGrades[sec] = { total:0, count:0 }; sectionGrades[sec].total += (r.ca1+r.ca2+r.exam); sectionGrades[sec].count++; });
-                let table = `<table class="w-full border"><thead class="bg-gray-100"><tr><th>Section</th><th>Average Score (%)</th></tr></thead><tbody>${Object.entries(sectionGrades).map(([sec,data]) => `<tr><td>${sec}</td><td>${(data.total/data.count).toFixed(2)}%</td></tr>`).join('')}</tbody></table>`;
+                let table = `<table class="w-full border"><thead class="bg-gray-100"><tr><th>Section</th><th>Average Score (%)</th></tr></thead><tbody>${Object.entries(sectionGrades).map(([sec,data]) => `<tr><td>${escapeHtml(sec)}</td><td>${(data.total/data.count).toFixed(2)}%</td></tr>`).join('')}</tbody></table>`;
                 document.getElementById("perfChart").innerHTML = table;
             };
         }
         async function renderSectionAnalysis() {
-            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">📊 Section Analysis</h2><select id="sectionSelect" class="border p-2 rounded"><option value="All Sections">All Sections</option>${SECTIONS.map(s=>`<option>${s}</option>`).join('')}</select><button id="analyzeBtn" class="bg-emerald-600 text-white px-4 py-2 rounded ml-2 hover:bg-emerald-700">Analyze</button><div id="analysisResult" class="mt-4"></div></div>`;
+            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">📊 Section Analysis</h2><select id="sectionSelect" class="border p-2 rounded"><option value="All Sections">All Sections</option>${SECTIONS.map(s=>`<option>${escapeHtml(s)}</option>`).join('')}</select><button id="analyzeBtn" class="bg-emerald-600 text-white px-4 py-2 rounded ml-2 hover:bg-emerald-700">Analyze</button><div id="analysisResult" class="mt-4"></div></div>`;
             document.getElementById("mainContent").innerHTML = html;
             document.getElementById("analyzeBtn").onclick = async () => {
                 let section = document.getElementById("sectionSelect").value;
@@ -784,7 +772,7 @@
         }
         
         function renderDashboard() { 
-            document.getElementById("mainContent").innerHTML = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold">Welcome ${currentUser.full_name}</h2><div class="grid grid-cols-2 gap-4 mt-6"><div class="p-5 bg-emerald-50 rounded-xl"><i class="fas fa-users text-3xl text-emerald-600"></i><p class="text-2xl font-bold mt-2">${schoolData.students.length}</p><p>Total Students</p></div><div class="p-5 bg-amber-50 rounded-xl"><i class="fas fa-chalkboard-user text-3xl text-amber-600"></i><p class="text-2xl font-bold mt-2">${schoolData.teachers.length}</p><p>Staff Members</p></div></div></div>`; 
+            document.getElementById("mainContent").innerHTML = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold">Welcome ${escapeHtml(currentUser.full_name)}</h2><div class="grid grid-cols-2 gap-4 mt-6"><div class="p-5 bg-emerald-50 rounded-xl"><i class="fas fa-users text-3xl text-emerald-600"></i><p class="text-2xl font-bold mt-2">${schoolData.students.length}</p><p>Total Students</p></div><div class="p-5 bg-amber-50 rounded-xl"><i class="fas fa-chalkboard-user text-3xl text-amber-600"></i><p class="text-2xl font-bold mt-2">${schoolData.teachers.length}</p><p>Staff Members</p></div></div></div>`; 
         }
         
         // Headteacher views
@@ -792,7 +780,7 @@
             let section = currentUser.assignedSection;
             if (!section) { showToast("No section assigned", true); return; }
             let students = schoolData.students.filter(s => s.section === section);
-            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold">👨‍🎓 Students in ${section}</h2><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Reg No</th><th>Name</th><th>Parent</th><th>Status</th></tr></thead><tbody>${students.map(s=>`<tr><td>${s.reg_number}</td><td>${s.name}</td><td>${s.parent_name||'-'}</td><td><span class="${s.status==='active'?'active-badge':'suspended-badge'}">${s.status}</span></td></tr>`).join('')}</tbody></table></div></div>`;
+            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold">👨‍🎓 Students in ${escapeHtml(section)}</h2><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Reg No</th><th>Name</th><th>Parent</th><th>Status</th></tr></thead><tbody>${students.map(s=>`<tr><td>${escapeHtml(s.reg_number)}</td><td>${escapeHtml(s.name)}</td><td>${escapeHtml(s.parent_name||'-')}</td><td class="${s.status==='active'?'active-badge':'suspended-badge'}">${s.status}</span></td></tr>`).join('')}</tbody></table></div></div>`;
             document.getElementById("mainContent").innerHTML = html;
         }
         async function renderSectionFees() {
@@ -800,10 +788,10 @@
             let students = schoolData.students.filter(s => s.section === section);
             let totalFees = 0, totalPaid = 0;
             for (let s of students) {
-                let { data: balances } = await supabaseClient.from('fee_balances').select('paid_amount').eq('student_id', s.id);
-                if (balances) balances.forEach(b => { totalFees += 50000; totalPaid += (b.paid_amount||0); });
+                let { data: balances } = await supabaseClient.from('fee_balances').select('total_fees,paid_amount').eq('student_id', s.id);
+                if (balances) balances.forEach(b => { totalFees += b.total_fees; totalPaid += (b.paid_amount||0); });
             }
-            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold">💰 Section Fees Summary (${section})</h2><p>Total Expected: ₦${totalFees.toLocaleString()}</p><p>Total Paid: ₦${totalPaid.toLocaleString()}</p><p>Outstanding: ₦${(totalFees-totalPaid).toLocaleString()}</p></div>`;
+            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold">💰 Section Fees Summary (${escapeHtml(section)})</h2><p>Total Expected: ₦${totalFees.toLocaleString()}</p><p>Total Paid: ₦${totalPaid.toLocaleString()}</p><p>Outstanding: ₦${(totalFees-totalPaid).toLocaleString()}</p></div>`;
             document.getElementById("mainContent").innerHTML = html;
         }
         
@@ -811,13 +799,13 @@
         async function renderMyClass() {
             let section = currentUser.assignedSection;
             let students = schoolData.students.filter(s => s.section === section);
-            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold">👩‍🏫 My Class - ${section}</h2><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Name</th><th>Reg No</th><th>Parent</th></tr></thead><tbody>${students.map(s=>`<tr><td>${s.name}</td><td>${s.reg_number}</td><td>${s.parent_name||'-'}</td></tr>`).join('')}</tbody></table></div></div>`;
+            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold">👩‍🏫 My Class - ${escapeHtml(section)}</h2><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Name</th><th>Reg No</th><th>Parent</th></tr></thead><tbody>${students.map(s=>`<tr><td>${escapeHtml(s.name)}</td><td>${escapeHtml(s.reg_number)}</td><td>${escapeHtml(s.parent_name||'-')}</td>`).join('')}</tbody></table></div></div>`;
             document.getElementById("mainContent").innerHTML = html;
         }
         async function renderGradeStudent() {
             let section = currentUser.assignedSection;
             let students = schoolData.students.filter(s => s.section === section);
-            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">📝 Grade Student</h2><div class="grid md:grid-cols-3 gap-4"><select id="gradeStudentId" class="border p-2 rounded"><option>Select Student</option>${students.map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}</select><select id="gradeTerm" class="border p-2 rounded"><option>1</option><option>2</option><option>3</option></select><input id="gradeYear" value="2026" class="border p-2 rounded"></div><div id="gradeEditor" class="mt-4"></div><button id="saveGradeBtn" class="mt-3 bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700">Save Grades</button></div>`;
+            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">📝 Grade Student</h2><div class="grid md:grid-cols-3 gap-4"><select id="gradeStudentId" class="border p-2 rounded"><option>Select Student</option>${students.map(s=>`<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('')}</select><select id="gradeTerm" class="border p-2 rounded"><option>1</option><option>2</option><option>3</option></select><input id="gradeYear" value="2026" class="border p-2 rounded"></div><div id="gradeEditor" class="mt-4"></div><button id="saveGradeBtn" class="mt-3 bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700">Save Grades</button></div>`;
             document.getElementById("mainContent").innerHTML = html;
             let currentGrades = [];
             const loadGradeTable = async () => {
@@ -829,7 +817,7 @@
                 document.getElementById("gradeEditor").innerHTML = tbl;
                 const addRow = (r = null) => {
                     let tr = document.createElement('tr');
-                    tr.innerHTML = `<td><input class="subj w-32 border p-1" value="${r?.subject || ''}"></td><td><input class="ca1 w-20 border p-1" value="${r?.ca1 || 0}" min="0" max="20" type="number"></td><td><input class="ca2 w-20 border p-1" value="${r?.ca2 || 0}" min="0" max="20" type="number"></td><td><input class="ex w-20 border p-1" value="${r?.exam || 0}" min="0" max="60" type="number"></td><td class="totCell"></td><td class="grCell"></td><td><button class="delRow bg-red-500 text-white px-1 rounded">X</button></td>`;
+                    tr.innerHTML = `<td><input class="subj w-32 border p-1" value="${escapeHtml(r?.subject || '')}"></td><td><input class="ca1 w-20 border p-1" value="${r?.ca1 || 0}" min="0" max="20" type="number"></td><td><input class="ca2 w-20 border p-1" value="${r?.ca2 || 0}" min="0" max="20" type="number"></td><td><input class="ex w-20 border p-1" value="${r?.exam || 0}" min="0" max="60" type="number"></td><td class="totCell"></td><td class="grCell"></td><td><button class="delRow bg-red-500 text-white px-1 rounded">X</button></td>`;
                     const update = () => { let c1 = +tr.querySelector('.ca1').value || 0, c2 = +tr.querySelector('.ca2').value || 0, ex = +tr.querySelector('.ex').value || 0, tot = c1+c2+ex; tr.querySelector('.totCell').innerText = tot; tr.querySelector('.grCell').innerText = tot>=80?'A':tot>=70?'B':tot>=60?'C':tot>=50?'D':'E'; };
                     tr.querySelector('.ca1').addEventListener('input', update); tr.querySelector('.ca2').addEventListener('input', update); tr.querySelector('.ex').addEventListener('input', update);
                     tr.querySelector('.delRow').addEventListener('click', () => tr.remove());
@@ -860,7 +848,7 @@
         async function renderAttendanceAndAppraisal() {
             let section = currentUser.assignedSection;
             let students = schoolData.students.filter(s => s.section === section);
-            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">🗒️ Attendance & Appraisal</h2><p class="mb-2">Record attendance for today: <input type="date" id="attDate" class="border p-1 rounded"></p><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Student</th><th>Present</th><th>Remarks</th></tr></thead><tbody>${students.map(s=>`<tr><td>${s.name}</td><td><input type="checkbox" class="attCheck" data-id="${s.id}"></td><td><input type="text" class="attRemarks" data-id="${s.id}" placeholder="Remarks" class="border p-1"></td></tr>`).join('')}</tbody></table></div><button id="saveAttendanceBtn" class="mt-3 bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700">Save Attendance</button></div>`;
+            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">🗒️ Attendance & Appraisal</h2><p class="mb-2">Record attendance for today: <input type="date" id="attDate" class="border p-1 rounded"></p><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Student</th><th>Present</th><th>Remarks</th></tr></thead><tbody>${students.map(s=>`<tr><td>${escapeHtml(s.name)}</td><td><input type="checkbox" class="attCheck" data-id="${s.id}"></td><td><input type="text" class="attRemarks" data-id="${s.id}" placeholder="Remarks" class="border p-1"></td>`).join('')}</tbody></table></div><button id="saveAttendanceBtn" class="mt-3 bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700">Save Attendance</button></div>`;
             document.getElementById("mainContent").innerHTML = html;
             document.getElementById("saveAttendanceBtn").onclick = async () => {
                 let date = document.getElementById("attDate").value;
@@ -964,7 +952,8 @@
             };
             const navHtml = menuItems.map(v=>`<a href="#" data-view="${v}" class="nav-link flex items-center space-x-3 px-4 py-2.5 rounded-lg text-slate-200 hover:bg-white/10 transition"><i class="fas fa-folder w-5"></i><span>${labels[v]||v}</span></a>`).join('');
             document.getElementById("dynamicNav").innerHTML = navHtml;
-            document.querySelectorAll('.nav-link').forEach(link=>link.addEventListener('click',(e)=>{ e.preventDefault(); renderContentView(link.dataset.view); closeMobileSidebar(); resetInactivityTimer(); }));
+            document.querySelectorAll('.nav-link').forEach(link=>link.addEventListener('click',(e)=>{ e.preventDefault(); const view = link.dataset.view; currentViewName = view; renderContentView(view); closeMobileSidebar(); resetInactivityTimer(); }));
+            currentViewName = menuItems[0];
             renderContentView(menuItems[0]);
         }
         
@@ -1008,23 +997,19 @@
             document.getElementById('closeMobileSidebar')?.addEventListener('click',closeMobileSidebar);
             document.getElementById('sidebarOverlay')?.addEventListener('click',closeMobileSidebar);
             
-            // Admin login
             document.getElementById('adminAuthForm')?.addEventListener('submit', async(e)=>{ e.preventDefault(); await loginAdmin(adminEmail.value, adminPassword.value); });
             document.getElementById('adminLoginBtnHero')?.addEventListener('click',()=>{ document.getElementById('landingPage').style.display='none'; document.getElementById('adminLoginModal').style.display='flex'; });
             document.getElementById('closeAdminLoginBtn')?.addEventListener('click',()=>location.reload());
             document.getElementById('adminForgotPasswordBtn')?.addEventListener('click', async()=>{ const email=document.getElementById('adminEmail').value; if(!email) return showToast("Enter email",true); await supabaseClient.auth.resetPasswordForEmail(email); showToast("Reset link sent!"); });
             
-            // Staff login
             document.getElementById('staffAuthForm')?.addEventListener('submit', async(e)=>{ e.preventDefault(); await loginStaff(staffUsername.value, staffPassword.value); });
             document.getElementById('staffLoginBtnHero')?.addEventListener('click',()=>{ document.getElementById('landingPage').style.display='none'; document.getElementById('staffLoginModal').style.display='flex'; });
             document.getElementById('closeStaffLoginBtn')?.addEventListener('click',()=>location.reload());
             
-            // Parent login
             document.getElementById('parentAuthForm')?.addEventListener('submit', async(e)=>{ e.preventDefault(); await parentLogin(parentRegNo.value, parentPassword.value); });
             document.getElementById('parentLoginBtn')?.addEventListener('click',()=>{ document.getElementById('landingPage').style.display='none'; document.getElementById('parentLoginModal').style.display='flex'; });
             document.getElementById('closeParentLoginBtn')?.addEventListener('click',()=>location.reload());
             
-            // Admin signup
             document.getElementById('adminSignupBtn')?.addEventListener('click',()=>{ document.getElementById('landingPage').style.display='none'; document.getElementById('adminSignupModal').style.display='flex'; });
             document.getElementById('closeAdminSignupBtn')?.addEventListener('click',()=>location.reload());
             document.getElementById('adminSignupForm')?.addEventListener('submit', async(e)=>{ e.preventDefault(); await adminSignup(adminFullName.value, adminEmail.value, adminPassword.value, adminRole.value, adminRegCode.value); });
