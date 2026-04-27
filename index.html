@@ -14,7 +14,7 @@
     </script>
     
     <title>Al‑Istiqaamah Flying Wings Academy | Complete Portal</title>
-    <meta name="description" content="Complete school management: term results, staff appraisal, student filters, enrollment, online admission with file uploads.">
+    <meta name="description" content="Complete school management: term results, staff appraisal, student filters, enrollment with role restrictions.">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -46,11 +46,6 @@
         .suspended-badge { background: #f97316; color: white; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; }
         .cookie-consent { position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: #f1f5f9; padding: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; z-index: 200; }
         .powered-by { margin-top: 1rem; text-align: center; font-size: 0.8rem; background: linear-gradient(135deg, #0f172a, #1e293b); padding: 8px; border-radius: 40px; display: inline-block; }
-        .status-badge { padding: 2px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; }
-        .status-pending { background: #fef3c7; color: #b45309; }
-        .status-reviewed { background: #dbeafe; color: #1e40af; }
-        .status-accepted { background: #d1fae5; color: #065f46; }
-        .status-rejected { background: #fee2e2; color: #991b1b; }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -58,7 +53,7 @@
     <!-- COOKIE CONSENT BANNER -->
     <div id="cookieBanner" class="cookie-consent" style="display: none;">
         <div class="flex-1 text-sm md:text-base">🍪 We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.</div>
-        <button id="acceptCookiesBtn" class="bg-amber-500 px-4 py-1 rounded-full text-black font-semibold">Accept All Cookies</button>
+        <button id="acceptCookiesBtn">Accept All Cookies</button>
     </div>
 
     <!-- LANDING PAGE -->
@@ -91,13 +86,13 @@
                     <div class="bg-white/10 backdrop-blur-md rounded-2xl p-5 shadow-xl border border-white/20 w-80">
                         <div class="flex items-center justify-between border-b border-white/20 pb-2 mb-3"><span class="text-amber-200"><i class="fas fa-clock"></i> Local Time</span><span id="liveTime" class="font-mono text-xl font-bold">--:--:--</span></div>
                         <div><p class="text-sm opacity-80"><i class="fas fa-calendar-alt mr-1"></i> <span id="liveDate"></span></p><p class="text-3xl font-bold mt-1"><span id="weatherTemp">--</span>°C</p><p class="text-sm capitalize"><span id="weatherDesc">loading...</span></p></div>
-                        <p class="text-xs mt-3 text-center text-gray-200"><i class="fas fa-location-dot"></i> <span id="userLocation">Zaria, Nigeria</span></p>
+                        <p class="text-xs mt-3 text-center text-gray-200"><i class="fas fa-location-dot"></i> <span id="userLocation">Fetching location...</span></p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ANNOUNCEMENT BAR -->
+        <!-- ANNOUNCEMENT BAR (DG/CEO editable newsletter) -->
         <div class="container mx-auto px-6 pt-6"><div id="announcementBarWrapper" class="mb-5"></div></div>
 
         <!-- Slideshow container -->
@@ -116,7 +111,7 @@
         
         <div class="bg-gray-100 py-16"><div class="container mx-auto px-6"><h2 class="text-3xl font-bold text-center text-gray-800 mb-4">🌸 Core <span class="text-amber-600">Objectives</span></h2><div class="grid md:grid-cols-3 gap-6 mt-8"><div class="bg-white p-5 rounded-xl shadow-md"><i class="fas fa-quran text-emerald-600 text-2xl"></i><p class="mt-2">Authentic Qur’anic & Prophetic knowledge</p></div><div class="bg-white p-5 rounded-xl shadow-md"><i class="fas fa-book-open text-emerald-600 text-2xl"></i><p class="mt-2">Joyful Qur’anic memorization</p></div><div class="bg-white p-5 rounded-xl shadow-md"><i class="fas fa-crown text-emerald-600 text-2xl"></i><p class="mt-2">Confident, principled leaders</p></div></div></div></div>
         
-        <div class="bg-emerald-900 text-white py-12 text-center"><div class="container mx-auto px-6"><h2 class="text-3xl font-bold mb-3">Begin Your Child's Journey of Faith & Excellence</h2><p class="mb-6">Admissions open. Contact our admission office.</p><div class="flex flex-wrap justify-center gap-4"><a href="tel:08067990749" class="bg-amber-500 hover:bg-amber-600 text-gray-900 px-6 py-3 rounded-full inline-flex gap-2 shadow-lg">📞 Call Us</a><button id="loginBtnFooter" class="border-2 border-amber-400 hover:bg-amber-400 hover:text-gray-900 px-6 py-3 rounded-full font-semibold">👥 Staff Dashboard</button><button id="applyNowBtn" class="apply-btn bg-amber-500 hover:bg-amber-600 text-gray-900 font-bold px-8 py-3 rounded-full shadow-lg transition"><i class="fas fa-pen-alt mr-2"></i> Apply Now</button></div></div></div>
+        <div class="bg-emerald-900 text-white py-12 text-center"><div class="container mx-auto px-6"><h2 class="text-3xl font-bold mb-3">Begin Your Child's Journey of Faith & Excellence</h2><p class="mb-6">Admissions open. Contact our admission office.</p><div class="flex flex-wrap justify-center gap-4"><a href="tel:08067990749" class="bg-amber-500 hover:bg-amber-600 text-gray-900 px-6 py-3 rounded-full inline-flex gap-2 shadow-lg">📞 Call Us</a><button id="loginBtnFooter" class="border-2 border-amber-400 hover:bg-amber-400 hover:text-gray-900 px-6 py-3 rounded-full font-semibold">👥 Staff Dashboard</button><button id="applyNowBtn" class="apply-btn text-gray-900 font-bold px-8 py-3 rounded-full shadow-lg">📝 Apply Now</button></div></div></div>
         
         <footer class="bg-slate-900 text-gray-400 py-8 text-center text-sm">
             <div>© 2026 Al‑Istiqaamah Flying Wings Academy — Samaru, Zaria, Kaduna State. RC: 1983033</div>
@@ -124,7 +119,7 @@
         </footer>
     </div>
 
-    <!-- LOGIN MODALS -->
+    <!-- MODALS (Login, Parent, Admin Signup) -->
     <div id="loginScreen" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70"><div class="bg-white rounded-2xl p-8 w-96 relative"><h2 class="text-2xl font-bold mb-4">Staff/Admin Login</h2><form id="authForm"><input type="email" id="authEmail" placeholder="Email" class="w-full border p-2 rounded mb-3"><input type="password" id="authPassword" placeholder="Password" class="w-full border p-2 rounded mb-4"><button type="submit" class="w-full bg-amber-600 text-white py-2 rounded-lg">Login</button></form><button id="closeLoginBtn" class="absolute top-3 right-4 text-2xl">&times;</button></div></div>
     <div id="parentLoginModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70"><div class="bg-white rounded-2xl p-8 w-96 relative"><h2 class="text-2xl font-bold mb-4">Parent Login</h2><form id="parentAuthForm"><input type="text" id="parentRegNo" placeholder="Student Registration Number" class="w-full border p-2 rounded mb-3"><input type="password" id="parentPassword" value="al123" class="w-full border p-2 rounded mb-4"><button type="submit" class="w-full bg-emerald-600 text-white py-2 rounded-lg">Access Dashboard</button></form><button id="closeParentLoginBtn" class="absolute top-3 right-4 text-2xl">&times;</button></div></div>
     <div id="adminSignupModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70"><div class="bg-white rounded-2xl p-8 w-96 relative"><h2 class="text-2xl font-bold mb-4">Admin Signup</h2><form id="adminSignupForm"><input type="text" id="adminFullName" placeholder="Full Name" class="w-full border p-2 rounded mb-2"><input type="email" id="adminEmail" placeholder="Email" class="w-full border p-2 rounded mb-2"><input type="password" id="adminPassword" placeholder="Password" class="w-full border p-2 rounded mb-2"><select id="adminRole"><option value="dg_ceo">DG/CEO</option><option value="umc">UMC</option></select><input type="text" id="adminRegCode" placeholder="Registration Code (ALIFLY2026)" class="w-full border p-2 rounded mt-2"><button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-lg mt-3">Create Account</button></form><button id="closeAdminSignupBtn" class="absolute top-3 right-4 text-2xl">&times;</button></div></div>
@@ -146,7 +141,7 @@
 
         function showToast(msg, isError=false) { let t = document.getElementById('toastMsg'); t.innerText = msg; t.style.display = 'block'; t.style.background = isError ? '#dc2626' : '#10b981'; setTimeout(()=> t.style.display = 'none', 3000); }
 
-        // ========== ANNOUNCEMENT BAR ==========
+        // ========== ANNOUNCEMENT BAR (DG/CEO) ==========
         async function fetchAndDisplayAnnouncement() {
             try {
                 const { data } = await supabaseClient.from('site_announcement').select('content').eq('id',1).single();
@@ -166,25 +161,81 @@
             if(!data) await supabaseClient.from('site_announcement').insert({ id:1, content: "📢 Welcome to Al‑Istiqaamah Flying Wings Academy. Admissions open for 2026!" });
         }
 
-        // ========== STUDENT MANAGEMENT (original) ==========
+        // ========== ENROLL STUDENT (Role-based access) ==========
+        // Only DG/CEO, UMC, and Headteacher (for their assigned section) can enroll.
         async function addStudentLogic(reg_number, name, parent_name, level, section, fee_status) {
+            // Permission check
             if (!currentUser) { showToast("Please login", true); return false; }
+            const allowedRoles = ['dg_ceo', 'umc', 'headteacher'];
+            if (!allowedRoles.includes(currentUser.role)) { showToast("You are not authorized to enroll students", true); return false; }
+            if (currentUser.role === 'headteacher') {
+                // Headteacher can only enroll into their assigned section
+                const headSection = currentUser.assignedSection || currentUser.section;
+                if (!headSection || headSection !== section) {
+                    showToast(`Headteachers can only enroll students into their own section: ${headSection}`, true);
+                    return false;
+                }
+            }
+            // Validation
             if (!name?.trim() || name.length<3) { showToast("Student name min 3 chars", true); return false; }
+            if (isNaN(level) || level<1 || level>12) { showToast("Level 1-12", true); return false; }
             if (!reg_number.trim()) { showToast("Registration number required", true); return false; }
             if (schoolData.students.find(s=>s.reg_number===reg_number)) { showToast("Reg number exists", true); return false; }
-            const { error } = await supabaseClient.from('students').insert([{ reg_number, name: name.trim(), parent_name: parent_name.trim(), level: parseInt(level), section, fee_status, status: 'active' }]);
+            const { error } = await supabaseClient.from('students').insert([{ reg_number, name: name.trim(), parent_name: parent_name.trim(), level: parseInt(level), section, fee_status, boarding: false, attendance_pct: 0, grades: {}, status: 'active' }]);
             if (error) { showToast("Error: "+error.message, true); return false; }
             await refreshSchoolData(); showToast(`Student ${name} enrolled`); return true;
         }
-        function renderEnrollStudent() { 
+        function renderEnrollStudent() {
+            // Check permissions
+            const allowedRoles = ['dg_ceo', 'umc', 'headteacher'];
+            if (!allowedRoles.includes(currentUser?.role)) {
+                showToast("Access denied: Only DG/CEO, UMC, or Headteacher can enroll students", true);
+                renderContentView("dashboard");
+                return;
+            }
             let sectionOptions = SECTIONS.map(s => `<option value="${s}">${s}</option>`).join('');
-            const html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">🎓 Enroll Student</h2><form id="enrollStudentForm" class="space-y-4"><input type="text" id="regNumber" placeholder="Registration Number" required class="border p-2 w-full rounded"><input type="text" id="studentName" placeholder="Student Name" required class="border p-2 w-full rounded"><input type="text" id="parentName" placeholder="Parent Name" required class="border p-2 w-full rounded"><input type="number" id="level" placeholder="Level (1-12)" min="1" max="12" required class="border p-2 w-full rounded"><select id="section" class="border p-2 w-full rounded">${sectionOptions}</select><select id="feeStatus" class="border p-2 w-full rounded"><option>Pending</option><option>Paid</option></select><button type="submit" class="bg-emerald-600 text-white px-4 py-2 rounded-lg w-full">Register Student</button></form></div>`;
+            let sectionSelectHtml = `<select id="section" class="border p-2 w-full rounded" required>${sectionOptions}</select>`;
+            let sectionNote = "";
+            // For headteacher, restrict to their assigned section and disable dropdown
+            if (currentUser.role === 'headteacher') {
+                const allowedSection = currentUser.assignedSection || currentUser.section;
+                if (allowedSection && SECTIONS.includes(allowedSection)) {
+                    sectionSelectHtml = `<input type="text" id="section" value="${allowedSection}" readonly class="border p-2 w-full rounded bg-gray-100" required>`;
+                    sectionNote = `<p class="text-xs text-amber-600 mt-1"><i class="fas fa-info-circle"></i> You can only enroll students into your assigned section: ${allowedSection}</p>`;
+                } else {
+                    showToast("Headteacher has no assigned section. Contact admin.", true);
+                    renderContentView("dashboard");
+                    return;
+                }
+            }
+            const html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4">🎓 Enroll Student</h2><form id="enrollStudentForm" class="space-y-4"><input type="text" id="regNumber" placeholder="Registration Number" required class="border p-2 w-full rounded"><input type="text" id="studentName" placeholder="Student Name" required class="border p-2 w-full rounded"><input type="text" id="parentName" placeholder="Parent Name" required class="border p-2 w-full rounded"><input type="number" id="level" placeholder="Level (1-12)" min="1" max="12" required class="border p-2 w-full rounded">${sectionSelectHtml}${sectionNote}<select id="feeStatus" class="border p-2 w-full rounded"><option>Pending</option><option>Paid</option></select><button type="submit" class="bg-emerald-600 text-white px-4 py-2 rounded-lg w-full">Register Student</button></form></div>`;
             document.getElementById("mainContent").innerHTML = html;
-            document.getElementById("enrollStudentForm")?.addEventListener("submit", async(e)=>{ e.preventDefault(); await addStudentLogic( document.getElementById("regNumber").value, document.getElementById("studentName").value, document.getElementById("parentName").value, document.getElementById("level").value, document.getElementById("section").value, document.getElementById("feeStatus").value ); renderStudentsList(); });
+            document.getElementById("enrollStudentForm")?.addEventListener("submit", async(e)=>{
+                e.preventDefault();
+                let sectionValue = document.getElementById("section").value;
+                if (currentUser.role === 'headteacher') {
+                    // Read-only input value
+                    sectionValue = document.getElementById("section").value;
+                }
+                const success = await addStudentLogic(
+                    document.getElementById("regNumber").value,
+                    document.getElementById("studentName").value,
+                    document.getElementById("parentName").value,
+                    document.getElementById("level").value,
+                    sectionValue,
+                    document.getElementById("feeStatus").value
+                );
+                if (success) renderStudentsList(); // go to student list after enrollment
+            });
         }
-        function renderStudentsList() { 
+
+        // ========== ENHANCED STUDENT LIST (Section Filter + Search) ==========
+        function renderStudentsList() {
             const sections = ['All Sections', ...SECTIONS];
-            let html = `<div class="bg-white p-5 rounded-xl shadow"><h2 class="text-xl font-bold mb-4"><i class="fas fa-users text-amber-600"></i> Student Directory</h2><div class="filter-bar flex flex-wrap gap-4"><select id="sectionFilterSelect" class="border rounded-full px-4 py-2">${sections.map(s => `<option value="${s}">${s}</option>`).join('')}</select><input type="text" id="studentSearchInput" placeholder="Search..." class="border rounded-full px-4 py-2 w-64"><span id="filteredCount"></span></div><div class="overflow-x-auto"><table class="w-full border"><thead><tr class="bg-gray-100"><th>Reg No</th><th>Name</th><th>Parent</th><th>Section</th><th>Level</th><th>Fees</th><th>Status</th><th>Actions</th></tr></thead><tbody id="studentsTableBody"></tbody></table></div></div>`;
+            let html = `<div class="bg-white p-5 rounded-xl shadow"><h2 class="text-xl font-bold mb-4"><i class="fas fa-users text-amber-600"></i> Student Directory (Filter by Section & Search)</h2>
+            <div class="filter-bar flex flex-wrap gap-4 items-center"><select id="sectionFilterSelect" class="border rounded-full px-4 py-2">${sections.map(s => `<option value="${s}">${s}</option>`).join('')}</select>
+            <input type="text" id="studentSearchInput" placeholder="Name or Reg No..." class="border rounded-full px-4 py-2 w-64"><span id="filteredCount" class="text-sm text-gray-500"></span></div>
+            <div class="overflow-x-auto"><table class="w-full border"><thead><tr class="bg-gray-100"><th>Reg No</th><th>Name</th><th>Parent</th><th>Section</th><th>Level</th><th>Fees</th><th>Status</th><th>Actions</th></tr></thead><tbody id="studentsTableBody"></tbody></table></div></div>`;
             document.getElementById("mainContent").innerHTML = html;
             const updateTable = () => {
                 const sectionFilter = document.getElementById("sectionFilterSelect").value;
@@ -193,167 +244,234 @@
                 if (searchTerm) filtered = filtered.filter(s => s.name.toLowerCase().includes(searchTerm) || s.reg_number.toLowerCase().includes(searchTerm));
                 document.getElementById("filteredCount").innerText = `${filtered.length} students`;
                 const tbody = document.getElementById("studentsTableBody");
-                if (tbody) tbody.innerHTML = filtered.map(s => `<tr class="border-b"><td class="p-2">${s.reg_number}</td><td class="p-2">${s.name}</td><td class="p-2">${s.parent_name || '-'}</td><td class="p-2 capitalize">${s.section}</td><td class="p-2">${s.level}</td><td class="${s.fee_status === 'Paid' ? 'text-green-600' : 'text-red-500'}">${s.fee_status || 'Pending'}</td><td class="p-2"><span class="${s.status === 'active' ? 'active-badge' : 'suspended-badge'}">${s.status}</span></td><td class="p-2"><button onclick="window.toggleSuspendStudent('${s.id}','${s.status}')" class="bg-amber-500 text-white px-2 py-1 rounded text-xs">Toggle</button></td></tr>`).join('');
+                if (tbody) tbody.innerHTML = filtered.map(s => `<tr class="border-b"><td class="p-2">${s.reg_number}</td><td class="p-2">${s.name}</td><td class="p-2">${s.parent_name || '-'}</td><td class="p-2 capitalize">${s.section}</td><td class="p-2">${s.level}</td><td class="${s.fee_status === 'Paid' ? 'text-green-600' : 'text-red-500'}">${s.fee_status || 'Pending'}</td><td class="p-2"><span class="${s.status === 'active' ? 'active-badge' : 'suspended-badge'}">${s.status}</span></td><td class="p-2"><button onclick="window.toggleSuspendStudent('${s.id}','${s.status}')" class="bg-amber-500 text-white px-2 py-1 rounded text-xs">${s.status === 'active' ? 'Suspend' : 'Activate'}</button> <button onclick="window.deleteStudent('${s.id}')" class="bg-red-500 text-white px-2 py-1 rounded text-xs">Delete</button></td></tr>`).join('');
             };
-            document.getElementById("sectionFilterSelect")?.addEventListener("change", updateTable);
-            document.getElementById("studentSearchInput")?.addEventListener("input", updateTable);
+            document.getElementById("sectionFilterSelect").addEventListener("change", updateTable);
+            document.getElementById("studentSearchInput").addEventListener("input", updateTable);
             updateTable();
             window.toggleSuspendStudent = async (id, cur) => { const newStatus = cur === 'active' ? 'suspended' : 'active'; await supabaseClient.from('students').update({status:newStatus}).eq('id',id); await refreshSchoolData(); renderStudentsList(); };
+            window.deleteStudent = async (id) => { if(confirm("Delete permanently?")) { await supabaseClient.from('students').delete().eq('id',id); await refreshSchoolData(); renderStudentsList(); } };
         }
-        async function refreshSchoolData() { const { data: students } = await supabaseClient.from('students').select('*'); if (students) schoolData.students = students.map(s => ({ ...s, fee_status: s.fee_status || 'Pending', status: s.status || 'active' })); const { data: teachers } = await supabaseClient.from('teachers').select('*'); if (teachers) schoolData.teachers = teachers; }
-        
-        // ========== TERM RESULTS (original simplified but kept) ==========
-        async function renderRecordResults() { document.getElementById("mainContent").innerHTML = `<div class="bg-white p-6 rounded-xl">📊 Results recording module active (CA/Exam). Full implementation with CA1,CA2,Exam,Grade.</div>`; }
-        async function renderAllResultsAdmin() { document.getElementById("mainContent").innerHTML = `<div class="bg-white p-6 rounded-xl">📈 All student results view for admin.</div>`; }
-        async function renderStaffAppraisal() { document.getElementById("mainContent").innerHTML = `<div class="bg-white p-6 rounded-xl">⭐ Staff appraisal (DG/CEO). Full evaluation system.</div>`; }
-        
-        // ========== ADMISSION APPLICATIONS (DG/CEO Tab) ==========
-        async function renderApplicationsList() {
-            if (currentUser?.role !== 'dg_ceo') { showToast("Access denied: Only DG/CEO can view applications", true); renderContentView("dashboard"); return; }
-            const { data: applications, error } = await supabaseClient.from('admission_applications').select('*').order('submitted_at', { ascending: false });
-            if (error) { showToast("Error fetching applications: "+error.message, true); return; }
-            let html = `<div class="bg-white p-6 rounded-xl shadow"><div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-bold"><i class="fas fa-file-alt text-amber-600"></i> Admission Applications Received</h2><span class="text-sm bg-gray-100 px-3 py-1 rounded-full">${applications?.length || 0} total</span></div>
-            <div class="overflow-x-auto"><table class="w-full border text-sm"><thead class="bg-gray-100"><tr><th>Date</th><th>Full Name</th><th>Parent/Guardian</th><th>Phone</th><th>Email</th><th>Status</th><th>Attachments</th><th>Update Status</th></tr></thead><tbody>`;
-            if (!applications || applications.length === 0) html += `<tr><td colspan="8" class="text-center p-6">No applications submitted yet.</td></tr>`;
-            else {
-                for (let app of applications) {
-                    const submitted = new Date(app.submitted_at).toLocaleDateString();
-                    const formData = app.form_data || {};
-                    const fullName = app.full_name || `${formData.surname || ''} ${formData.firstname || ''}`;
-                    const parentName = formData.declarantName || formData.fatherName || '-';
-                    const phone = app.phone || formData.parentPhone || '-';
-                    const email = app.parent_email || formData.parentEmail || '-';
-                    const status = app.status || 'pending';
-                    const statusClass = status === 'pending' ? 'status-pending' : (status === 'accepted' ? 'status-accepted' : (status === 'rejected' ? 'status-rejected' : 'status-reviewed'));
-                    let attachmentsHtml = '-';
-                    if (formData.attachments) {
-                        const att = formData.attachments;
-                        const links = [];
-                        if (att.birthCert) links.push(`<a href="${att.birthCert}" target="_blank" class="text-blue-600 underline">Birth Cert</a>`);
-                        if (att.prevReport) links.push(`<a href="${att.prevReport}" target="_blank" class="text-blue-600 underline">Report</a>`);
-                        if (att.medicalReport) links.push(`<a href="${att.medicalReport}" target="_blank" class="text-blue-600 underline">Medical</a>`);
-                        if (att.immunizationCard) links.push(`<a href="${att.immunizationCard}" target="_blank" class="text-blue-600 underline">Immunization</a>`);
-                        if (att.passportPhotos && att.passportPhotos.length) links.push(`<a href="${att.passportPhotos[0]}" target="_blank" class="text-blue-600 underline">Photos (${att.passportPhotos.length})</a>`);
-                        if (links.length) attachmentsHtml = links.join(' | ');
-                    }
-                    html += `<tr class="border-b hover:bg-gray-50"><td class="p-2">${submitted}</td><td class="p-2 font-semibold">${escapeHtml(fullName)}</td><td class="p-2">${escapeHtml(parentName)}</td><td class="p-2">${escapeHtml(phone)}</td><td class="p-2">${escapeHtml(email)}</td><td class="p-2"><span class="status-badge ${statusClass}">${status.toUpperCase()}</span></td><td class="p-2 text-xs">${attachmentsHtml}</td>
-                    <td class="p-2"><select class="status-update border rounded px-2 py-1 text-xs" data-id="${app.id}"><option value="pending" ${status==='pending'?'selected':''}>Pending</option><option value="reviewed" ${status==='reviewed'?'selected':''}>Reviewed</option><option value="accepted" ${status==='accepted'?'selected':''}>Accepted</option><option value="rejected" ${status==='rejected'?'selected':''}>Rejected</option></select></td></tr>`;
-                }
-            }
-            html += `</tbody></table></div></div>`;
+
+        // ========== STAFF APPRAISAL (DG/CEO) ==========
+        async function saveStaffAppraisal(staffId, rating, comments) {
+            if (!currentUser || currentUser.role !== 'dg_ceo') { showToast("Only DG/CEO can appraise", true); return false; }
+            const { error } = await supabaseClient.from('staff_appraisals').insert({ staff_id: staffId, rating, comments, appraised_by: currentUser.full_name, appraised_at: new Date() });
+            if (error) { showToast(error.message, true); return false; }
+            showToast("Appraisal saved"); return true;
+        }
+        async function fetchAppraisalsForStaff(staffId) {
+            const { data } = await supabaseClient.from('staff_appraisals').select('*').eq('staff_id', staffId).order('appraised_at', { ascending: false });
+            return data || [];
+        }
+        async function renderStaffAppraisal() {
+            if (currentUser.role !== 'dg_ceo') { showToast("Access denied", true); renderContentView("dashboard"); return; }
+            const { data: teachersList } = await supabaseClient.from('teachers').select('*');
+            const allStaff = teachersList || [];
+            const sectionsFilter = ['All Sections', ...STAFF_SECTIONS];
+            let html = `<div class="bg-white p-5 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4"><i class="fas fa-star text-amber-600"></i> Staff Appraisal (DG/CEO)</h2>
+            <div class="filter-bar flex flex-wrap gap-4"><select id="staffSectionFilter" class="border rounded-full px-4 py-2">${sectionsFilter.map(s => `<option value="${s}">${s}</option>`).join('')}</select>
+            <input type="text" id="staffSearchInput" placeholder="Search name or email" class="border rounded-full px-4 py-2 w-64"><span id="staffFilteredCount"></span></div>
+            <div id="staffCardsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4"></div></div>`;
             document.getElementById("mainContent").innerHTML = html;
-            document.querySelectorAll('.status-update').forEach(select => {
-                select.addEventListener('change', async (e) => {
-                    const newStatus = e.target.value;
-                    const appId = e.target.dataset.id;
-                    const { error } = await supabaseClient.from('admission_applications').update({ status: newStatus }).eq('id', appId);
-                    if (error) showToast("Update failed: "+error.message, true);
-                    else { showToast("Status updated"); renderApplicationsList(); }
-                });
+            const renderCards = async () => {
+                const sectionFilter = document.getElementById("staffSectionFilter").value;
+                const searchTerm = document.getElementById("staffSearchInput").value.toLowerCase();
+                let filtered = allStaff.filter(s => s.name && s.email);
+                if (sectionFilter !== 'All Sections') filtered = filtered.filter(s => (s.assigned_section || s.section || '') === sectionFilter);
+                if (searchTerm) filtered = filtered.filter(s => s.name.toLowerCase().includes(searchTerm) || s.email.toLowerCase().includes(searchTerm));
+                document.getElementById("staffFilteredCount").innerText = `${filtered.length} staff`;
+                const container = document.getElementById("staffCardsContainer");
+                container.innerHTML = '';
+                for (const staff of filtered) {
+                    const appraisals = await fetchAppraisalsForStaff(staff.id);
+                    const last = appraisals[0];
+                    const ratingStars = last ? '⭐'.repeat(last.rating) + '☆'.repeat(5-last.rating) : 'Not appraised';
+                    container.innerHTML += `<div class="border rounded-xl p-4 bg-white shadow-sm"><div class="flex items-center gap-2"><i class="fas fa-user-tie text-amber-600"></i><h3 class="font-bold">${escapeHtml(staff.name)}</h3></div><p class="text-sm">${staff.email} | ${staff.role || 'Staff'}</p><p class="text-sm">Section: ${staff.assigned_section || staff.section || '-'}</p><p class="text-sm">Latest: ${ratingStars} ${last ? `(${new Date(last.appraised_at).toLocaleDateString()})` : ''}</p><button class="appraise-btn mt-2 bg-amber-500 text-white px-3 py-1 rounded-full text-sm" data-id="${staff.id}" data-name="${escapeHtml(staff.name)}">Appraise</button></div>`;
+                }
+                document.querySelectorAll('.appraise-btn').forEach(btn => btn.addEventListener('click', () => openAppraisalModal(btn.dataset.id, btn.dataset.name)));
+            };
+            document.getElementById("staffSectionFilter").addEventListener("change", renderCards);
+            document.getElementById("staffSearchInput").addEventListener("input", renderCards);
+            await renderCards();
+        }
+        function openAppraisalModal(staffId, staffName) {
+            const modalDiv = document.createElement('div');
+            modalDiv.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black/50';
+            modalDiv.innerHTML = `<div class="bg-white rounded-2xl p-6 w-96 relative"><button class="close-modal absolute top-2 right-3 text-2xl">&times;</button><h3 class="text-xl font-bold mb-3">Appraise ${staffName}</h3><div><label>Rating (1-5)</label><div id="starRating" class="flex gap-1 text-2xl text-amber-400 my-2"></div><input type="hidden" id="ratingValue" value="3"></div><textarea id="appraisalComments" rows="3" class="w-full border rounded-lg p-2 mt-2" placeholder="Performance comments..."></textarea><button id="submitAppraisal" class="w-full bg-emerald-600 text-white py-2 rounded-full mt-4">Submit</button></div>`;
+            document.body.appendChild(modalDiv);
+            let currentRating = 3;
+            const starContainer = modalDiv.querySelector('#starRating');
+            const updateStars = () => { starContainer.innerHTML = ''; for (let i=1; i<=5; i++) { const star = document.createElement('i'); star.className = i <= currentRating ? 'fas fa-star cursor-pointer' : 'far fa-star cursor-pointer'; star.addEventListener('click', () => { currentRating = i; document.getElementById('ratingValue').value = i; updateStars(); }); starContainer.appendChild(star); } };
+            updateStars();
+            modalDiv.querySelector('#submitAppraisal').addEventListener('click', async () => {
+                const rating = parseInt(document.getElementById('ratingValue').value);
+                const comments = modalDiv.querySelector('#appraisalComments').value;
+                await saveStaffAppraisal(parseInt(staffId), rating, comments);
+                modalDiv.remove();
+                renderStaffAppraisal();
+            });
+            modalDiv.querySelector('.close-modal').addEventListener('click', () => modalDiv.remove());
+        }
+
+        // ========== TERM-BASED RESULTS (CA1, CA2, EXAM) ==========
+        async function saveStudentResult(studentId, term, year, subject, ca1, ca2, exam) {
+            const ca1n = parseFloat(ca1)||0, ca2n = parseFloat(ca2)||0, examn = parseFloat(exam)||0;
+            const total = ca1n + ca2n + examn;
+            let grade = 'F'; if (total >= 80) grade = 'A'; else if (total >= 70) grade = 'B'; else if (total >= 60) grade = 'C'; else if (total >= 50) grade = 'D';
+            const { error } = await supabaseClient.from('student_results').upsert({ student_id: studentId, term, year, subject, ca1: ca1n, ca2: ca2n, exam: examn, total, grade }, { onConflict: 'student_id,term,year,subject' });
+            if (error) { showToast("Error: "+error.message, true); return false; }
+            return true;
+        }
+        async function getStudentResults(studentId, term, year) {
+            const { data } = await supabaseClient.from('student_results').select('*').eq('student_id', studentId).eq('term', term).eq('year', year);
+            return data || [];
+        }
+        async function getAllResultsForClass(section, term, year) {
+            const students = schoolData.students.filter(s => s.section === section && s.status === 'active');
+            if (!students.length) return [];
+            const { data } = await supabaseClient.from('student_results').select('*').in('student_id', students.map(s=>s.id)).eq('term', term).eq('year', year);
+            return data || [];
+        }
+        async function renderRecordResults() {
+            if (!['teacher','headteacher','dg_ceo'].includes(currentUser.role)) { showToast("Access denied", true); return; }
+            const assignedSection = currentUser.assignedSection || (currentUser.section && !currentUser.section.includes('Oversight') ? currentUser.section : SECTIONS[0]);
+            const students = schoolData.students.filter(s => s.section === assignedSection && s.status === 'active');
+            if (!students.length) { document.getElementById("mainContent").innerHTML = `<div class="bg-white p-6">No students in your section.</div>`; return; }
+            const currentYear = new Date().getFullYear();
+            let html = `<div class="bg-white p-6 rounded-xl shadow"><h2 class="text-2xl font-bold mb-4"><i class="fas fa-chart-line"></i> Record Termly Results (CA1, CA2, Exam)</h2>
+            <div class="filter-bar flex flex-wrap gap-4"><select id="resultTerm"><option value="1">First Term</option><option value="2">Second Term</option><option value="3">Third Term</option></select>
+            <input type="number" id="resultYear" value="${currentYear}" class="border rounded px-3 py-1 w-28"><input type="text" id="resultSubject" placeholder="Subject" class="border rounded px-3 py-1"><button id="loadResultTable" class="bg-emerald-600 text-white px-4 py-1 rounded-full">Load</button></div>
+            <div id="resultTableContainer" class="overflow-x-auto mt-4"></div></div>`;
+            document.getElementById("mainContent").innerHTML = html;
+            document.getElementById("loadResultTable").addEventListener("click", async () => {
+                const term = parseInt(document.getElementById("resultTerm").value);
+                const year = parseInt(document.getElementById("resultYear").value);
+                const subject = document.getElementById("resultSubject").value.trim();
+                if (!subject) { showToast("Enter subject", true); return; }
+                const existingMap = new Map();
+                const existingResults = await getAllResultsForClass(assignedSection, term, year);
+                existingResults.forEach(r => { existingMap.set(`${r.student_id}_${r.subject}`, r); });
+                let tableHtml = `<table class="result-table"><thead><tr><th>Student</th><th>Reg No</th><th>CA1 (20)</th><th>CA2 (20)</th><th>Exam (60)</th><th>Total</th><th>Grade</th><th>Save</th></tr></thead><tbody>`;
+                for (let s of students) {
+                    const key = `${s.id}_${subject}`;
+                    const rec = existingMap.get(key);
+                    const ca1 = rec ? rec.ca1 : '';
+                    const ca2 = rec ? rec.ca2 : '';
+                    const exam = rec ? rec.exam : '';
+                    tableHtml += `<tr id="row-${s.id}"><td>${s.name}</td><td>${s.reg_number}</td>
+                        <td><input type="number" class="score-input ca1" data-id="${s.id}" value="${ca1}" min="0" max="20" step="0.5"></td>
+                        <td><input type="number" class="score-input ca2" data-id="${s.id}" value="${ca2}" min="0" max="20" step="0.5"></td>
+                        <td><input type="number" class="score-input exam" data-id="${s.id}" value="${exam}" min="0" max="60" step="0.5"></td>
+                        <td class="total-${s.id}">${rec ? rec.total : '-'}</td><td class="grade-${s.id}">${rec ? rec.grade : '-'}</td>
+                        <td><button class="save-result bg-amber-500 text-white px-3 py-1 rounded text-sm" data-id="${s.id}">Save</button></td></tr>`;
+                }
+                tableHtml += `</tbody></table>`;
+                document.getElementById("resultTableContainer").innerHTML = tableHtml;
+                document.querySelectorAll('.ca1, .ca2, .exam').forEach(inp => inp.addEventListener('input', function() {
+                    const sid = this.dataset.id;
+                    const ca1v = parseFloat(document.querySelector(`.ca1[data-id="${sid}"]`).value) || 0;
+                    const ca2v = parseFloat(document.querySelector(`.ca2[data-id="${sid}"]`).value) || 0;
+                    const examv = parseFloat(document.querySelector(`.exam[data-id="${sid}"]`).value) || 0;
+                    const total = ca1v + ca2v + examv;
+                    let grade = 'F'; if (total >= 80) grade = 'A'; else if (total >= 70) grade = 'B'; else if (total >= 60) grade = 'C'; else if (total >= 50) grade = 'D';
+                    document.querySelector(`.total-${sid}`).innerText = total.toFixed(1);
+                    document.querySelector(`.grade-${sid}`).innerText = grade;
+                }));
+                document.querySelectorAll('.save-result').forEach(btn => btn.addEventListener('click', async (e) => {
+                    const sid = parseInt(btn.dataset.id);
+                    const ca1v = parseFloat(document.querySelector(`.ca1[data-id="${sid}"]`).value) || 0;
+                    const ca2v = parseFloat(document.querySelector(`.ca2[data-id="${sid}"]`).value) || 0;
+                    const examv = parseFloat(document.querySelector(`.exam[data-id="${sid}"]`).value) || 0;
+                    if (ca1v > 20 || ca2v > 20 || examv > 60) { showToast("Check max values", true); return; }
+                    await saveStudentResult(sid, term, year, subject, ca1v, ca2v, examv);
+                    showToast("Result saved");
+                }));
+            });
+        }
+        async function renderParentResults() {
+            const child = schoolData.students.find(s => s.id === currentUser.studentId);
+            if (!child) { document.getElementById("mainContent").innerHTML = `<div class="bg-white p-6">No linked student</div>`; return; }
+            const currentYear = new Date().getFullYear();
+            let html = `<div class="bg-white p-6 rounded-xl"><h2 class="text-2xl font-bold mb-3">📘 Results: ${child.name} (${child.reg_number})</h2>
+            <div class="flex gap-4 mb-4"><select id="parentTerm"><option value="1">First Term</option><option value="2">Second Term</option><option value="3">Third Term</option></select>
+            <input type="number" id="parentYear" value="${currentYear}" class="border rounded px-3 py-1 w-28"><button id="viewResultsBtn" class="bg-amber-600 text-white px-4 py-1 rounded-full">View</button></div>
+            <div id="parentResultDisplay"></div></div>`;
+            document.getElementById("mainContent").innerHTML = html;
+            document.getElementById("viewResultsBtn").addEventListener("click", async () => {
+                const term = parseInt(document.getElementById("parentTerm").value);
+                const year = parseInt(document.getElementById("parentYear").value);
+                const results = await getStudentResults(child.id, term, year);
+                if (!results.length) { document.getElementById("parentResultDisplay").innerHTML = "<p>No results yet.</p>"; return; }
+                let table = `<table class="result-table"><thead><tr><th>Subject</th><th>CA1 (20)</th><th>CA2 (20)</th><th>Exam (60)</th><th>Total</th><th>Grade</th></tr></thead><tbody>`;
+                let totalSum = 0;
+                for (let r of results) { totalSum += r.total; table += `<tr><td>${r.subject}</td><td>${r.ca1}</td><td>${r.ca2}</td><td>${r.exam}</td><td>${r.total}</td><td class="font-bold">${r.grade}</td></tr>`; }
+                const avg = (totalSum / results.length).toFixed(1);
+                table += `<tr class="bg-gray-100 font-bold"><td colspan="4">Average</td><td>${avg}</td><td>${avg >= 75 ? 'Excellent' : avg >= 60 ? 'Good' : avg >= 45 ? 'Fair' : 'Needs Improvement'}</td></tr>`;
+                table += `</tbody></table>`;
+                document.getElementById("parentResultDisplay").innerHTML = table;
+            });
+        }
+        async function renderAllResultsAdmin() {
+            if (currentUser.role !== 'dg_ceo') { showToast("Access denied", true); return; }
+            const sections = ['All Sections', ...SECTIONS];
+            const currentYear = new Date().getFullYear();
+            let html = `<div class="bg-white p-6 rounded-xl"><h2 class="text-2xl font-bold mb-4">📊 All Student Results (Admin)</h2>
+            <div class="filter-bar flex flex-wrap gap-4"><select id="adminSection">${sections.map(s => `<option value="${s}">${s}</option>`).join('')}</select>
+            <select id="adminTerm"><option value="1">First Term</option><option value="2">Second Term</option><option value="3">Third Term</option></select>
+            <input type="number" id="adminYear" value="${currentYear}" class="border rounded px-3 py-1 w-28"><button id="loadAdminResults" class="bg-indigo-600 text-white px-4 py-1 rounded-full">Load</button></div>
+            <div id="adminResultTable"></div></div>`;
+            document.getElementById("mainContent").innerHTML = html;
+            document.getElementById("loadAdminResults").addEventListener("click", async () => {
+                const section = document.getElementById("adminSection").value;
+                const term = parseInt(document.getElementById("adminTerm").value);
+                const year = parseInt(document.getElementById("adminYear").value);
+                let students = schoolData.students.filter(s => s.status === 'active');
+                if (section !== 'All Sections') students = students.filter(s => s.section === section);
+                if (!students.length) { document.getElementById("adminResultTable").innerHTML = "<p>No students</p>"; return; }
+                let output = `<table class="result-table"><thead><tr><th>Student</th><th>Reg No</th><th>Section</th><th>Subject Scores (CA1/CA2/Exam = Total/Grade)</th></tr></thead><tbody>`;
+                for (let stu of students) {
+                    const results = await getStudentResults(stu.id, term, year);
+                    if (results.length === 0) output += `<tr><td>${stu.name}</td><td>${stu.reg_number}</td><td>${stu.section}</td><td>No records</td></tr>`;
+                    else {
+                        const subjectsHtml = results.map(r => `<div><strong>${r.subject}</strong>: ${r.ca1}+${r.ca2}+${r.exam}=${r.total} (${r.grade})</div>`).join('');
+                        output += `<tr><td>${stu.name}</td><td>${stu.reg_number}</td><td>${stu.section}</td><td>${subjectsHtml}</td></tr>`;
+                    }
+                }
+                output += `</tbody></table>`;
+                document.getElementById("adminResultTable").innerHTML = output;
             });
         }
 
-        // ========== ADMISSION APPLICATION FORM (with file uploads) ==========
-        async function ensureStorageBucket() {
-            const { data: buckets } = await supabaseClient.storage.listBuckets();
-            if (!buckets.find(b => b.name === 'application_attachments')) {
-                await supabaseClient.storage.createBucket('application_attachments', { public: true });
-            }
+        // ========== CORE FUNCTIONS (auth, data, navigation) ==========
+        async function refreshSchoolData() {
+            const { data: students } = await supabaseClient.from('students').select('*');
+            if (students) schoolData.students = students.map(s => ({ ...s, fee_status: s.fee_status || 'Pending', status: s.status || 'active' }));
+            const { data: teachers } = await supabaseClient.from('teachers').select('*');
+            if (teachers) schoolData.teachers = teachers;
         }
-        async function uploadFile(file, applicantName) {
-            const safeName = applicantName.replace(/\s/g, '_') + '_' + Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9.]/g, '_');
-            const { error } = await supabaseClient.storage.from('application_attachments').upload(`applications/${safeName}`, file);
-            if (error) throw error;
-            const { data: { publicUrl } } = supabaseClient.storage.from('application_attachments').getPublicUrl(`applications/${safeName}`);
-            return publicUrl;
+        async function loginUser(email, password) {
+            try {
+                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+                if (error) throw error;
+                const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', data.user.id).single();
+                if (!profile?.role) throw new Error("No role assigned");
+                currentUser = { ...profile, full_name: profile.full_name, role: profile.role, section: profile.section, assignedSection: profile.section && !profile.section.includes('Oversight') ? profile.section : SECTIONS[0] };
+                await refreshSchoolData();
+                showDashboard();
+            } catch(e) { showToast("Login failed: "+e.message, true); }
         }
-        function showApplicationFormModal() {
-            const modalDiv = document.createElement('div');
-            modalDiv.className = 'fixed inset-0 z-[100] flex items-center justify-center bg-black/80 overflow-y-auto p-4';
-            modalDiv.innerHTML = `
-                <div class="bg-white rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-y-auto relative shadow-2xl">
-                    <div class="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center z-10">
-                        <h2 class="text-2xl font-bold text-emerald-800"><i class="fas fa-file-alt mr-2"></i> Admission Application Form</h2>
-                        <button id="closeAppModal" class="text-gray-500 text-3xl hover:text-red-600">&times;</button>
-                    </div>
-                    <div class="p-6">
-                        <form id="admissionApplicationForm" enctype="multipart/form-data" class="space-y-6">
-                            <!-- Sections A-H (condensed but complete) -->
-                            <div class="border rounded-xl p-4"><h3 class="font-bold text-lg mb-3">A. APPLICANT INFORMATION</h3><div class="grid grid-cols-1 md:grid-cols-3 gap-3"><input type="text" name="surname" placeholder="Surname *" required class="border p-2 rounded"><input type="text" name="firstname" placeholder="First Name *" required class="border p-2 rounded"><input type="text" name="othernames" placeholder="Other Names" class="border p-2 rounded"><select name="gender" class="border p-2 rounded"><option>Male</option><option>Female</option></select><input type="date" name="dob" class="border p-2 rounded"><input type="text" name="placeOfBirth" placeholder="Place of Birth" class="border p-2 rounded"><input type="text" name="nationality" value="Nigerian" class="border p-2 rounded"><input type="text" name="stateOfOrigin" placeholder="State of Origin" class="border p-2 rounded"><input type="text" name="lga" placeholder="LGA" class="border p-2 rounded"><input type="text" name="religion" placeholder="Religion" class="border p-2 rounded"><input type="text" name="homeAddress" placeholder="Home Address" class="border p-2 rounded col-span-2"></div></div>
-                            <div class="border rounded-xl p-4"><h3 class="font-bold text-lg mb-3">B. ACADEMIC INFO</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-3"><input type="text" name="classLevel" placeholder="Class/Level Seeking" class="border p-2 rounded"><input type="text" name="prevSchool" placeholder="Previous School" class="border p-2 rounded"><input type="text" name="lastClass" placeholder="Last Class Completed" class="border p-2 rounded"><textarea name="reasonLeaving" placeholder="Reason for Leaving" rows="2" class="border p-2 rounded"></textarea><input type="text" name="languages" placeholder="Languages Spoken" class="border p-2 rounded"><input type="text" name="specialNeeds" placeholder="Special Education Needs" class="border p-2 rounded"></div></div>
-                            <div class="border rounded-xl p-4"><h3 class="font-bold text-lg mb-3">C. HEALTH</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-3"><input type="text" name="bloodGroup" placeholder="Blood Group" class="border p-2 rounded"><input type="text" name="allergies" placeholder="Allergies" class="border p-2 rounded"><input type="text" name="physicalChallenge" placeholder="Physical Challenge" class="border p-2 rounded"><input type="text" name="chronic" placeholder="Chronic Illness" class="border p-2 rounded"><input type="text" name="emergencyHealth" placeholder="Emergency Health Info" class="border p-2 rounded"><select name="immunization" class="border p-2 rounded"><option>Up to date</option><option>Partial</option></select></div></div>
-                            <div class="border rounded-xl p-4"><h3 class="font-bold text-lg mb-3">D. PARENT/GUARDIAN</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-3"><input type="text" name="fatherName" placeholder="Father's Full Name" class="border p-2 rounded"><input type="text" name="motherName" placeholder="Mother's Full Name" class="border p-2 rounded"><input type="text" name="guardianName" placeholder="Guardian Name" class="border p-2 rounded"><input type="text" name="relationship" placeholder="Relationship" class="border p-2 rounded"><input type="text" name="parentOccupation" placeholder="Occupation" class="border p-2 rounded"><input type="text" name="parentResAddress" placeholder="Residential Address" class="col-span-2 border p-2 rounded"><input type="tel" name="parentPhone" placeholder="Phone Number(s)" class="border p-2 rounded"><input type="email" name="parentEmail" placeholder="Email Address" class="border p-2 rounded"></div></div>
-                            <div class="border rounded-xl p-4"><h3 class="font-bold text-lg mb-3">E. SPONSOR</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-3"><input type="text" name="sponsorName" placeholder="Sponsor Name" class="border p-2 rounded"><input type="text" name="sponsorRelationship" placeholder="Relationship" class="border p-2 rounded"><input type="text" name="sponsorContact" placeholder="Contact Address" class="border p-2 rounded"><input type="tel" name="sponsorPhone" placeholder="Phone" class="border p-2 rounded"><input type="text" name="feeResponsible" placeholder="Person Responsible for Fees" class="border p-2 rounded"></div></div>
-                            <div class="border rounded-xl p-4"><h3 class="font-bold text-lg mb-3">F. RELIGIOUS</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-3"><input type="text" name="muslimName" placeholder="Muslim Name" class="border p-2 rounded"><select name="quranReading" class="border p-2 rounded"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select><input type="text" name="quranMemorization" placeholder="Memorization Level" class="border p-2 rounded"><input type="text" name="prevMadrasah" placeholder="Previous Madrasah" class="border p-2 rounded"><textarea name="religiousNeeds" placeholder="Religious Needs" rows="2" class="border p-2 rounded"></textarea></div></div>
-                            <div class="border rounded-xl p-4"><h3 class="font-bold text-lg mb-3">G. TRANSPORT</h3><div class="grid grid-cols-1 md:grid-cols-3 gap-3"><select name="transportMode" class="border p-2 rounded"><option>School Bus</option><option>Private Vehicle</option></select><select name="boardingStatus" class="border p-2 rounded"><option>Day Student</option><option>Boarding</option></select><input type="text" name="busPoint" placeholder="Pick-up Point" class="border p-2 rounded"></div></div>
-                            <div class="border rounded-xl p-4"><h3 class="font-bold text-lg mb-3">H. DECLARATION</h3><div class="grid grid-cols-1 md:grid-cols-3 gap-3"><input type="text" name="declarantName" placeholder="Parent/Guardian Name *" required class="border p-2 rounded"><input type="text" name="signature" placeholder="Signature" class="border p-2 rounded"><input type="date" name="declarationDate" class="border p-2 rounded"></div></div>
-                            <div class="border-2 border-dashed border-amber-300 bg-amber-50 rounded-xl p-4">
-                                <h3 class="font-bold text-lg mb-3 text-amber-800"><i class="fas fa-paperclip"></i> J. REQUIRED ATTACHMENTS *</h3>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div><label class="block font-semibold">Birth Certificate</label><input type="file" name="birthCert" accept=".pdf,.jpg,.png" required class="w-full border p-2 rounded"></div>
-                                    <div><label class="block font-semibold">Previous School Report</label><input type="file" name="prevReport" accept=".pdf,.jpg,.png" required class="w-full border p-2 rounded"></div>
-                                    <div><label class="block font-semibold">Medical Report</label><input type="file" name="medicalReport" accept=".pdf,.jpg,.png" required class="w-full border p-2 rounded"></div>
-                                    <div><label class="block font-semibold">Immunization Card</label><input type="file" name="immunizationCard" accept=".pdf,.jpg,.png" required class="w-full border p-2 rounded"></div>
-                                    <div><label class="block font-semibold">2 Passport Photos</label><input type="file" name="passportPhotos" accept="image/*" multiple required class="w-full border p-2 rounded"></div>
-                                </div>
-                            </div>
-                            <div id="uploadProgress" class="hidden text-center text-emerald-600 font-semibold"><i class="fas fa-spinner fa-spin"></i> Uploading attachments...</div>
-                            <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-3 rounded-xl shadow">Submit Application</button>
-                        </form>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(modalDiv);
-            const closeBtn = modalDiv.querySelector('#closeAppModal');
-            const form = modalDiv.querySelector('#admissionApplicationForm');
-            const progressDiv = modalDiv.querySelector('#uploadProgress');
-            closeBtn.onclick = () => modalDiv.remove();
-            form.onsubmit = async (e) => {
-                e.preventDefault();
-                const fd = new FormData(form);
-                const applicantName = `${fd.get('surname')} ${fd.get('firstname')}`;
-                if (!applicantName.trim()) { showToast("Enter applicant name", true); return; }
-                progressDiv.classList.remove('hidden');
-                try {
-                    await ensureStorageBucket();
-                    const fileFields = ['birthCert', 'prevReport', 'medicalReport', 'immunizationCard', 'passportPhotos'];
-                    const uploadedUrls = {};
-                    for (let field of fileFields) {
-                        if (field === 'passportPhotos') {
-                            const files = fd.getAll('passportPhotos');
-                            const urls = [];
-                            for (let f of files) if (f.size) urls.push(await uploadFile(f, applicantName));
-                            uploadedUrls[field] = urls;
-                        } else {
-                            const file = fd.get(field);
-                            if (file && file.size) uploadedUrls[field] = await uploadFile(file, applicantName);
-                            else throw new Error(`${field} is required`);
-                        }
-                    }
-                    const textData = {};
-                    for (let [k, v] of fd.entries()) if (!fileFields.includes(k)) textData[k] = v;
-                    const finalPayload = { ...textData, attachments: uploadedUrls };
-                    const { error } = await supabaseClient.from('admission_applications').insert([{ form_data: finalPayload, full_name: applicantName, parent_email: textData.parentEmail || null, phone: textData.parentPhone || null, submitted_at: new Date(), status: 'pending' }]);
-                    if (error) throw error;
-                    showToast("✅ Application submitted! DG/CEO will review.");
-                    modalDiv.remove();
-                } catch (err) { showToast("Error: "+err.message, true); } finally { progressDiv.classList.add('hidden'); }
-            };
-        }
-
-        // ========== CORE DASHBOARD & NAVIGATION ==========
-        async function loginUser(email, password) { try { const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password }); if (error) throw error; const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', data.user.id).single(); if (!profile?.role) throw new Error("No role assigned"); currentUser = { ...profile, full_name: profile.full_name, role: profile.role, assignedSection: profile.section }; await refreshSchoolData(); showDashboard(); } catch(e) { showToast("Login failed: "+e.message, true); } }
         async function logoutUser() { await supabaseClient.auth.signOut(); currentUser = null; document.getElementById('appContainer').classList.add('hidden'); document.getElementById('landingPage').style.display = 'block'; fetchAndDisplayAnnouncement(); closeMobileSidebar(); }
         function showDashboard() { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('parentLoginModal').style.display = 'none'; document.getElementById('landingPage').style.display = 'none'; document.getElementById('appContainer').classList.remove('hidden'); document.getElementById('topUserName').innerText = currentUser.full_name; document.getElementById('topUserRole').innerText = currentUser.role.toUpperCase(); renderNav(); }
         function renderNav() {
             let items = [];
-            if (currentUser.role === 'dg_ceo') items = ["dashboard","students","enroll-student","record-results","all-results-admin","staff-appraisal","manage-announcement","manage-slides","applications"];
+            if (currentUser.role === 'dg_ceo') items = ["dashboard","students","enroll-student","record-results","all-results-admin","staff-appraisal","manage-announcement","manage-slides"];
             else if (currentUser.role === 'umc') items = ["dashboard","students","enroll-student","record-results","all-results-admin","manage-slides"];
-            else if (currentUser.role === 'headteacher') items = ["dashboard","students","enroll-student","record-results"];
-            else if (currentUser.role === 'teacher') items = ["dashboard","record-results"];
+            else if (currentUser.role === 'headteacher') items = ["dashboard","students","enroll-student","record-results","attendance"];
+            else if (currentUser.role === 'teacher') items = ["dashboard","record-results","attendance"];
             else if (currentUser.role === 'parent') items = ["my-children-results"];
             else items = ["dashboard"];
-            const labels = { dashboard:"🏠 Dashboard", students:"📚 Students", "enroll-student":"🎓 Enroll Student", "record-results":"📝 Record Results", "all-results-admin":"📊 View All Results", "staff-appraisal":"⭐ Staff Appraisal", "manage-announcement":"📢 Announcement", "manage-slides":"🖼️ Slides", applications:"📋 Applications", "my-children-results":"📘 My Child's Results" };
+            const labels = { dashboard:"🏠 Dashboard", students:"📚 Students", "enroll-student":"🎓 Enroll Student", "record-results":"📝 Record Term Results", "all-results-admin":"📊 View All Results", "staff-appraisal":"⭐ Staff Appraisal", "manage-announcement":"📢 Announcement", "manage-slides":"🖼️ Slides", attendance:"✅ Attendance", "my-children-results":"📘 My Child's Results" };
             const html = items.map(v => `<a href="#" data-view="${v}" class="nav-link flex items-center space-x-3 px-4 py-2.5 rounded-lg text-slate-200 hover:bg-white/10"><i class="fas ${v==='enroll-student'?'fa-user-plus':'fa-folder'} w-5"></i><span>${labels[v]||v}</span></a>`).join('');
             document.getElementById("dynamicNav").innerHTML = html;
             document.querySelectorAll('.nav-link').forEach(link => link.addEventListener('click', (e) => { e.preventDefault(); renderContentView(link.dataset.view); closeMobileSidebar(); }));
@@ -368,21 +486,25 @@
                 "all-results-admin": renderAllResultsAdmin,
                 "staff-appraisal": renderStaffAppraisal,
                 "manage-announcement": () => { if (currentUser.role !== 'dg_ceo') return; let html = `<div class="bg-white p-6 rounded-xl"><h2 class="text-2xl font-bold">Edit Announcement</h2><textarea id="announceText" rows="3" class="w-full border p-2 rounded mt-2"></textarea><button id="saveAnnounceBtn" class="bg-amber-600 text-white px-4 py-2 rounded mt-3">Publish</button></div>`; document.getElementById("mainContent").innerHTML = html; supabaseClient.from('site_announcement').select('content').eq('id',1).single().then(({data}) => { if(data) document.getElementById("announceText").value = data.content; }); document.getElementById("saveAnnounceBtn").addEventListener("click", async () => { await updateAnnouncement(document.getElementById("announceText").value); }); },
-                "manage-slides": () => document.getElementById("mainContent").innerHTML = `<div class="bg-white p-6">Slideshow manager (upload/delete).</div>`,
-                applications: renderApplicationsList,
-                "my-children-results": () => document.getElementById("mainContent").innerHTML = `<div class="bg-white p-6">Parent results view.</div>`
+                "manage-slides": () => document.getElementById("mainContent").innerHTML = `<div class="bg-white p-6">Slideshow manager (use existing upload/delete)</div>`,
+                attendance: () => document.getElementById("mainContent").innerHTML = `<div class="bg-white p-6">Attendance module placeholder.</div>`,
+                "my-children-results": renderParentResults
             };
             if (fns[view]) fns[view](); else document.getElementById("mainContent").innerHTML = "<div class='bg-white p-6'>Module coming soon</div>";
         }
 
-        // ========== SLIDESHOW ==========
-        async function loadSlidesFromSupabase() { const { data } = await supabaseClient.from('slides').select('*').order('created_at'); slidesData = data?.map(s=>({url:s.image_url, caption:s.caption, id:s.id})) || [{ url: "https://picsum.photos/id/20/1200/600", caption: "Modern Classrooms" }]; rebuildSlideshow(); }
+        // ========== SLIDESHOW (simplified) ==========
+        async function loadSlidesFromSupabase() {
+            const { data } = await supabaseClient.from('slides').select('*').order('created_at');
+            slidesData = data?.map(s=>({url:s.image_url, caption:s.caption, id:s.id})) || [{ url: "https://picsum.photos/id/20/1200/600", caption: "Modern Classrooms" }];
+            rebuildSlideshow();
+        }
         function rebuildSlideshow() { const container = document.getElementById('slidesContainer'), dots = document.getElementById('dotsContainer'); if(!container) return; container.innerHTML = ''; dots.innerHTML = ''; slidesData.forEach((slide, idx) => { let div = document.createElement('div'); div.className = `carousel-slide absolute inset-0 w-full h-full transition-opacity duration-500 ${idx===currentSlideIndex?'opacity-100 z-10':'opacity-0 z-0'}`; div.style.backgroundImage = `linear-gradient(0deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2)), url('${slide.url}')`; div.style.backgroundSize = 'cover'; let cap = document.createElement('div'); cap.className = 'absolute bottom-0 bg-black/60 text-white p-2 w-full text-center'; cap.innerText = slide.caption; div.appendChild(cap); container.appendChild(div); let dot = document.createElement('button'); dot.className = `dot w-3 h-3 rounded-full mx-1 ${idx===currentSlideIndex?'bg-amber-400 w-4':'bg-white/60'}`; dot.addEventListener('click', () => goToSlide(idx)); dots.appendChild(dot); }); resetAutoSlide(); }
         function goToSlide(index) { let slides = document.querySelectorAll('#slidesContainer .carousel-slide'); if(!slides.length) return; if(index<0) index=slides.length-1; if(index>=slides.length) index=0; slides[currentSlideIndex]?.classList.remove('opacity-100','z-10'); slides[currentSlideIndex]?.classList.add('opacity-0','z-0'); slides[index]?.classList.remove('opacity-0','z-0'); slides[index]?.classList.add('opacity-100','z-10'); document.querySelectorAll('#dotsContainer .dot').forEach((d,i)=>{ if(i===index) d.classList.add('bg-amber-400','w-4'); else d.classList.remove('bg-amber-400','w-4'); }); currentSlideIndex = index; resetAutoSlide(); }
         function resetAutoSlide() { if(slideInterval) clearInterval(slideInterval); if(slidesData.length>1) slideInterval = setInterval(()=>goToSlide(currentSlideIndex+1),5000); }
-        function closeMobileSidebar() { document.getElementById('dynamicSidebar')?.classList.remove('open'); document.getElementById('sidebarOverlay')?.classList.remove('active'); }
 
         // ========== EVENT BINDINGS & INIT ==========
+        function closeMobileSidebar() { document.getElementById('dynamicSidebar')?.classList.remove('open'); document.getElementById('sidebarOverlay')?.classList.remove('active'); }
         document.getElementById('mobileMenuToggle')?.addEventListener('click', () => document.getElementById('dynamicSidebar').classList.toggle('open'));
         document.getElementById('topLogoutBtn')?.addEventListener('click', logoutUser);
         document.getElementById('authForm')?.addEventListener('submit', async(e)=>{ e.preventDefault(); await loginUser(authEmail.value, authPassword.value); });
@@ -397,13 +519,13 @@
         document.getElementById('closeAdminSignupBtn')?.addEventListener('click',()=>{ document.getElementById('adminSignupModal').style.display='none'; document.getElementById('landingPage').style.display='block'; fetchAndDisplayAnnouncement(); });
         document.getElementById('prevSlide')?.addEventListener('click',()=>goToSlide(currentSlideIndex-1));
         document.getElementById('nextSlide')?.addEventListener('click',()=>goToSlide(currentSlideIndex+1));
-        document.getElementById('applyNowBtn')?.addEventListener('click', (e) => { e.preventDefault(); showApplicationFormModal(); });
-        
-        async function checkSession() { const { data: { session } } = await supabaseClient.auth.getSession(); if (session) { const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', session.user.id).single(); if (profile?.role) { currentUser = { ...profile, full_name: profile.full_name, role: profile.role, assignedSection: profile.section }; await refreshSchoolData(); showDashboard(); return; } } document.getElementById('landingPage').style.display = 'block'; document.getElementById('appContainer').classList.add('hidden'); fetchAndDisplayAnnouncement(); }
+        document.getElementById('applyNowBtn')?.addEventListener('click',()=>alert("📝 Contact admissions: 08067990749"));
+        async function checkSession() { const { data: { session } } = await supabaseClient.auth.getSession(); if (session) { const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', session.user.id).single(); if (profile?.role) { currentUser = { ...profile, full_name: profile.full_name, role: profile.role, section: profile.section, assignedSection: profile.section && !profile.section.includes('Oversight') ? profile.section : SECTIONS[0] }; await refreshSchoolData(); showDashboard(); return; } } document.getElementById('landingPage').style.display = 'block'; document.getElementById('appContainer').classList.add('hidden'); fetchAndDisplayAnnouncement(); }
         function initCookieConsent() { const banner = document.getElementById('cookieBanner'); const acceptBtn = document.getElementById('acceptCookiesBtn'); if (!localStorage.getItem('cookies_accepted')) banner.style.display = 'flex'; acceptBtn.addEventListener('click', () => { localStorage.setItem('cookies_accepted', 'true'); banner.style.display = 'none'; showToast("Cookies accepted ✅"); }); }
         function updateDateTime() { let now=new Date(); if(document.getElementById('liveTime')) document.getElementById('liveTime').innerText=now.toLocaleTimeString('en-NG'); if(document.getElementById('liveDate')) document.getElementById('liveDate').innerText=now.toLocaleDateString('en-NG',{weekday:'long',year:'numeric',month:'long',day:'numeric'}); if(document.getElementById('weatherTemp')) document.getElementById('weatherTemp').innerText = "28"; document.getElementById('weatherDesc').innerText = "Sunny"; }
         setInterval(updateDateTime,1000); updateDateTime();
         ensureAnnouncementRowExists().then(()=>{ loadSlidesFromSupabase(); checkSession(); initCookieConsent(); fetchAndDisplayAnnouncement(); });
+        window.resetPasswordAction = async function() { const email = document.getElementById('authEmail').value; if(!email) { showToast("Enter email", true); return; } const { error } = await supabaseClient.auth.resetPasswordForEmail(email); if(error) showToast(error.message, true); else showToast("Reset link sent!"); };
     </script>
 </body>
 </html>
