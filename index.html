@@ -9,7 +9,7 @@
         // ============================
         // SUPABASE CONFIGURATION
         // ============================
-        const SUPABASE_URL = 'https://pxapvpkfkhbfilgctqwk.supabase.co';
+        const SUPABASE_URL = 'https://pxapvpkfkhbfilgctqwk.supabase.coo';
         const SUPABASE_ANON_KEY = 'sb_publishable_U1lpOxr6vNLnDZ1Xb2PSUw__sefnE0v';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -20,13 +20,14 @@
         -- Enable UUID extension
         CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-        -- Profiles table (for admin roles)
-        CREATE TABLE profiles (
-          id UUID REFERENCES auth.users(id) PRIMARY KEY,
-          full_name TEXT NOT NULL,
+        -- ADMINS table (for custom admin authentication)
+        CREATE TABLE admins (
+          id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
           email TEXT UNIQUE NOT NULL,
+          password_hash TEXT NOT NULL,
+          full_name TEXT NOT NULL,
           role TEXT NOT NULL CHECK (role IN ('dg_ceo','umc','daf','dprpa','der','do','headteacher')),
-          section TEXT,
+          section TEXT DEFAULT 'Oversight',
           created_at TIMESTAMP DEFAULT now()
         );
 
@@ -149,12 +150,6 @@
           appraised_by TEXT,
           created_at TIMESTAMP DEFAULT now()
         );
-
-        -- Enable RLS on profiles (adjust as needed)
-        ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
-        CREATE POLICY "Public profiles are viewable by everyone" ON profiles FOR SELECT USING (true);
-        CREATE POLICY "Users can insert their own profile" ON profiles FOR INSERT WITH CHECK (auth.uid() = id);
-        CREATE POLICY "Users can update own profile" ON profiles FOR UPDATE USING (auth.uid() = id);
 
         -- Create storage buckets (must be done via Supabase Dashboard > Storage)
         -- Buckets required: "slides" and "application_attachments" (both public)
@@ -644,7 +639,7 @@
                 let totalScore = 0, subjectCount = results.length;
                 results.forEach(r => { totalScore += (r.ca1 + r.ca2 + r.exam); });
                 const average = subjectCount ? (totalScore / subjectCount).toFixed(2) : 0;
-                let reportHtml = `<div class="border rounded-lg p-4 bg-gray-50" id="reportSheetContent"><div class="text-center border-b pb-2 mb-3"><h3 class="text-xl font-bold">Al‑Istiqaamah Flying Wings Academy</h3><h4 class="text-lg">TERMLY REPORT SHEET</h4><p><strong>Student:</strong> ${escapeHtml(student.name)} (${escapeHtml(student.reg_number)}) | <strong>Section:</strong> ${escapeHtml(student.section)} | <strong>Term:</strong> ${term} | <strong>Year:</strong> ${year}</p></div><table class="w-full border"><thead class="bg-gray-200"><tr><th>Subject</th><th>CA1 (20)</th><th>CA2 (20)</th><th>Exam (60)</th><th>Total (100)</th><th>Grade</th></tr></thead><tbody>${results.map(r => `<tr><td>${escapeHtml(r.subject)}</td><td class="text-center">${r.ca1}</td><td class="text-center">${r.ca2}</td><td class="text-center">${r.exam}</td><td class="text-center font-bold">${r.ca1+r.ca2+r.exam}</td><td class="text-center">${r.grade}</td></tr>`).join('')}${results.length === 0 ? '<tr><td colspan="6" class="text-center text-gray-500">No results recorded yet.</td></tr>' : ''}</tbody>${results.length ? `<tfoot class="bg-gray-100 font-bold"><tr><td colspan="3">Total Score: ${totalScore}</td><td colspan="3">Average: ${average}%</td></tr><tr><td colspan="6" class="text-sm text-gray-600">Remarks: ${average >= 75 ? 'Excellent' : average >= 60 ? 'Good' : average >= 50 ? 'Satisfactory' : 'Needs Improvement'}</td></tr></tfoot>` : ''}</table><div class="mt-3 flex gap-2"><button id="printReportBtn" class="bg-blue-600 text-white px-3 py-1 rounded">Print Report Sheet</button><button id="editResultsBtn" class="bg-amber-600 text-white px-3 py-1 rounded">Edit Subjects/Grades</button></div></div>`;
+                let reportHtml = `<div class="border rounded-lg p-4 bg-gray-50" id="reportSheetContent"><div class="text-center border-b pb-2 mb-3"><h3 class="text-xl font-bold">Al‑Istiqaamah Flying Wings Academy</h3><h4 class="text-lg">TERMLY REPORT SHEET</h4><p><strong>Student:</strong> ${escapeHtml(student.name)} (${escapeHtml(student.reg_number)}) | <strong>Section:</strong> ${escapeHtml(student.section)} | <strong>Term:</strong> ${term} | <strong>Year:</strong> ${year}</p></div><table class="w-full border"><thead class="bg-gray-200"><tr><th>Subject</th><th>CA1 (20)</th><th>CA2 (20)</th><th>Exam (60)</th><th>Total (100)</th><th>Grade</th></tr></thead><tbody>${results.map(r => `<tr><td>${escapeHtml(r.subject)}</td><td class="text-center">${r.ca1}</td><td class="text-center">${r.ca2}</td><td class="text-center">${r.exam}</td><td class="text-center font-bold">${r.ca1+r.ca2+r.exam}</td><td class="text-center">${r.grade}</td></tr>`).join('')}${results.length === 0 ? '<tr><td colspan="6" class="text-center text-gray-500">No results recorded yet.</td></tr>' : ''}</tbody>${results.length ? `<tfoot class="bg-gray-100 font-bold"><tr><td colspan="3">Total Score: ${totalScore}</td><td colspan="3">Average: ${average}%</tr><tr><td colspan="6" class="text-sm text-gray-600">Remarks: ${average >= 75 ? 'Excellent' : average >= 60 ? 'Good' : average >= 50 ? 'Satisfactory' : 'Needs Improvement'}</tr></tfoot>` : ''}</table><div class="mt-3 flex gap-2"><button id="printReportBtn" class="bg-blue-600 text-white px-3 py-1 rounded">Print Report Sheet</button><button id="editResultsBtn" class="bg-amber-600 text-white px-3 py-1 rounded">Edit Subjects/Grades</button></div></div>`;
                 document.getElementById("reportSheetContainer").innerHTML = reportHtml;
                 document.getElementById("printReportBtn").onclick = () => { const printContent = document.getElementById("reportSheetContent").innerHTML; const printWindow = window.open('', '_blank'); printWindow.document.write(`<html><head><title>Report Sheet</title><link href="https://cdn.tailwindcss.com" rel="stylesheet"><style>body { padding: 20px; }</style></head><body>${printContent}</body></html>`); printWindow.document.close(); printWindow.print(); };
                 document.getElementById("editResultsBtn").onclick = () => { document.getElementById("resultEditor").classList.remove("hidden"); loadEditorTable(studentId, term, year); };
@@ -1091,40 +1086,62 @@
             };
         }
         
-        // ============ AUTHENTICATION ============
-        async function ensureProfileExists(userId, email) {
-            const { data: existing, error: fetchError } = await supabaseClient
-                .from('profiles')
-                .select('*')
-                .eq('id', userId)
-                .maybeSingle();
-            if (!existing && !fetchError) {
-                const { count } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true });
-                const role = count === 0 ? 'dg_ceo' : 'umc';
-                const { error: insertError } = await supabaseClient.from('profiles').insert([{
-                    id: userId,
-                    full_name: email.split('@')[0],
-                    email: email,
-                    role: role,
-                    section: 'Oversight'
-                }]);
-                if (insertError) throw insertError;
-                return { id: userId, full_name: email.split('@')[0], email, role, section: 'Oversight' };
+        // ============ AUTHENTICATION (CUSTOM ADMIN TABLE) ============
+        async function loginAdmin(email, password) {
+            try {
+                const { data: admin, error } = await supabaseClient
+                    .from('admins')
+                    .select('*')
+                    .eq('email', email)
+                    .single();
+                if (error || !admin) throw new Error("Admin not found");
+                if (admin.password_hash !== password) throw new Error("Wrong password");
+                currentUser = {
+                    id: admin.id,
+                    full_name: admin.full_name,
+                    role: admin.role,
+                    assignedSection: admin.section,
+                    isAdmin: true
+                };
+                await refreshSchoolData();
+                showDashboard();
+                resetInactivityTimer();
+                attachActivityListeners();
+            } catch(e) {
+                showToast("Admin login failed: "+e.message, true);
             }
-            return existing;
         }
 
-        async function loginAdmin(email, password) { 
-            try { 
-                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password }); 
-                if (error) throw error; 
-                let profile = await ensureProfileExists(data.user.id, data.user.email);
-                if (!profile) throw new Error("No profile found and could not create one");
-                currentUser = { ...profile, full_name: profile.full_name, role: profile.role, assignedSection: profile.section }; 
-                await refreshSchoolData(); 
-                showDashboard(); 
-                resetInactivityTimer(); attachActivityListeners(); 
-            } catch(e) { showToast("Admin login failed: "+e.message, true); } 
+        async function adminSignup(fullName, email, password, role, regCode) {
+            if (regCode !== "ALIFLY2026") {
+                showToast("Invalid admin registration code", true);
+                return false;
+            }
+            try {
+                const { data: existing } = await supabaseClient
+                    .from('admins')
+                    .select('email')
+                    .eq('email', email)
+                    .maybeSingle();
+                if (existing) throw new Error("Admin already exists");
+
+                const { error: insertError } = await supabaseClient
+                    .from('admins')
+                    .insert([{
+                        email: email,
+                        password_hash: password,
+                        full_name: fullName,
+                        role: role,
+                        section: 'Oversight'
+                    }]);
+                if (insertError) throw insertError;
+                showToast(`Admin ${fullName} created! You can now log in.`);
+                document.getElementById('adminSignupModal').style.display = 'none';
+                return true;
+            } catch(err) {
+                showToast("Signup failed: "+err.message, true);
+                return false;
+            }
         }
         
         async function loginStaff(username, password) { 
@@ -1147,19 +1164,6 @@
             if(!student) throw new Error("Student not found"); 
             currentUser={ role:"parent", full_name:`Parent of ${student.name}`, studentId:student.id }; 
             showDashboard(); resetInactivityTimer(); attachActivityListeners(); 
-        }
-        
-        async function adminSignup(fullName, email, password, role, regCode) { 
-            if(regCode !== "ALIFLY2026") { showToast("Invalid admin registration code", true); return false; } 
-            try {
-                const { data: authData, error: signUpError } = await supabaseClient.auth.signUp({ email, password }); 
-                if (signUpError) throw signUpError;
-                const { error: profileError } = await supabaseClient.from('profiles').insert([{ id: authData.user.id, full_name: fullName, email, role, section: 'Oversight' }]); 
-                if (profileError) throw profileError;
-                showToast(`Admin ${fullName} created! You can now log in.`); 
-                document.getElementById('adminSignupModal').style.display = 'none'; 
-                return true; 
-            } catch(err) { showToast("Signup failed: "+err.message, true); return false; }
         }
         
         // ============ NAVIGATION & ROUTING ============
