@@ -71,7 +71,8 @@
                 <div class="flex flex-col lg:flex-row justify-between gap-8 items-start">
                     <div class="max-w-2xl">
                         <div class="flex items-center gap-4 mb-4">
-                            <img src="https://placehold.co/100x100?text=🦅&bg=0a2e2c" alt="logo" class="logo-img rounded-full border-2 border-amber-400">
+                            <!-- Changed logo to local logo.jpg -->
+                            <img src="logo.jpg" alt="logo" class="logo-img rounded-full border-2 border-amber-400">
                             <h1 class="text-3xl md:text-4xl font-bold">Al‑Istiqaamah <span class="text-amber-300">Flying Wings Academy</span></h1>
                         </div>
                         <div class="bg-amber-900/30 border-l-4 border-amber-400 p-3 rounded-r-xl mb-4">
@@ -116,7 +117,11 @@
 
     <!-- DASHBOARD CONTAINER -->
     <div id="appContainer" class="hidden flex h-screen flex-col bg-white fixed inset-0 z-40">
-        <div class="top-bar"><div class="flex items-center gap-3"><button id="mobileMenuToggle" class="text-2xl md:hidden"><i class="fas fa-bars"></i></button><img src="https://placehold.co/60x60?text=AFW" class="h-10 w-auto"><span class="font-bold">Al‑Istiqaamah Portal</span></div><div class="flex items-center gap-3"><div class="user-info"><i class="fas fa-user-circle text-xl"></i><span id="topUserName"></span> (<span id="topUserRole"></span>)</div><button id="topLogoutBtn" class="logout-top-btn"><i class="fas fa-sign-out-alt"></i> Exit</button></div></div>
+        <div class="top-bar"><div class="flex items-center gap-3"><button id="mobileMenuToggle" class="text-2xl md:hidden"><i class="fas fa-bars"></i></button>
+            <!-- Changed top bar logo to local logo.jpg -->
+            <img src="logo.jpg" class="h-10 w-auto"><span class="font-bold">Al‑Istiqaamah Portal</span></div>
+            <div class="flex items-center gap-3"><div class="user-info"><i class="fas fa-user-circle text-xl"></i><span id="topUserName"></span> (<span id="topUserRole"></span>)</div><button id="topLogoutBtn" class="logout-top-btn"><i class="fas fa-sign-out-alt"></i> Exit</button></div>
+        </div>
         <div class="flex flex-1 overflow-hidden relative"><div id="sidebarOverlay" class="sidebar-overlay"></div><aside id="dynamicSidebar" class="sidebar text-white w-80 flex flex-col overflow-y-auto"><div class="p-4 border-b flex justify-between"><span><i class="fas fa-school"></i> Navigation</span><button id="closeMobileSidebar" class="md:hidden text-xl">&times;</button></div><nav id="dynamicNav" class="flex-1 px-3 mt-4 space-y-1"></nav></aside><main id="mainContent" class="flex-1 overflow-auto bg-gray-100 p-5"></main></div>
     </div>
 
@@ -383,12 +388,12 @@
                 const studentId = document.getElementById("resStudent").value, term = document.getElementById("resTerm").value, year = document.getElementById("resYear").value;
                 if(!studentId) return;
                 const { data: existing } = await supabaseClient.from('student_results').select('*').eq('student_id',studentId).eq('term',term).eq('year',year);
-                let editor = `<table class="w-full border"><thead><tr><th>Subject</th><th>CA1(20)</th><th>CA2(20)</th><th>Exam(60)</th><th>Total</th><th>Grade</th><th><button id="addSubjectRow" class="bg-amber-500 text-white px-2 py-1 text-sm rounded">+ Subject</button></th></tr></thead><tbody id="resultRowsBody"></tbody>...</td><button id="saveResultsFinal" class="apply-btn px-4 py-2 rounded mt-3">Save All Results</button>`;
+                let editor = `<table class="w-full border"><thead><tr><th>Subject</th><th>CA1(20)</th><th>CA2(20)</th><th>Exam(60)</th><th>Total</th><th>Grade</th><th><button id="addSubjectRow" class="bg-amber-500 text-white px-2 py-1 text-sm rounded">+ Subject</button></th></tr></thead><tbody id="resultRowsBody"></tbody>...</table><button id="saveResultsFinal" class="apply-btn px-4 py-2 rounded mt-3">Save All Results</button>`;
                 document.getElementById("resultEditor").innerHTML = editor;
                 const tbody = document.getElementById("resultRowsBody");
                 const addRow = (data=null) => {
                     let tr = document.createElement('tr');
-                    tr.innerHTML = `<tr><input class="subj border p-1" value="${data?.subject||''}"></td><tr><input class="ca1 grade-input" value="${data?.ca1||0}" min="0" max="20"></td><td><input class="ca2 grade-input" value="${data?.ca2||0}" min="0" max="20"></td><td><input class="exam grade-input" value="${data?.exam||0}" min="0" max="60"></td><td class="totalCell font-bold"></td><td class="gradeCell"></td><td><button class="remove-subject-btn">X</button></td>`;
+                    tr.innerHTML = `<tr><input class="subj border p-1" value="${data?.subject||''}"></td><td><input class="ca1 grade-input" value="${data?.ca1||0}" min="0" max="20"></td><td><input class="ca2 grade-input" value="${data?.ca2||0}" min="0" max="20"></td><td><input class="exam grade-input" value="${data?.exam||0}" min="0" max="60"></td><td class="totalCell font-bold"></td><td class="gradeCell"></td><td><button class="remove-subject-btn">X</button></td>`;
                     const update = () => { let c1=+tr.querySelector('.ca1').value||0, c2=+tr.querySelector('.ca2').value||0, ex=+tr.querySelector('.exam').value||0, tot=c1+c2+ex; tr.querySelector('.totalCell').innerText=tot; tr.querySelector('.gradeCell').innerText = tot>=80?'A':tot>=70?'B':tot>=60?'C':tot>=50?'D':'E'; };
                     tr.querySelector('.ca1').addEventListener('input',update); tr.querySelector('.ca2').addEventListener('input',update); tr.querySelector('.exam').addEventListener('input',update);
                     tr.querySelector('.remove-subject-btn').onclick = ()=>tr.remove(); update(); tbody.appendChild(tr);
@@ -419,7 +424,7 @@
                 const { data: txns } = await supabaseClient.from('fee_transactions').select('*').eq('student_id',studentId).eq('term',term).eq('year',year);
                 const student = schoolData.students.find(s=>s.id==studentId);
                 const percent = (balance.paid_amount/balance.total_fees)*100;
-                let panel = `<div class="border p-4 rounded"><p><strong>${student.name}</strong> | Total: ₦${balance.total_fees.toLocaleString()} | Paid: ₦${balance.paid_amount} | Balance: <span class="font-bold ${balance.balance>0?'text-red-600':'text-green-600'}">₦${balance.balance}</span></p><div class="progress-bar mt-2"><div class="progress-fill" style="width: ${percent}%"></div></div><table class="w-full text-sm mt-3 border"><thead><tr><th>Date</th><th>Amount</th><th>Receipt</th><th>Status</th><th>Action</th></tr></thead><tbody>${txns.map(t=>`<tr><td>${new Date(t.payment_date).toLocaleDateString()}</td><td>₦${t.amount_paid}</td><td>${t.receipt_no}</td><td class="${t.status==='authorized'?'text-green-600':'text-orange-500'}">${t.status}</td><td>${t.status!=='authorized' && ['dg_ceo','daf'].includes(currentUser.role) ? `<button class="authTx text-blue-600" data-id="${t.id}">Authorize</button>` : '-'}</td></tr>`).join('')}</tbody>}</tr><div class="mt-4"><input id="paymentAmount" type="number" placeholder="Amount (₦)" class="border p-2 rounded"><select id="paymentMethod"><option>cash</option><option>bank_transfer</option></select><button id="payNowBtn" class="apply-btn px-4 py-1 rounded ml-2">Record Payment</button></div></div>`;
+                let panel = `<div class="border p-4 rounded"><p><strong>${student.name}</strong> | Total: ₦${balance.total_fees.toLocaleString()} | Paid: ₦${balance.paid_amount} | Balance: <span class="font-bold ${balance.balance>0?'text-red-600':'text-green-600'}">₦${balance.balance}</span></p><div class="progress-bar mt-2"><div class="progress-fill" style="width: ${percent}%"></div></div><table class="w-full text-sm mt-3 border"><thead><tr><th>Date</th><th>Amount</th><th>Receipt</th><th>Status</th><th>Action</th></tr></thead><tbody>${txns.map(t=>`<tr><td>${new Date(t.payment_date).toLocaleDateString()}</td><td>₦${t.amount_paid}</td><td>${t.receipt_no}</td><td class="${t.status==='authorized'?'text-green-600':'text-orange-500'}">${t.status}</td><td>${t.status!=='authorized' && ['dg_ceo','daf'].includes(currentUser.role) ? `<button class="authTx text-blue-600" data-id="${t.id}">Authorize</button>` : '-'}</td></tr>`).join('')}</tbody>}</table><div class="mt-4"><input id="paymentAmount" type="number" placeholder="Amount (₦)" class="border p-2 rounded"><select id="paymentMethod"><option>cash</option><option>bank_transfer</option></select><button id="payNowBtn" class="apply-btn px-4 py-1 rounded ml-2">Record Payment</button></div></div>`;
                 document.getElementById("feeDetailsPanel").innerHTML = panel;
                 document.getElementById("payNowBtn").onclick = async ()=>{
                     try {
