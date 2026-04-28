@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* ========== CUSTOM CSS ========== */
+        /* ========== CUSTOM CSS (unchanged) ========== */
         @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap');
         * { font-family: 'Inter', sans-serif; }
         .hero-pattern { background: linear-gradient(135deg, #0a2e2c 0%, #0f3b38 100%); }
@@ -342,20 +342,228 @@
             };
         }
 
-        // Stub render functions (implemented fully in original; shortened here for brevity)
-        async function renderStudentsList() { /* full implementation as in original */ }
-        async function renderEnrollStudent() { /* full */ }
-        async function renderResultsManagement() { /* full */ }
-        async function renderFeeManagement() { /* full */ }
-        async function renderParentFees() { /* full */ }
-        async function renderApplicationsList() { /* full */ }
-        async function renderStaffManagement() { /* full */ }
-        async function renderManageAnnouncement() { /* full */ }
-        async function renderManageSlides() { /* full */ }
-        function renderDashboard() { /* full */ }
-        function renderContentView(view) { /* full */ }
-        async function fetchAndDisplayAnnouncement() { /* full */ }
+        // ========== FULLY IMPLEMENTED RENDER FUNCTIONS ==========
+        async function renderStudentsList() {
+            let html = `<div class="bg-white p-5 rounded-xl shadow"><h2 class="text-2xl font-bold mb-3">📚 Student Registry</h2><div class="flex gap-3 mb-4"><select id="sectionFilter" class="border p-2 rounded"><option>All Sections</option>${SECTIONS.map(s=>`<option>${s}</option>`)}</select><input id="searchStudent" placeholder="Search name/reg" class="border p-2 rounded"></div><div class="overflow-x-auto"><table class="w-full border"><thead class="bg-gray-100"><tr><th>Reg No</th><th>Name</th><th>Parent</th><th>Section</th><th>Fee Status</th>${(currentUser.role==='dg_ceo'||currentUser.role==='umc')?'<th>Actions</th>':''}</tr></thead><tbody id="stuTbody"></tbody>}</div></div>`;
+            document.getElementById("mainContent").innerHTML = html;
+            const filter = () => {
+                let filtered = schoolData.students.filter(s=> document.getElementById("sectionFilter").value==='All Sections' || s.section === document.getElementById("sectionFilter").value);
+                let search = document.getElementById("searchStudent").value.toLowerCase();
+                if(search) filtered = filtered.filter(s=> s.name.toLowerCase().includes(search) || s.reg_number.toLowerCase().includes(search));
+                document.getElementById("stuTbody").innerHTML = filtered.map(s=>`<tr class="border-b"><td class="p-2">${s.reg_number}</td><td class="p-2">${s.name}</td><td class="p-2">${s.parent_name||'-'}</td><td class="p-2">${s.section}</td><td class="p-2"><span class="${s.fee_status==='Paid'?'active-badge':'suspended-badge'}">${s.fee_status}</span></td>${(currentUser.role==='dg_ceo'||currentUser.role==='umc')?`<td class="p-2"><button onclick="window.toggleStudentStatus('${s.id}','${s.status}')" class="suspend-btn">Toggle</button><button onclick="window.deleteStudentCascade('${s.id}')" class="delete-btn">Delete</button></td>`:''}</tr>`).join('');
+            };
+            document.getElementById("sectionFilter").addEventListener("change", filter); document.getElementById("searchStudent").addEventListener("input", filter); filter();
+            window.toggleStudentStatus = async (id,cur)=>{ let newStat = cur==='active'?'suspended':'active'; await supabaseClient.from('students').update({status:newStat}).eq('id',id); await refreshSchoolData(); renderStudentsList(); };
+            window.deleteStudentCascade = async (id)=>{ 
+                if(confirm("Delete student & ALL related records?")){
+                    await supabaseClient.from('fee_transactions').delete().eq('student_id',id);
+                    await supabaseClient.from('fee_balances').delete().eq('student_id',id);
+                    await supabaseClient.from('student_results').delete().eq('student_id',id);
+                    await supabaseClient.from('students').delete().eq('id',id);
+                    await refreshSchoolData(); renderStudentsList(); showToast("Deleted");
+                } 
+            };
+        }
 
+        async function renderEnrollStudent() {
+            if(!['dg_ceo','umc'].includes(currentUser.role)) return showToast("Access denied",true);
+            document.getElementById("mainContent").innerHTML = `<div class="bg-white p-6 rounded-xl"><h2>🎓 Enroll New Student</h2><form id="enrollForm"><input id="regNum" placeholder="Reg Number (unique)" required class="border p-2 w-full mb-2"><input id="stuName" placeholder="Full Name" required class="border p-2 w-full mb-2"><input id="parentName" placeholder="Parent/Guardian" class="border p-2 w-full mb-2"><select id="secSelect" class="border p-2 w-full mb-2">${SECTIONS.map(s=>`<option>${s}</option>`)}</select><button type="submit" class="apply-btn w-full py-2 rounded">Register</button></form></div>`;
+            document.getElementById("enrollForm").addEventListener("submit", async(e)=>{
+                e.preventDefault(); const reg = document.getElementById("regNum").value.trim(), name = document.getElementById("stuName").value.trim(); if(!reg || !name) return showToast("Required fields",true);
+                await supabaseClient.from('students').insert([{ reg_number: reg, name, parent_name: document.getElementById("parentName").value, section: document.getElementById("secSelect").value, fee_status: 'Pending', status:'active' }]);
+                await refreshSchoolData(); renderStudentsList(); showToast("Enrolled");
+            });
+        }
+
+        async function renderResultsManagement() {
+            if(currentUser.role !== 'dg_ceo' && currentUser.role !== 'der') return showToast("DG/CEO or DER only",true);
+            let html = `<div class="bg-white p-6 rounded-xl"><h2 class="text-2xl font-bold">📊 Results Entry</h2><div class="grid md:grid-cols-3 gap-3"><select id="resStudent"><option>Select Student</option>${schoolData.students.map(s=>`<option value="${s.id}">${s.name}</option>`)}</select><select id="resTerm"><option value="1">Term1</option><option value="2">Term2</option><option value="3">Term3</option></select><input id="resYear" value="2026" class="border p-2 rounded"></div><button id="loadResultsData" class="apply-btn px-4 py-2 rounded mt-3">Load</button><div id="resultEditor" class="mt-4"></div></div>`;
+            document.getElementById("mainContent").innerHTML = html;
+            document.getElementById("loadResultsData").onclick = async()=>{
+                const studentId = document.getElementById("resStudent").value, term = document.getElementById("resTerm").value, year = document.getElementById("resYear").value;
+                if(!studentId) return;
+                const { data: existing } = await supabaseClient.from('student_results').select('*').eq('student_id',studentId).eq('term',term).eq('year',year);
+                let editor = `<table class="w-full border"><thead><tr><th>Subject</th><th>CA1(20)</th><th>CA2(20)</th><th>Exam(60)</th><th>Total</th><th>Grade</th><th><button id="addSubjectRow" class="bg-amber-500 text-white px-2 py-1 text-sm rounded">+ Subject</button></th></tr></thead><tbody id="resultRowsBody"></tbody>...</td><button id="saveResultsFinal" class="apply-btn px-4 py-2 rounded mt-3">Save All Results</button>`;
+                document.getElementById("resultEditor").innerHTML = editor;
+                const tbody = document.getElementById("resultRowsBody");
+                const addRow = (data=null) => {
+                    let tr = document.createElement('tr');
+                    tr.innerHTML = `<tr><input class="subj border p-1" value="${data?.subject||''}"></td><tr><input class="ca1 grade-input" value="${data?.ca1||0}" min="0" max="20"></td><td><input class="ca2 grade-input" value="${data?.ca2||0}" min="0" max="20"></td><td><input class="exam grade-input" value="${data?.exam||0}" min="0" max="60"></td><td class="totalCell font-bold"></td><td class="gradeCell"></td><td><button class="remove-subject-btn">X</button></td>`;
+                    const update = () => { let c1=+tr.querySelector('.ca1').value||0, c2=+tr.querySelector('.ca2').value||0, ex=+tr.querySelector('.exam').value||0, tot=c1+c2+ex; tr.querySelector('.totalCell').innerText=tot; tr.querySelector('.gradeCell').innerText = tot>=80?'A':tot>=70?'B':tot>=60?'C':tot>=50?'D':'E'; };
+                    tr.querySelector('.ca1').addEventListener('input',update); tr.querySelector('.ca2').addEventListener('input',update); tr.querySelector('.exam').addEventListener('input',update);
+                    tr.querySelector('.remove-subject-btn').onclick = ()=>tr.remove(); update(); tbody.appendChild(tr);
+                };
+                if(existing?.length) existing.forEach(addRow); else addRow();
+                document.getElementById("addSubjectRow").onclick = ()=>addRow();
+                document.getElementById("saveResultsFinal").onclick = async()=>{
+                    await supabaseClient.from('student_results').delete().eq('student_id',studentId).eq('term',term).eq('year',year);
+                    for(let row of tbody.children){
+                        let subj = row.querySelector('.subj').value.trim(); if(!subj) continue;
+                        let ca1 = +row.querySelector('.ca1').value, ca2 = +row.querySelector('.ca2').value, exam = +row.querySelector('.exam').value;
+                        let total = ca1+ca2+exam, grade = total>=80?'A':total>=70?'B':total>=60?'C':total>=50?'D':'E';
+                        await supabaseClient.from('student_results').insert([{ student_id: studentId, term, year, subject: subj, ca1, ca2, exam, total, grade }]);
+                    }
+                    showToast("Results saved");
+                };
+            };
+        }
+
+        async function renderFeeManagement() {
+            if(!['dg_ceo','daf'].includes(currentUser.role)) return showToast("DAF/DG only",true);
+            let html = `<div class="bg-white rounded-xl p-6"><h2 class="text-2xl font-bold">💰 Fee Management</h2><div class="grid md:grid-cols-3 gap-3 my-4"><select id="feeStudentId"><option value="">Select Student</option>${schoolData.students.map(s=>`<option value="${s.id}">${s.reg_number} - ${s.name}</option>`)}</select><select id="feeTerm"><option value="1">First Term</option><option value="2">Second</option><option value="3">Third</option></select><input id="feeYear" value="2026" class="border p-2 rounded"></div><button id="loadFeeBtn" class="apply-btn px-4 py-2 rounded">Load</button><div id="feeDetailsPanel" class="mt-5"></div></div>`;
+            document.getElementById("mainContent").innerHTML = html;
+            document.getElementById("loadFeeBtn").onclick = async () => {
+                const studentId = document.getElementById("feeStudentId").value, term = document.getElementById("feeTerm").value, year = document.getElementById("feeYear").value;
+                if(!studentId) return showToast("Select student",true);
+                const balance = await getOrCreateBalance(studentId, term, year);
+                const { data: txns } = await supabaseClient.from('fee_transactions').select('*').eq('student_id',studentId).eq('term',term).eq('year',year);
+                const student = schoolData.students.find(s=>s.id==studentId);
+                const percent = (balance.paid_amount/balance.total_fees)*100;
+                let panel = `<div class="border p-4 rounded"><p><strong>${student.name}</strong> | Total: ₦${balance.total_fees.toLocaleString()} | Paid: ₦${balance.paid_amount} | Balance: <span class="font-bold ${balance.balance>0?'text-red-600':'text-green-600'}">₦${balance.balance}</span></p><div class="progress-bar mt-2"><div class="progress-fill" style="width: ${percent}%"></div></div><table class="w-full text-sm mt-3 border"><thead><tr><th>Date</th><th>Amount</th><th>Receipt</th><th>Status</th><th>Action</th></tr></thead><tbody>${txns.map(t=>`<tr><td>${new Date(t.payment_date).toLocaleDateString()}</td><td>₦${t.amount_paid}</td><td>${t.receipt_no}</td><td class="${t.status==='authorized'?'text-green-600':'text-orange-500'}">${t.status}</td><td>${t.status!=='authorized' && ['dg_ceo','daf'].includes(currentUser.role) ? `<button class="authTx text-blue-600" data-id="${t.id}">Authorize</button>` : '-'}</td></tr>`).join('')}</tbody>}</tr><div class="mt-4"><input id="paymentAmount" type="number" placeholder="Amount (₦)" class="border p-2 rounded"><select id="paymentMethod"><option>cash</option><option>bank_transfer</option></select><button id="payNowBtn" class="apply-btn px-4 py-1 rounded ml-2">Record Payment</button></div></div>`;
+                document.getElementById("feeDetailsPanel").innerHTML = panel;
+                document.getElementById("payNowBtn").onclick = async ()=>{
+                    try {
+                        let amt = parseFloat(document.getElementById("paymentAmount").value);
+                        let meth = document.getElementById("paymentMethod").value;
+                        let authRole = ['dg_ceo','daf'].includes(currentUser.role);
+                        await recordPayment(studentId, term, year, amt, meth, authRole);
+                        showToast(`Payment ${authRole?'authorized':'pending'} recorded`);
+                        await refreshSchoolData();
+                        document.getElementById("loadFeeBtn").click();
+                    } catch(e) { showToast(e.message,true); }
+                };
+                document.querySelectorAll('.authTx').forEach(btn=>btn.onclick = async ()=>{
+                    await supabaseClient.from('fee_transactions').update({ status:'authorized', authorized_by: currentUser.full_name }).eq('id', btn.dataset.id);
+                    showToast("Authorized"); document.getElementById("loadFeeBtn").click();
+                });
+            };
+        }
+
+        async function renderParentFees() {
+            const student = schoolData.students.find(s=>s.id == currentUser.studentId);
+            if(!student) return showToast("No linked student",true);
+            const { data: balances } = await supabaseClient.from('fee_balances').select('*').eq('student_id',student.id).order('year');
+            const { data: transactions } = await supabaseClient.from('fee_transactions').select('*').eq('student_id',student.id).order('payment_date');
+            let html = `<div class="bg-white p-6 rounded-xl"><h2 class="text-2xl font-bold">💰 Fee Statement: ${student.name} (${student.reg_number})</h2>`;
+            for(let bal of balances){
+                const termName = bal.term==1?"First":bal.term==2?"Second":"Third";
+                const percent = (bal.paid_amount/bal.total_fees)*100;
+                html += `<div class="border p-4 mt-4 rounded"><h3 class="font-bold">${termName} Term ${bal.year}</h3><p>Total: ₦${bal.total_fees} | Paid: ₦${bal.paid_amount} | Balance: <span class="font-bold ${bal.balance>0?'text-red-600':'text-green-600'}">₦${bal.balance}</span></p><div class="progress-bar my-2"><div class="progress-fill" style="width:${percent}%"></div></div><table class="w-full text-sm"><thead><tr><th>Date</th><th>Amount</th><th>Receipt No</th><th>Status</th><th>Print</th></tr></thead><tbody>${transactions.filter(t=>t.term==bal.term && t.year==bal.year).map(tx=>`<tr><td>${new Date(tx.payment_date).toLocaleDateString()}</td><td>₦${tx.amount_paid}</td><td>${tx.receipt_no}</td><td>${tx.status}</td><td><button onclick="window.printReceiptById('${tx.id}','${student.id}')" class="text-blue-600">Print</button></td></tr>`).join('')}</tbody>}</table>${bal.balance<=0?`<button onclick="window.printFullTermReceipt('${student.id}',${bal.term},${bal.year})" class="apply-btn px-3 py-1 rounded text-sm mt-2">Print Full Term Receipt</button>`:''}</div>`;
+            }
+            html+=`</div>`;
+            document.getElementById("mainContent").innerHTML = html;
+            window.printReceiptById = async (txId, stuId) => {
+                const { data: tx } = await supabaseClient.from('fee_transactions').select('*').eq('id',txId).single();
+                const stu = schoolData.students.find(s=>s.id==stuId);
+                if(!tx) return;
+                const termName = {1:"First",2:"Second",3:"Third"}[tx.term];
+                const receiptHtml = `<div class="receipt-card"><div class="text-center border-b pb-4"><h2 class="text-xl font-bold">Al‑Istiqaamah Flying Wings Academy</h2><p>Fee Receipt</p></div><div><p><strong>Receipt No:</strong> ${tx.receipt_no}</p><p><strong>Student:</strong> ${stu.name} (${stu.reg_number})</p><p><strong>Term:</strong> ${termName} ${tx.year}</p><p><strong>Amount:</strong> ₦${tx.amount_paid}</p><p><strong>Status:</strong> ${tx.status}</p></div><div class="text-center mt-4"><button onclick="window.print()" class="apply-btn px-4 py-1 rounded">Print</button></div></div>`;
+                let modal = document.createElement('div'); modal.className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-[300]"; modal.innerHTML=`<div class="max-w-md w-full bg-white rounded-xl p-4 relative"><button class="absolute right-2 top-2 text-2xl closeModal">&times;</button>${receiptHtml}</div>`;
+                document.body.appendChild(modal); modal.querySelector('.closeModal').onclick = ()=>modal.remove();
+            };
+            window.printFullTermReceipt = async (stuId, term, year) => {
+                const { data: txs } = await supabaseClient.from('fee_transactions').select('*').eq('student_id',stuId).eq('term',term).eq('year',year).eq('status','authorized');
+                const total = txs.reduce((sum, t)=>sum+t.amount_paid,0);
+                const stu = schoolData.students.find(s=>s.id==stuId);
+                const receiptHtml = `<div class="receipt-card"><div class="text-center border-b pb-4"><h2 class="text-xl font-bold">Al‑Istiqaamah Flying Wings Academy</h2><p>FULL TERM PAYMENT RECEIPT</p></div><div><p><strong>Student:</strong> ${stu.name} (${stu.reg_number})</p><p><strong>Term ${term} ${year}</strong></p><p><strong>Total Paid:</strong> ₦${total.toLocaleString()}</p><p><strong>Cleared Fee</strong></p></div><div class="text-center mt-4"><button onclick="window.print()" class="apply-btn px-4 py-1 rounded">Print</button></div></div>`;
+                let modal = document.createElement('div'); modal.className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-[300]"; modal.innerHTML=`<div class="max-w-md w-full bg-white rounded-xl p-4 relative"><button class="absolute right-2 top-2 text-2xl closeModal">&times;</button>${receiptHtml}</div>`;
+                document.body.appendChild(modal); modal.querySelector('.closeModal').onclick = ()=>modal.remove();
+            };
+        }
+
+        async function renderApplicationsList() { 
+            if(!['dg_ceo','umc'].includes(currentUser.role)) return;
+            const { data } = await supabaseClient.from('admission_applications').select('*');
+            let html = `<div class="bg-white p-5 rounded-xl"><h2 class="text-2xl font-bold">📋 Applications</h2><div class="overflow-x-auto"><table class="min-w-full border"><thead class="bg-gray-100"><tr><th>Name</th><th>Email</th><th>Status</th><th>Action</th></tr></thead><tbody>${data.map(app=>`<tr><td>${app.full_name}</td><td>${app.parent_email||'-'}</td><td><span class="status-badge status-${app.status}">${app.status}</span></td><td><button onclick="window.viewAppDetails('${app.id}')" class="bg-blue-600 text-white p-1 rounded text-xs">Details</button></td></tr>`).join('')}</tbody>}...</div></div>`;
+            document.getElementById("mainContent").innerHTML = html;
+            window.viewAppDetails = async (id) => { const {data:app} = await supabaseClient.from('admission_applications').select('*').eq('id',id).single(); alert(JSON.stringify(app.form_data,null,2)); };
+        }
+
+        async function renderStaffManagement() {
+            if(!['dg_ceo','umc'].includes(currentUser.role)) return showToast("Access denied",true);
+            const { data: teachers } = await supabaseClient.from('teachers').select('*');
+            let html = `<div class="bg-white p-6 rounded-xl"><h2 class="text-2xl font-bold">👥 Staff Management</h2><form id="staffForm" class="grid md:grid-cols-2 gap-3 mt-4"><input id="staffName" placeholder="Full Name" required class="border p-2 rounded"><input id="staffEmail" placeholder="Email" required class="border p-2 rounded"><select id="staffRole"><option value="teacher">Teacher</option><option value="headteacher">Head Teacher</option></select><input id="staffLevel" placeholder="Level (teacher only)" class="border p-2 rounded"><select id="staffSection">${SECTIONS.map(s=>`<option>${s}</option>`).join('')}</select><input id="staffPassword" value="password123" class="border p-2 rounded"><button type="submit" class="apply-btn py-2 rounded">Register Staff</button></form><table class="w-full border mt-6"><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Section</th><th>Actions</th></tr></thead><tbody id="staffTableBody"></tbody>...</div>`;
+            document.getElementById("mainContent").innerHTML = html;
+            const renderStaffTable = async () => {
+                const tb = document.getElementById("staffTableBody"); tb.innerHTML = "";
+                for(let st of teachers||[]){
+                    tb.innerHTML += `<tr><td class="p-2">${st.name}</td><td class="p-2">${st.email}</td><td class="p-2">${st.role}</td><td class="p-2">${st.assigned_section||'-'}</td><td class="p-2"><button class="deleteStaffBtn delete-btn" data-id="${st.id}">Delete</button></td></tr>`;
+                }
+                document.querySelectorAll('.deleteStaffBtn').forEach(btn=>btn.addEventListener('click',async()=>{
+                    if(confirm("Delete staff member?")){
+                        await supabaseClient.from('teachers').delete().eq('id', btn.dataset.id);
+                        await refreshSchoolData();
+                        renderStaffManagement();
+                        showToast("Staff deleted");
+                    }
+                }));
+            };
+            await renderStaffTable();
+            document.getElementById("staffForm")?.addEventListener("submit", async(e)=>{
+                e.preventDefault();
+                const email = document.getElementById("staffEmail").value;
+                const pwd = document.getElementById("staffPassword").value;
+                const name = document.getElementById("staffName").value;
+                const role = document.getElementById("staffRole").value;
+                const section = document.getElementById("staffSection").value;
+                const level = document.getElementById("staffLevel").value;
+                const { data: authData, error: authError } = await supabaseClient.auth.signUp({ email, password: pwd });
+                if(authError) throw authError;
+                await supabaseClient.from('profiles').insert([{ id: authData.user.id, full_name: name, role: 'staff' }]);
+                await supabaseClient.from('teachers').insert([{ name, email, role, assigned_section: section, level }]);
+                await refreshSchoolData();
+                renderStaffManagement();
+                showToast("Staff registered. They can now log in with email.");
+            });
+        }
+
+        async function renderManageAnnouncement() {
+            if(currentUser.role !== 'dg_ceo') return showToast("DG only",true);
+            let html = `<div class="bg-white p-6 rounded-xl"><h2 class="text-2xl font-bold">📢 Update Announcement</h2><textarea id="announceText" rows="3" class="w-full border rounded p-2"></textarea><button id="saveAnnounce" class="apply-btn mt-3 px-4 py-2 rounded">Save</button></div>`;
+            document.getElementById("mainContent").innerHTML = html;
+            const { data } = await supabaseClient.from('site_announcement').select('content').eq('id',1).single();
+            if(data) document.getElementById("announceText").value = data.content;
+            document.getElementById("saveAnnounce").onclick = async()=>{
+                await supabaseClient.from('site_announcement').update({ content: document.getElementById("announceText").value }).eq('id',1);
+                showToast("Announcement updated");
+                fetchAndDisplayAnnouncement();
+            };
+        }
+
+        async function renderManageSlides() {
+            if(currentUser.role !== 'dg_ceo') return showToast("DG only",true);
+            const { data: slides } = await supabaseClient.from('slides').select('*');
+            let html = `<div class="bg-white p-6 rounded-xl"><h2 class="text-2xl font-bold">📸 Manage Slides</h2><div class="mb-4"><input type="file" id="slideUpload" accept="image/*"><input id="slideCaption" placeholder="Caption" class="border p-2 rounded ml-2"><button id="uploadSlideBtn" class="apply-btn px-4 py-2 rounded">Upload</button></div><div class="grid grid-cols-3 gap-4">${slides?.map(s=>`<div class="border rounded p-2"><img src="${s.image_url}" class="h-24 object-cover"><p>${s.caption}</p><button data-id="${s.id}" class="delete-slide-btn delete-btn mt-1">Delete</button></div>`).join('')}</div></div>`;
+            document.getElementById("mainContent").innerHTML = html;
+            document.getElementById("uploadSlideBtn").onclick = async () => {
+                const file = document.getElementById("slideUpload").files[0];
+                const caption = document.getElementById("slideCaption").value;
+                if(!file || !caption) return showToast("Select image and caption",true);
+                const url = await uploadSlideImage(file);
+                await supabaseClient.from('slides').insert([{ image_url: url, caption }]);
+                showToast("Slide added"); renderManageSlides(); loadSlides();
+            };
+            document.querySelectorAll('.delete-slide-btn').forEach(btn=>btn.onclick = async()=>{
+                await supabaseClient.from('slides').delete().eq('id', btn.dataset.id);
+                renderManageSlides(); loadSlides();
+            });
+        }
+
+        function renderDashboard() { 
+            document.getElementById("mainContent").innerHTML = `<div class="bg-white p-8 rounded-2xl shadow"><h2 class="text-3xl font-bold text-emerald-800">Welcome ${currentUser.full_name}</h2><p class="mt-2">Total Students: ${schoolData.students.length} | Total Staff: ${schoolData.teachers.length}</p><div class="grid grid-cols-2 gap-4 mt-6"><div class="bg-green-50 p-4 rounded-xl card-hover"><i class="fas fa-users text-2xl"></i><p class="font-bold">Active Learners</p><p>${schoolData.students.filter(s=>s.status==='active').length}</p></div></div></div>`; 
+        }
+
+        function renderContentView(view) {
+            const map = { dashboard: renderDashboard, students: renderStudentsList, "enroll-student": renderEnrollStudent, "results-management": renderResultsManagement, "fee-management": renderFeeManagement, "fee-statement": renderParentFees, applications: renderApplicationsList, "staff-management": renderStaffManagement, "manage-announcement": renderManageAnnouncement, "manage-slides": renderManageSlides };
+            if(map[view]) map[view](); else renderDashboard();
+        }
+
+        async function fetchAndDisplayAnnouncement() {
+            const { data } = await supabaseClient.from('site_announcement').select('content').eq('id',1).single();
+            if(data && document.getElementById('announcementBarWrapper')) document.getElementById('announcementBarWrapper').innerHTML = `<div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-xl">📢 ${data.content}</div>`;
+        }
+
+        // ========== INIT ==========
         async function init() {
             await refreshSchoolData(); 
             await loadSlides(); 
@@ -417,20 +625,6 @@
             await fetchAndDisplayAnnouncement();
             document.getElementById('landingPage').style.display = 'block';
         }
-        // Minimal stubs to avoid errors (replace with actual full implementations from your original file)
-        async function renderStudentsList() { document.getElementById("mainContent").innerHTML = "<p>Students list - full implementation in original file</p>"; }
-        async function renderEnrollStudent() { document.getElementById("mainContent").innerHTML = "<p>Enroll form - full implementation in original file</p>"; }
-        async function renderResultsManagement() { document.getElementById("mainContent").innerHTML = "<p>Results - full implementation in original file</p>"; }
-        async function renderFeeManagement() { document.getElementById("mainContent").innerHTML = "<p>Fee management - full implementation in original file</p>"; }
-        async function renderParentFees() { document.getElementById("mainContent").innerHTML = "<p>Parent fee statement - full implementation in original file</p>"; }
-        async function renderApplicationsList() { document.getElementById("mainContent").innerHTML = "<p>Applications list - full implementation in original file</p>"; }
-        async function renderStaffManagement() { document.getElementById("mainContent").innerHTML = "<p>Staff management - full implementation in original file</p>"; }
-        async function renderManageAnnouncement() { document.getElementById("mainContent").innerHTML = "<p>Manage announcement - full implementation in original file</p>"; }
-        async function renderManageSlides() { document.getElementById("mainContent").innerHTML = "<p>Manage slides - full implementation in original file</p>"; }
-        function renderDashboard() { document.getElementById("mainContent").innerHTML = `<div class="bg-white p-8 rounded-2xl shadow"><h2 class="text-3xl font-bold text-emerald-800">Welcome ${currentUser.full_name}</h2><p>Total Students: ${schoolData.students.length} | Total Staff: ${schoolData.teachers.length}</p></div>`; }
-        function renderContentView(view) { const map = { dashboard: renderDashboard, students: renderStudentsList, "enroll-student": renderEnrollStudent, "results-management": renderResultsManagement, "fee-management": renderFeeManagement, "fee-statement": renderParentFees, applications: renderApplicationsList, "staff-management": renderStaffManagement, "manage-announcement": renderManageAnnouncement, "manage-slides": renderManageSlides }; if(map[view]) map[view](); else renderDashboard(); }
-        async function fetchAndDisplayAnnouncement() { const { data } = await supabaseClient.from('site_announcement').select('content').eq('id',1).single(); if(data && document.getElementById('announcementBarWrapper')) document.getElementById('announcementBarWrapper').innerHTML = `<div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-xl">📢 ${data.content}</div>`; }
-        
         init();
     </script>
 </body>
